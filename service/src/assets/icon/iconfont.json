@@ -1,0 +1,121 @@
+{
+  "id": "3736621",
+  "name": "最新客服系统",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "4652338",
+      "name": "加",
+      "font_class": "jia",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "5835456",
+      "name": "表情",
+      "font_class": "biaoqing",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "595394",
+      "name": "更多",
+      "font_class": "gengduo1",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "396490",
+      "name": "置顶",
+      "font_class": "zhiding",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "5905976",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "4896380",
+      "name": "更多",
+      "font_class": "gengduo",
+      "unicode": "ec1c",
+      "unicode_decimal": 60444
+    },
+    {
+      "icon_id": "1048852",
+      "name": "通知",
+      "font_class": "notice",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "26699",
+      "name": "二维码",
+      "font_class": "erweima",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "2019048",
+      "name": "黑名单",
+      "font_class": "heimingdan",
+      "unicode": "e79f",
+      "unicode_decimal": 59295
+    },
+    {
+      "icon_id": "8455509",
+      "name": "统计",
+      "font_class": "tongji",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "11372722",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e8bd",
+      "unicode_decimal": 59581
+    },
+    {
+      "icon_id": "27260978",
+      "name": "通讯录-02",
+      "font_class": "tongxunlu",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
+      "icon_id": "29637833",
+      "name": "发送",
+      "font_class": "fasong",
+      "unicode": "ff18",
+      "unicode_decimal": 65304
+    },
+    {
+      "icon_id": "29638578",
+      "name": "打招呼",
+      "font_class": "dazhaohu",
+      "unicode": "ff19",
+      "unicode_decimal": 65305
+    },
+    {
+      "icon_id": "29638703",
+      "name": "快捷回复管理",
+      "font_class": "quickReply",
+      "unicode": "ff1a",
+      "unicode_decimal": 65306
+    },
+    {
+      "icon_id": "4933244",
+      "name": "笑脸",
+      "font_class": "xiaolian",
+      "unicode": "e702",
+      "unicode_decimal": 59138
+    }
+  ]
+}

@@ -1,0 +1,3652 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "客服系统api `\n客服后端：`",
+        "title": "客服系统API文档`",
+        "contact": {},
+        "version": "1.0`"
+    },
+    "paths": {
+        "/api/system/upload": {
+            "post": {
+                "tags": [
+                    "公共接口"
+                ],
+                "summary": "系统默认文件上传",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "文件参数",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/websocket/conn": {
+            "get": {
+                "tags": [
+                    "公共"
+                ],
+                "summary": "websocket连接",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/auth/login": {
+            "post": {
+                "description": "原密码 admin 新密码 123456`",
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "修改密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "新密码",
+                        "name": "new_password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/config/get": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "配置 获取配置",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/config/update": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "配置 修改配置",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "system_name",
+                        "name": "system_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "system_video",
+                        "name": "system_video",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "system_version",
+                        "name": "system_version",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pc_download_link",
+                        "name": "pc_download_link",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "oss_storage",
+                        "name": "oss_storage",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "oss_ali_access_key",
+                        "name": "oss_ali_access_key",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "oss_ali_secret_key",
+                        "name": "oss_ali_secret_key",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "oss_ali_region",
+                        "name": "oss_ali_region",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "oss_ali_domain",
+                        "name": "oss_ali_domain",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "oss_tencent_access_key",
+                        "name": "oss_tencent_access_key",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "oss_tencent_secret_key",
+                        "name": "oss_tencent_secret_key",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "oss_tencent_region",
+                        "name": "oss_tencent_region",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "oss_tencent_domain",
+                        "name": "oss_tencent_domain",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ad_default",
+                        "name": "ad_default",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pay_wechat_mch_id",
+                        "name": "pay_wechat_mch_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pay_wechat_appid",
+                        "name": "pay_wechat_appid",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pay_wechat_app_key",
+                        "name": "pay_wechat_app_key",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pay_ali_mch_id",
+                        "name": "pay_ali_mch_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pay_ali_appid",
+                        "name": "pay_ali_appid",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pay_ali_app_key",
+                        "name": "pay_ali_app_key",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/count": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "在线统计",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/count_service_list": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "在线统计-客服列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/domain/create": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "域名-添加域名",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "域名",
+                        "name": "domain",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "域名类型 private action ",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/domain/delete": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "域名-删除域名",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "域名ID",
+                        "name": "domain_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/domain/enable_disable": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "域名-快速启用禁用域名",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "域名id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "状态 enable 启动 un_enable 禁用",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/domain/list": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "域名-列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型 action 罗迪 ",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "搜索域名",
+                        "name": "domain",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "搜索账号",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "绑定状态 0所有 1是绑定  2未绑定",
+                        "name": "is_bind_service",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/domain/query_by_id": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "域名-通过ID查询域名信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "域名ID",
+                        "name": "domain_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/domain/un_bind": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "域名-域名解绑",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "域名id",
+                        "name": "domain_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/domain/update": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "域名-修改域名",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "域名ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "域名",
+                        "name": "domain",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "域名类型 private action ",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "状态 enable 启动 un_enable 禁用",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/pay/recorder": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "账单记录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "查询的账户",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型",
+                        "name": "reason",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "开始时间",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "结束时间",
+                        "name": "end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定每页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/service_manager/ban": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "账号-冻结指定账号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "账号ID",
+                        "name": "service_manager_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/service_manager/create": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "账号-创建账号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "账号数量",
+                        "name": "count",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/service_manager/delete": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "账号-删除所有账号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "需要删除的母账号ID",
+                        "name": "service_manager_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/service_manager/get_service_list": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "账号-获取客服关系后台的客服账号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "需要查询的母账号ID",
+                        "name": "service_manager_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/service_manager/list": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "账号-获取账号列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "查询条件",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "开始时间",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "结束时间",
+                        "name": "end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/service_manager/renew": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "账号-续费",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定ID",
+                        "name": "service_manager_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "续费金额",
+                        "name": "account",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/service_manager/reset_password": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "账号-修改指定账号密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "账号ID",
+                        "name": "service_manager_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "修改名字",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "修改密码",
+                        "name": "password",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/setting/create": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "设定公告敏感词-创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "值",
+                        "name": "value",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/setting/delete": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "设定公告敏感词-删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/setting/list": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "设定公告敏感词-列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "搜索值",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/setting/update": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "设定公告敏感词-修改",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型 keyword 关键字 notice  公告",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "值",
+                        "name": "value",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/users/list": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "用户列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/wechat_auths/create": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "公众号-新增",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "名称",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "appid",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "app_secret",
+                        "name": "app_secret",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "文件名.txt",
+                        "name": "file_name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "文件值",
+                        "name": "file_value",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型 auth授权 push推送",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "授权地址",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "授权备用地址",
+                        "name": "url_spare",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/wechat_auths/delete": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "公众号-删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/wechat_auths/enable_disable": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "公众号-快速启用禁用",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型 push auth",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "状态 puth auth",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/wechat_auths/list": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "公众号-列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型 push auth",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/wechat_auths/switch": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "公众号-一键切换url",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "url_spare",
+                        "name": "url_spare",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/manager/wechat_auths/update": {
+            "post": {
+                "tags": [
+                    "客服系统总后台"
+                ],
+                "summary": "公众号-修改",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "授权的ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "名称",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "appid",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "app_secret",
+                        "name": "app_secret",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "文件名.txt",
+                        "name": "file_name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "文件值",
+                        "name": "file_value",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型 auth授权 push推送",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "授权地址",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "授权备用地址",
+                        "name": "url_spare",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/auth/login": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "客服登录接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "登录账号",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/common/api/oss_config": {
+            "post": {
+                "tags": [
+                    "客服系统",
+                    "用户端"
+                ],
+                "summary": "获取上传参数",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/common/count": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "统计",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/config": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "公共配置-获取系统配置",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/count": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "统计",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/info": {
+            "post": {
+                "description": "service_manager_id 账号ID\nServiceId 客服ID\nFileName 名称\nHead 头像\nUsername 账号\nCode code码 暂时没有用\nDomain 微信入口码\nHost 绑定的域名\nWeb 微信入口链接\nTimeOut 过期时间\nCreateTime 创建时间",
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "获取账号信息详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/auth/login": {
+            "post": {
+                "description": "服务初始连接测试 --\u003e 接口描述",
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "基础-登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "1",
+                        "description": "登录账号",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "1",
+                        "description": "登录密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/auth/reset_password": {
+            "post": {
+                "description": "服务初始连接测试 --\u003e 接口描述",
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "基础-修改密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "1",
+                        "description": "登录账号",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "1",
+                        "description": "登录密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "1",
+                        "description": "登录密码",
+                        "name": "new_password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/black/add": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "房间-拉黑指定用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "拉黑类型ip user",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/black/delete": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "房间-删除拉黑",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "拉黑类型ip user",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/bot/add": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "机器人管理-新增机器人消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "问题",
+                        "name": "problem",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "回答",
+                        "name": "answer",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/bot/delete": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "机器人管理-删除机器人消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息id",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/bot/info": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "机器人管理-获取机器人信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/bot/list": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "机器人管理-获取机器人消息列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/bot/update": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "机器人管理-修改机器人消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "问题id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "问题",
+                        "name": "problem",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "回答",
+                        "name": "answer",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/bot/update_info": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "机器人管理-修改机器人信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "状态 run启动 stop停止",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "头像",
+                        "name": "head",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "打招呼信息",
+                        "name": "hello",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/count": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "基础-获取统计信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/count_message_detail": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "基础-获取统计信息消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/count_room_detail": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "基础-获取统计信息用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/data": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "基础-获取数据大屏",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/info": {
+            "post": {
+                "description": "service_manager_id 账号ID\naccount 钱包\nid_card_a身份证A面\nid_card_b身份证B面\nhead头像\nreal_name 真名\naccount 钱包\nhead头像\nreal_name 真名\nid_card_number 身份证号\nid_card_number 身份证号\nid_card_a 身份证A面\nid_card_b 身份证B面\nid_card_apply_status 身份证状态 none没有上传  apply 审批中 agree 同意 refuse 拒绝",
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "基础-获取账号信息详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/member/create": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "账号管理-创建账号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "客服名称",
+                        "name": "service_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "开通天数",
+                        "name": "day",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/member/create_list": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "账号管理-批量创建账号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "开通数量",
+                        "name": "service_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "开通天数",
+                        "name": "day",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/member/delete": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "账号管理-删除账号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "删除的客服ID",
+                        "name": "service_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/member/list": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "账号管理-获取账号列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "搜索名字",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/member/renewal": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "账号管理-续费",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "客服ID",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "续费的天数",
+                        "name": "day",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/member/renewal_all": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "账号管理-批量续费",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "客服账号列表 \\r 分割",
+                        "name": "username_list",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "续费的天数",
+                        "name": "day",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/member/update": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "账号管理-修改账号信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "客服ID",
+                        "name": "service_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "客服名称",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/message/add": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "快捷回复管理-新增消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "标题",
+                        "name": "title",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "标题内容",
+                        "name": "content",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "内容类型 text image",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/message/delete": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "快捷回复管理-删除消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "删除的指定ID",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/message/list": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "快捷回复管理-获取消息列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/message/update": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "快捷回复管理-修改消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "标题",
+                        "name": "title",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "标题内容",
+                        "name": "content",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "内容类型 text image",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/pay/recorder": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "账单记录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "查询的账户",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型",
+                        "name": "reason",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "开始时间",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "结束时间",
+                        "name": "end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定每页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/update": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "基础-修改账号基本信息接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "昵称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "头像",
+                        "name": "head",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "身份证a",
+                        "name": "id_card_a",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "身份证b",
+                        "name": "id_card_b",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "真实名称",
+                        "name": "real_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "身份证号码",
+                        "name": "id_card_number",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/users/black": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "拉黑列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "开始时间",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "结束时间",
+                        "name": "end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户名字",
+                        "name": "user_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "客服名字",
+                        "name": "service_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/users/list": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "用户列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "客服名称",
+                        "name": "service_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户名称",
+                        "name": "user_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "开始时间",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "结束时间",
+                        "name": "end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/manager/users/message": {
+            "post": {
+                "tags": [
+                    "客服后台"
+                ],
+                "summary": "聊天记录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "客服ID",
+                        "name": "service_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/menu_setting/create": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "菜单管理-创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "标题",
+                        "name": "title",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "内容",
+                        "name": "content",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "操作",
+                        "name": "action",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "提示",
+                        "name": "tag",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序",
+                        "name": "sort",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/menu_setting/delete": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "菜单管理-删除消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "删除的ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/menu_setting/list": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "菜单管理-消息列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/menu_setting/update": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "菜单管理-修改消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "标题",
+                        "name": "title",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "内容",
+                        "name": "content",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "操作",
+                        "name": "action",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "提示",
+                        "name": "tag",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序",
+                        "name": "sort",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/message/clear_message": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "聊天-消息清空",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "查询的用户ID",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/message/list": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "聊天-获取聊天记录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "查询的用户ID",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定每页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/message/remove_msg": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "聊天-消息撤回",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "查询的用户ID",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定的消息ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/message/send_all": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "聊天-群发消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "description": "查询的用户ID数组",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息类型",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息内容",
+                        "name": "content",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/message/send_to_user": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "聊天-发送消息给用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "发送人ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息类型",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息内容",
+                        "name": "content",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/notice_setting/info": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "公告-详细信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/notice_setting/update": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "公告-修改",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "启用状态",
+                        "name": "is_show",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "图片",
+                        "name": "image",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "内容",
+                        "name": "text",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/reset_qrcode": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "重置二维码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/rooms/black": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "房间-拉黑指定用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "拉黑类型ip user",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "1拉黑 0不拉黑",
+                        "name": "is_black",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/rooms/black_list": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "房间-拉黑列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定每页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/rooms/delete_day": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "房间-删除指定天前的用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "天数前",
+                        "name": "day",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/rooms/detail": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "房间-获取用户房间详细",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/rooms/end": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "房间-更新用户登录信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "手机号",
+                        "name": "mobile",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "备注",
+                        "name": "tag",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "备注名字",
+                        "name": "rename",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/rooms/list": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "房间-获取用户房间列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "user_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "1清理count状态  0不清理",
+                        "name": "is_clear_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "all 所有 user_no_read  用户未读 server_read 已回复 server_no_read 未回复 top 置顶 black 拉黑",
+                        "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定每页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/rooms/rename": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "房间-备注",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "备注",
+                        "name": "rename",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/rooms/top": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "房间-置顶指定用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "1置顶 0不置顶",
+                        "name": "top",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/rooms/update": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "房间-更新用户登录信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "指定ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "手机号",
+                        "name": "mobile",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "备注",
+                        "name": "tag",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "备注名字",
+                        "name": "rename",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/service_manager/message/list": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "快捷回复管理-获取消息列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/service_message/create": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "消息管理-创建消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息内容",
+                        "name": "msg_info",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息类型",
+                        "name": "msg_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建类型 hello打招呼 group群发消息 quick_reply快捷回复",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/service_message/delete": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "消息管理-删除消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "删除的ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/service_message/get": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "消息管理-获取单条消息详细",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/service_message/list": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "消息管理-消息列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/service_message/swap": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "消息管理-位置交换",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "消息ID1",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "消息ID2",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/service_message/update": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "消息管理-修改消息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息内容",
+                        "name": "msg_info",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息类型",
+                        "name": "msg_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "启用状态",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建类型 hello打招呼 group群发消息 quick_reply快捷回复",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/setting": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "公共配置-公告列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "搜索值",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/update": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "修改客服和昵称",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "客服名称",
+                        "name": "head",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "客服头像",
+                        "name": "head",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "二维码背景",
+                        "name": "code_background",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "二维码颜色",
+                        "name": "code_color",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/service/users": {
+            "post": {
+                "tags": [
+                    "客服系统"
+                ],
+                "summary": "用户列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "搜索值",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/auth/info": {
+            "post": {
+                "tags": [
+                    "用户端"
+                ],
+                "summary": "获取客服基本信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/auth/send": {
+            "post": {
+                "tags": [
+                    "用户端"
+                ],
+                "summary": "发送消息给客服",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息类型",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息内容",
+                        "name": "content",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/auth/token": {
+            "post": {
+                "tags": [
+                    "用户端"
+                ],
+                "summary": "用户token字符串换取真实token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/message/list": {
+            "post": {
+                "tags": [
+                    "用户端"
+                ],
+                "summary": "消息列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "指定页",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页数量",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="5ddccd6a-7ab7-4cbf-9912-2b353b21fbcd" name="43.155.25.156">
+        <fileTransfer rootFolder="/home/latest-customer-service-system-master/server" accessType="SFTP" host="154.221.30.183" port="22" sshConfigId="9b218bcc-b6b9-4bb4-9908-03d452fb6cb3" sshConfig="root@154.221.30.183:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="61c6c1ac-d0b5-450f-8f46-ea5d95132381" name="182.254.221.24">
+        <fileTransfer accessType="SFTP" host="182.254.221.24" port="22" sshConfigId="24e8f8ea-dceb-4b85-9e1d-b10e60afdc7b" sshConfig="root@182.254.221.24:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="365b5c7f-f2c9-4870-8604-3c09726d32c9" name="test">
+        <fileTransfer rootFolder="/home/latest-customer-service-system-master/server" accessType="SFTP" host="154.221.30.183" port="22" sshConfigId="9b218bcc-b6b9-4bb4-9908-03d452fb6cb3" sshConfig="root@154.221.30.183:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

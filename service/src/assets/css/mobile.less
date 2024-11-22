@@ -1,0 +1,66 @@
+//pc端
+@media only screen and (min-width: 767px) {
+    .pc {
+        display: block !important;
+    }
+    .mobile {
+        display: none !important;
+        touch-action: auto !important;
+    }
+}
+// 手机端
+@media only screen and (max-width: 767px) {
+    .mobile-hidden{
+        display: none !important;
+    }
+    .pc {
+        display: none !important;
+    }
+
+    .mobile {
+        display: block !important;
+        touch-action: auto !important;
+    }
+    .scrollbar:hover::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+    }
+    ::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+    }
+    .tel-layout{
+        width: 100%;
+    }
+    .ant-modal-body{
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+    .ant-drawer-content-wrapper{
+        width: 90% !important;
+    }
+    .drawer-list .item .td{
+        font-size: 12px;
+    }
+    .user-menu{
+        display: block !important;
+        overflow: hidden;
+        padding: 0 !important;
+        .right{
+            width: calc(100% - 20px);
+            max-width: 100% !important;
+            padding-right: 20px;
+            padding-bottom: 20px;            
+        }
+        
+    }
+    .user-notice{
+        .right{
+            margin-left: 0;
+        }
+    }
+    .header-container{
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+}

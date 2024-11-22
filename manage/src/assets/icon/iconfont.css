@@ -1,0 +1,51 @@
+/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: "iconfont"; /* Project id 3736621 */
+  src: url('//at.alicdn.com/t/c/font_3736621_iawv0julid.woff2?t=1667016071861') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3736621_iawv0julid.woff?t=1667016071861') format('woff'),
+       url('//at.alicdn.com/t/c/font_3736621_iawv0julid.ttf?t=1667016071861') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-erweima:before {
+  content: "\e608";
+}
+
+.icon-heimingdan:before {
+  content: "\e79f";
+}
+
+.icon-tongji:before {
+  content: "\e61a";
+}
+
+.icon-xiaoxi:before {
+  content: "\e8bd";
+}
+
+.icon-tongxunlu:before {
+  content: "\e675";
+}
+
+.icon-fasong:before {
+  content: "\ff18";
+}
+
+.icon-dazhaohu:before {
+  content: "\ff19";
+}
+
+.icon-quickReply:before {
+  content: "\ff1a";
+}
+
+.icon-xiaolian:before {
+  content: "\e702";
+}

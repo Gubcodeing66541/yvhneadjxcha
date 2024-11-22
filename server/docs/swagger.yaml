@@ -1,0 +1,2522 @@
+info:
+  contact: {}
+  description: |-
+    客服系统api `
+    客服后端：`
+  title: 客服系统API文档`
+  version: 1.0`
+paths:
+  /api/system/upload:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 文件参数
+        in: formData
+        name: image
+        required: true
+        type: file
+      responses: {}
+      summary: 系统默认文件上传
+      tags:
+      - 公共接口
+  /api/websocket/conn:
+    get:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: websocket连接
+      tags:
+      - 公共
+  /manager/auth/login:
+    post:
+      description: 原密码 admin 新密码 123456`
+      parameters:
+      - description: 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: 新密码
+        in: query
+        name: new_password
+        required: true
+        type: string
+      responses: {}
+      summary: 修改密码
+      tags:
+      - 客服系统总后台
+  /manager/config/get:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 配置 获取配置
+      tags:
+      - 客服系统总后台
+  /manager/config/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: system_name
+        in: query
+        name: system_name
+        type: string
+      - description: system_video
+        in: query
+        name: system_video
+        type: string
+      - description: system_version
+        in: query
+        name: system_version
+        type: string
+      - description: pc_download_link
+        in: query
+        name: pc_download_link
+        type: string
+      - description: oss_storage
+        in: query
+        name: oss_storage
+        type: string
+      - description: oss_ali_access_key
+        in: query
+        name: oss_ali_access_key
+        type: string
+      - description: oss_ali_secret_key
+        in: query
+        name: oss_ali_secret_key
+        type: string
+      - description: oss_ali_region
+        in: query
+        name: oss_ali_region
+        type: string
+      - description: oss_ali_domain
+        in: query
+        name: oss_ali_domain
+        type: string
+      - description: oss_tencent_access_key
+        in: query
+        name: oss_tencent_access_key
+        type: string
+      - description: oss_tencent_secret_key
+        in: query
+        name: oss_tencent_secret_key
+        type: string
+      - description: oss_tencent_region
+        in: query
+        name: oss_tencent_region
+        type: string
+      - description: oss_tencent_domain
+        in: query
+        name: oss_tencent_domain
+        type: string
+      - description: ad_default
+        in: query
+        name: ad_default
+        type: string
+      - description: pay_wechat_mch_id
+        in: query
+        name: pay_wechat_mch_id
+        type: string
+      - description: pay_wechat_appid
+        in: query
+        name: pay_wechat_appid
+        type: string
+      - description: pay_wechat_app_key
+        in: query
+        name: pay_wechat_app_key
+        type: string
+      - description: pay_ali_mch_id
+        in: query
+        name: pay_ali_mch_id
+        type: string
+      - description: pay_ali_appid
+        in: query
+        name: pay_ali_appid
+        type: string
+      - description: pay_ali_app_key
+        in: query
+        name: pay_ali_app_key
+        type: string
+      responses: {}
+      summary: 配置 修改配置
+      tags:
+      - 客服系统总后台
+  /manager/count:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 在线统计
+      tags:
+      - 客服系统总后台
+  /manager/count_service_list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 在线统计-客服列表
+      tags:
+      - 客服系统总后台
+  /manager/domain/create:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 域名
+        in: query
+        name: domain
+        required: true
+        type: string
+      - description: '域名类型 private action '
+        in: query
+        name: type
+        required: true
+        type: string
+      responses: {}
+      summary: 域名-添加域名
+      tags:
+      - 客服系统总后台
+  /manager/domain/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 域名ID
+        in: query
+        name: domain_id
+        required: true
+        type: string
+      responses: {}
+      summary: 域名-删除域名
+      tags:
+      - 客服系统总后台
+  /manager/domain/enable_disable:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 域名id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 状态 enable 启动 un_enable 禁用
+        in: query
+        name: status
+        required: true
+        type: string
+      responses: {}
+      summary: 域名-快速启用禁用域名
+      tags:
+      - 客服系统总后台
+  /manager/domain/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: '类型 action 罗迪 '
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 搜索域名
+        in: query
+        name: domain
+        type: string
+      - description: 搜索账号
+        in: query
+        name: username
+        type: string
+      - description: 绑定状态 0所有 1是绑定  2未绑定
+        in: query
+        name: is_bind_service
+        type: integer
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 域名-列表
+      tags:
+      - 客服系统总后台
+  /manager/domain/query_by_id:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 域名ID
+        in: query
+        name: domain_id
+        required: true
+        type: string
+      responses: {}
+      summary: 域名-通过ID查询域名信息
+      tags:
+      - 客服系统总后台
+  /manager/domain/un_bind:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 域名id
+        in: query
+        name: domain_id
+        required: true
+        type: string
+      responses: {}
+      summary: 域名-域名解绑
+      tags:
+      - 客服系统总后台
+  /manager/domain/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 域名ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 域名
+        in: query
+        name: domain
+        required: true
+        type: string
+      - description: '域名类型 private action '
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 状态 enable 启动 un_enable 禁用
+        in: query
+        name: status
+        required: true
+        type: string
+      responses: {}
+      summary: 域名-修改域名
+      tags:
+      - 客服系统总后台
+  /manager/pay/recorder:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 查询的账户
+        in: query
+        name: search
+        type: string
+      - description: 类型
+        in: query
+        name: reason
+        type: string
+      - description: 开始时间
+        in: query
+        name: start_time
+        type: string
+      - description: 结束时间
+        in: query
+        name: end_time
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 指定每页数量
+        in: query
+        name: offset
+        required: true
+        type: integer
+      responses: {}
+      summary: 账单记录
+      tags:
+      - 客服系统总后台
+  /manager/service_manager/ban:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 账号ID
+        in: query
+        name: service_manager_id
+        type: integer
+      responses: {}
+      summary: 账号-冻结指定账号
+      tags:
+      - 客服系统总后台
+  /manager/service_manager/create:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 账号数量
+        in: query
+        name: count
+        required: true
+        type: integer
+      responses: {}
+      summary: 账号-创建账号
+      tags:
+      - 客服系统总后台
+  /manager/service_manager/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 需要删除的母账号ID
+        in: query
+        name: service_manager_id
+        type: integer
+      responses: {}
+      summary: 账号-删除所有账号
+      tags:
+      - 客服系统总后台
+  /manager/service_manager/get_service_list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 需要查询的母账号ID
+        in: query
+        name: service_manager_id
+        type: integer
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 账号-获取客服关系后台的客服账号
+      tags:
+      - 客服系统总后台
+  /manager/service_manager/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 查询条件
+        in: query
+        name: search
+        type: string
+      - description: 开始时间
+        in: query
+        name: start_time
+        type: string
+      - description: 结束时间
+        in: query
+        name: end_time
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 账号-获取账号列表
+      tags:
+      - 客服系统总后台
+  /manager/service_manager/renew:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定ID
+        in: query
+        name: service_manager_id
+        required: true
+        type: string
+      - description: 续费金额
+        in: query
+        name: account
+        required: true
+        type: integer
+      responses: {}
+      summary: 账号-续费
+      tags:
+      - 客服系统总后台
+  /manager/service_manager/reset_password:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 账号ID
+        in: query
+        name: service_manager_id
+        type: integer
+      - description: 修改名字
+        in: query
+        name: name
+        type: integer
+      - description: 修改密码
+        in: query
+        name: password
+        type: integer
+      responses: {}
+      summary: 账号-修改指定账号密码
+      tags:
+      - 客服系统总后台
+  /manager/setting/create:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 类型
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 值
+        in: query
+        name: value
+        required: true
+        type: string
+      responses: {}
+      summary: 设定公告敏感词-创建
+      tags:
+      - 客服系统总后台
+  /manager/setting/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: 设定公告敏感词-删除
+      tags:
+      - 客服系统总后台
+  /manager/setting/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 类型
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 搜索值
+        in: query
+        name: search
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 设定公告敏感词-列表
+      tags:
+      - 客服系统总后台
+  /manager/setting/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: 类型 keyword 关键字 notice  公告
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 值
+        in: query
+        name: value
+        required: true
+        type: string
+      responses: {}
+      summary: 设定公告敏感词-修改
+      tags:
+      - 客服系统总后台
+  /manager/users/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 用户列表
+      tags:
+      - 客服系统总后台
+  /manager/wechat_auths/create:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 名称
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: appid
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - description: app_secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
+      - description: 文件名.txt
+        in: query
+        name: file_name
+        required: true
+        type: string
+      - description: 文件值
+        in: query
+        name: file_value
+        required: true
+        type: string
+      - description: 类型 auth授权 push推送
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 授权地址
+        in: query
+        name: url
+        required: true
+        type: string
+      - description: 授权备用地址
+        in: query
+        name: url_spare
+        required: true
+        type: string
+      responses: {}
+      summary: 公众号-新增
+      tags:
+      - 客服系统总后台
+  /manager/wechat_auths/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      responses: {}
+      summary: 公众号-删除
+      tags:
+      - 客服系统总后台
+  /manager/wechat_auths/enable_disable:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 类型 push auth
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: 状态 puth auth
+        in: query
+        name: status
+        required: true
+        type: string
+      responses: {}
+      summary: 公众号-快速启用禁用
+      tags:
+      - 客服系统总后台
+  /manager/wechat_auths/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 类型 push auth
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 公众号-列表
+      tags:
+      - 客服系统总后台
+  /manager/wechat_auths/switch:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: url
+        in: query
+        name: url
+        required: true
+        type: string
+      - description: url_spare
+        in: query
+        name: url_spare
+        required: true
+        type: string
+      responses: {}
+      summary: 公众号-一键切换url
+      tags:
+      - 客服系统总后台
+  /manager/wechat_auths/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 授权的ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 名称
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: appid
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - description: app_secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
+      - description: 文件名.txt
+        in: query
+        name: file_name
+        required: true
+        type: string
+      - description: 文件值
+        in: query
+        name: file_value
+        required: true
+        type: string
+      - description: 类型 auth授权 push推送
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 授权地址
+        in: query
+        name: url
+        required: true
+        type: string
+      - description: 授权备用地址
+        in: query
+        name: url_spare
+        required: true
+        type: string
+      responses: {}
+      summary: 公众号-修改
+      tags:
+      - 客服系统总后台
+  /service/auth/login:
+    post:
+      parameters:
+      - description: 登录账号
+        in: query
+        name: username
+        required: true
+        type: string
+      responses: {}
+      summary: 客服登录接口
+      tags:
+      - 客服系统
+  /service/common/api/oss_config:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 获取上传参数
+      tags:
+      - 客服系统
+      - 用户端
+  /service/common/count:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 统计
+      tags:
+      - 客服系统
+  /service/config:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 公共配置-获取系统配置
+      tags:
+      - 客服系统
+  /service/count:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 统计
+      tags:
+      - 客服系统
+  /service/info:
+    post:
+      description: |-
+        service_manager_id 账号ID
+        ServiceId 客服ID
+        FileName 名称
+        Head 头像
+        Username 账号
+        Code code码 暂时没有用
+        Domain 微信入口码
+        Host 绑定的域名
+        Web 微信入口链接
+        TimeOut 过期时间
+        CreateTime 创建时间
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 获取账号信息详情
+      tags:
+      - 客服系统
+  /service/manager/auth/login:
+    post:
+      description: 服务初始连接测试 --> 接口描述
+      parameters:
+      - default: "1"
+        description: 登录账号
+        in: query
+        name: username
+        required: true
+        type: string
+      - default: "1"
+        description: 登录密码
+        in: query
+        name: password
+        required: true
+        type: string
+      responses: {}
+      summary: 基础-登录
+      tags:
+      - 客服后台
+  /service/manager/auth/reset_password:
+    post:
+      description: 服务初始连接测试 --> 接口描述
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - default: "1"
+        description: 登录账号
+        in: query
+        name: username
+        required: true
+        type: string
+      - default: "1"
+        description: 登录密码
+        in: query
+        name: password
+        required: true
+        type: string
+      - default: "1"
+        description: 登录密码
+        in: query
+        name: new_password
+        required: true
+        type: string
+      responses: {}
+      summary: 基础-修改密码
+      tags:
+      - 客服后台
+  /service/manager/black/add:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: 拉黑类型ip user
+        in: query
+        name: type
+        required: true
+        type: string
+      responses: {}
+      summary: 房间-拉黑指定用户
+      tags:
+      - 客服后台
+  /service/manager/black/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: 拉黑类型ip user
+        in: query
+        name: type
+        required: true
+        type: string
+      responses: {}
+      summary: 房间-删除拉黑
+      tags:
+      - 客服后台
+  /service/manager/bot/add:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 问题
+        in: query
+        name: problem
+        type: string
+      - description: 回答
+        in: query
+        name: answer
+        type: string
+      responses: {}
+      summary: 机器人管理-新增机器人消息
+      tags:
+      - 客服后台
+  /service/manager/bot/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 消息id
+        in: query
+        name: id
+        type: string
+      responses: {}
+      summary: 机器人管理-删除机器人消息
+      tags:
+      - 客服后台
+  /service/manager/bot/info:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 机器人管理-获取机器人信息
+      tags:
+      - 客服后台
+  /service/manager/bot/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 机器人管理-获取机器人消息列表
+      tags:
+      - 客服后台
+  /service/manager/bot/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 问题id
+        in: query
+        name: id
+        type: string
+      - description: 问题
+        in: query
+        name: problem
+        type: string
+      - description: 回答
+        in: query
+        name: answer
+        type: string
+      responses: {}
+      summary: 机器人管理-修改机器人消息
+      tags:
+      - 客服后台
+  /service/manager/bot/update_info:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 状态 run启动 stop停止
+        in: query
+        name: status
+        type: string
+      - description: 头像
+        in: query
+        name: head
+        type: string
+      - description: 打招呼信息
+        in: query
+        name: hello
+        type: string
+      responses: {}
+      summary: 机器人管理-修改机器人信息
+      tags:
+      - 客服后台
+  /service/manager/count:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 基础-获取统计信息
+      tags:
+      - 客服后台
+  /service/manager/count_message_detail:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 基础-获取统计信息消息
+      tags:
+      - 客服后台
+  /service/manager/count_room_detail:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 基础-获取统计信息用户
+      tags:
+      - 客服后台
+  /service/manager/data:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 基础-获取数据大屏
+      tags:
+      - 客服后台
+  /service/manager/info:
+    post:
+      description: |-
+        service_manager_id 账号ID
+        account 钱包
+        id_card_a身份证A面
+        id_card_b身份证B面
+        head头像
+        real_name 真名
+        account 钱包
+        head头像
+        real_name 真名
+        id_card_number 身份证号
+        id_card_number 身份证号
+        id_card_a 身份证A面
+        id_card_b 身份证B面
+        id_card_apply_status 身份证状态 none没有上传  apply 审批中 agree 同意 refuse 拒绝
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 基础-获取账号信息详情
+      tags:
+      - 客服后台
+  /service/manager/member/create:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 客服名称
+        in: query
+        name: service_name
+        type: string
+      - description: 开通天数
+        in: query
+        name: day
+        type: integer
+      responses: {}
+      summary: 账号管理-创建账号
+      tags:
+      - 客服后台
+  /service/manager/member/create_list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 开通数量
+        in: query
+        name: service_number
+        type: integer
+      - description: 开通天数
+        in: query
+        name: day
+        type: integer
+      responses: {}
+      summary: 账号管理-批量创建账号
+      tags:
+      - 客服后台
+  /service/manager/member/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 删除的客服ID
+        in: query
+        name: service_id
+        type: integer
+      responses: {}
+      summary: 账号管理-删除账号
+      tags:
+      - 客服后台
+  /service/manager/member/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 搜索名字
+        in: query
+        name: search
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        type: integer
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: integer
+      responses: {}
+      summary: 账号管理-获取账号列表
+      tags:
+      - 客服后台
+  /service/manager/member/renewal:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 客服ID
+        in: query
+        name: username
+        type: string
+      - description: 续费的天数
+        in: query
+        name: day
+        type: integer
+      responses: {}
+      summary: 账号管理-续费
+      tags:
+      - 客服后台
+  /service/manager/member/renewal_all:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 客服账号列表 \r 分割
+        in: query
+        name: username_list
+        type: string
+      - description: 续费的天数
+        in: query
+        name: day
+        type: integer
+      responses: {}
+      summary: 账号管理-批量续费
+      tags:
+      - 客服后台
+  /service/manager/member/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 客服ID
+        in: query
+        name: service_id
+        type: integer
+      - description: 客服名称
+        in: query
+        name: name
+        type: string
+      responses: {}
+      summary: 账号管理-修改账号信息
+      tags:
+      - 客服后台
+  /service/manager/message/add:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 标题
+        in: query
+        name: title
+        required: true
+        type: string
+      - description: 标题内容
+        in: query
+        name: content
+        required: true
+        type: string
+      - description: 内容类型 text image
+        in: query
+        name: type
+        required: true
+        type: string
+      responses: {}
+      summary: 快捷回复管理-新增消息
+      tags:
+      - 客服后台
+  /service/manager/message/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 删除的指定ID
+        in: query
+        name: id
+        type: string
+      responses: {}
+      summary: 快捷回复管理-删除消息
+      tags:
+      - 客服后台
+  /service/manager/message/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 快捷回复管理-获取消息列表
+      tags:
+      - 客服后台
+  /service/manager/message/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 消息ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 标题
+        in: query
+        name: title
+        required: true
+        type: string
+      - description: 标题内容
+        in: query
+        name: content
+        required: true
+        type: string
+      - description: 内容类型 text image
+        in: query
+        name: type
+        required: true
+        type: string
+      responses: {}
+      summary: 快捷回复管理-修改消息
+      tags:
+      - 客服后台
+  /service/manager/pay/recorder:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 查询的账户
+        in: query
+        name: search
+        type: string
+      - description: 类型
+        in: query
+        name: reason
+        type: string
+      - description: 开始时间
+        in: query
+        name: start_time
+        type: string
+      - description: 结束时间
+        in: query
+        name: end_time
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 指定每页数量
+        in: query
+        name: offset
+        required: true
+        type: integer
+      responses: {}
+      summary: 账单记录
+      tags:
+      - 客服后台
+  /service/manager/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 昵称
+        in: query
+        name: name
+        type: string
+      - description: 头像
+        in: query
+        name: head
+        type: string
+      - description: 身份证a
+        in: query
+        name: id_card_a
+        type: string
+      - description: 身份证b
+        in: query
+        name: id_card_b
+        type: string
+      - description: 真实名称
+        in: query
+        name: real_name
+        type: string
+      - description: 身份证号码
+        in: query
+        name: id_card_number
+        type: string
+      responses: {}
+      summary: 基础-修改账号基本信息接口
+      tags:
+      - 客服后台
+  /service/manager/users/black:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 开始时间
+        in: query
+        name: start_time
+        type: string
+      - description: 结束时间
+        in: query
+        name: end_time
+        type: string
+      - description: 用户名字
+        in: query
+        name: user_name
+        type: string
+      - description: 客服名字
+        in: query
+        name: service_name
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 拉黑列表
+      tags:
+      - 客服后台
+  /service/manager/users/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 客服名称
+        in: query
+        name: service_name
+        type: string
+      - description: 用户名称
+        in: query
+        name: user_name
+        type: string
+      - description: 开始时间
+        in: query
+        name: start_time
+        type: string
+      - description: 结束时间
+        in: query
+        name: end_time
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 用户列表
+      tags:
+      - 客服后台
+  /service/manager/users/message:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: 客服ID
+        in: query
+        name: service_id
+        required: true
+        type: integer
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 聊天记录
+      tags:
+      - 客服后台
+  /service/menu_setting/create:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 标题
+        in: query
+        name: title
+        required: true
+        type: string
+      - description: 内容
+        in: query
+        name: content
+        required: true
+        type: string
+      - description: 操作
+        in: query
+        name: action
+        required: true
+        type: string
+      - description: 提示
+        in: query
+        name: tag
+        required: true
+        type: string
+      - description: 排序
+        in: query
+        name: sort
+        required: true
+        type: string
+      responses: {}
+      summary: 菜单管理-创建
+      tags:
+      - 客服系统
+  /service/menu_setting/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 删除的ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: 菜单管理-删除消息
+      tags:
+      - 客服系统
+  /service/menu_setting/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 菜单管理-消息列表
+      tags:
+      - 客服系统
+  /service/menu_setting/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 标题
+        in: query
+        name: title
+        required: true
+        type: string
+      - description: 内容
+        in: query
+        name: content
+        required: true
+        type: string
+      - description: 操作
+        in: query
+        name: action
+        required: true
+        type: string
+      - description: 提示
+        in: query
+        name: tag
+        required: true
+        type: string
+      - description: 排序
+        in: query
+        name: sort
+        required: true
+        type: string
+      responses: {}
+      summary: 菜单管理-修改消息
+      tags:
+      - 客服系统
+  /service/message/clear_message:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 查询的用户ID
+        in: query
+        name: user_id
+        type: string
+      responses: {}
+      summary: 聊天-消息清空
+      tags:
+      - 客服系统
+  /service/message/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 查询的用户ID
+        in: query
+        name: user_id
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 指定每页数量
+        in: query
+        name: offset
+        required: true
+        type: integer
+      responses: {}
+      summary: 聊天-获取聊天记录
+      tags:
+      - 客服系统
+  /service/message/remove_msg:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 查询的用户ID
+        in: query
+        name: user_id
+        type: string
+      - description: 指定的消息ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: 聊天-消息撤回
+      tags:
+      - 客服系统
+  /service/message/send_all:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 查询的用户ID数组
+        in: query
+        name: user_id
+        type: array
+      - description: 消息类型
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 消息内容
+        in: query
+        name: content
+        required: true
+        type: string
+      responses: {}
+      summary: 聊天-群发消息
+      tags:
+      - 客服系统
+  /service/message/send_to_user:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 发送人ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: 消息类型
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 消息内容
+        in: query
+        name: content
+        required: true
+        type: string
+      responses: {}
+      summary: 聊天-发送消息给用户
+      tags:
+      - 客服系统
+  /service/notice_setting/info:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 公告-详细信息
+      tags:
+      - 客服系统
+  /service/notice_setting/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 启用状态
+        in: query
+        name: is_show
+        required: true
+        type: string
+      - description: 图片
+        in: query
+        name: image
+        required: true
+        type: string
+      - description: 内容
+        in: query
+        name: text
+        required: true
+        type: string
+      responses: {}
+      summary: 公告-修改
+      tags:
+      - 客服系统
+  /service/reset_qrcode:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 重置二维码
+      tags:
+      - 客服系统
+  /service/rooms/black:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: 拉黑类型ip user
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 1拉黑 0不拉黑
+        in: query
+        name: is_black
+        type: integer
+      responses: {}
+      summary: 房间-拉黑指定用户
+      tags:
+      - 客服系统
+  /service/rooms/black_list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 指定每页数量
+        in: query
+        name: offset
+        required: true
+        type: integer
+      responses: {}
+      summary: 房间-拉黑列表
+      tags:
+      - 客服系统
+  /service/rooms/delete_day:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 天数前
+        in: query
+        name: day
+        type: integer
+      responses: {}
+      summary: 房间-删除指定天前的用户
+      tags:
+      - 客服系统
+  /service/rooms/detail:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      responses: {}
+      summary: 房间-获取用户房间详细
+      tags:
+      - 客服系统
+  /service/rooms/end:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: 手机号
+        in: query
+        name: mobile
+        required: true
+        type: integer
+      - description: 备注
+        in: query
+        name: tag
+        required: true
+        type: integer
+      - description: 备注名字
+        in: query
+        name: rename
+        required: true
+        type: integer
+      responses: {}
+      summary: 房间-更新用户登录信息
+      tags:
+      - 客服系统
+  /service/rooms/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户名
+        in: query
+        name: user_name
+        type: string
+      - description: 1清理count状态  0不清理
+        in: query
+        name: is_clear_status
+        type: string
+      - description: all 所有 user_no_read  用户未读 server_read 已回复 server_no_read 未回复
+          top 置顶 black 拉黑
+        in: query
+        name: type
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 指定每页数量
+        in: query
+        name: offset
+        required: true
+        type: integer
+      responses: {}
+      summary: 房间-获取用户房间列表
+      tags:
+      - 客服系统
+  /service/rooms/rename:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: 备注
+        in: query
+        name: rename
+        type: string
+      responses: {}
+      summary: 房间-备注
+      tags:
+      - 客服系统
+  /service/rooms/top:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: 1置顶 0不置顶
+        in: query
+        name: top
+        type: integer
+      responses: {}
+      summary: 房间-置顶指定用户
+      tags:
+      - 客服系统
+  /service/rooms/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: 手机号
+        in: query
+        name: mobile
+        required: true
+        type: integer
+      - description: 备注
+        in: query
+        name: tag
+        required: true
+        type: integer
+      - description: 备注名字
+        in: query
+        name: rename
+        required: true
+        type: integer
+      responses: {}
+      summary: 房间-更新用户登录信息
+      tags:
+      - 客服系统
+  /service/service_manager/message/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 快捷回复管理-获取消息列表
+      tags:
+      - 客服系统
+  /service/service_message/create:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 消息内容
+        in: query
+        name: msg_info
+        required: true
+        type: string
+      - description: 消息类型
+        in: query
+        name: msg_type
+        required: true
+        type: string
+      - description: 创建类型 hello打招呼 group群发消息 quick_reply快捷回复
+        in: query
+        name: type
+        required: true
+        type: string
+      responses: {}
+      summary: 消息管理-创建消息
+      tags:
+      - 客服系统
+  /service/service_message/delete:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 删除的ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: 消息管理-删除消息
+      tags:
+      - 客服系统
+  /service/service_message/get:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 消息ID
+        in: query
+        name: id
+        required: true
+        type: string
+      responses: {}
+      summary: 消息管理-获取单条消息详细
+      tags:
+      - 客服系统
+  /service/service_message/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 类型
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 消息管理-消息列表
+      tags:
+      - 客服系统
+  /service/service_message/swap:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 消息ID1
+        in: query
+        name: from
+        required: true
+        type: integer
+      - description: 消息ID2
+        in: query
+        name: to
+        required: true
+        type: integer
+      responses: {}
+      summary: 消息管理-位置交换
+      tags:
+      - 客服系统
+  /service/service_message/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 消息ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 消息内容
+        in: query
+        name: msg_info
+        required: true
+        type: string
+      - description: 消息类型
+        in: query
+        name: msg_type
+        required: true
+        type: string
+      - description: 启用状态
+        in: query
+        name: status
+        required: true
+        type: string
+      - description: 创建类型 hello打招呼 group群发消息 quick_reply快捷回复
+        in: query
+        name: type
+        required: true
+        type: string
+      responses: {}
+      summary: 消息管理-修改消息
+      tags:
+      - 客服系统
+  /service/setting:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 类型
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 搜索值
+        in: query
+        name: search
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 公共配置-公告列表
+      tags:
+      - 客服系统
+  /service/update:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 客服名称
+        in: query
+        name: head
+        required: true
+        type: string
+      - description: 客服头像
+        in: query
+        name: head
+        type: string
+      - description: 二维码背景
+        in: query
+        name: code_background
+        type: string
+      - description: 二维码颜色
+        in: query
+        name: code_color
+        type: string
+      responses: {}
+      summary: 修改客服和昵称
+      tags:
+      - 客服系统
+  /service/users:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 搜索值
+        in: query
+        name: search
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 用户列表
+      tags:
+      - 客服系统
+  /user/auth/info:
+    post:
+      parameters:
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 获取客服基本信息
+      tags:
+      - 用户端
+  /user/auth/send:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 消息类型
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: 消息内容
+        in: query
+        name: content
+        required: true
+        type: string
+      responses: {}
+      summary: 发送消息给客服
+      tags:
+      - 用户端
+  /user/auth/token:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses: {}
+      summary: 用户token字符串换取真实token
+      tags:
+      - 用户端
+  /user/message/list:
+    post:
+      parameters:
+      - description: 认证token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 指定页
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页数量
+        in: query
+        name: offset
+        required: true
+        type: string
+      responses: {}
+      summary: 消息列表
+      tags:
+      - 用户端
+swagger: "2.0"

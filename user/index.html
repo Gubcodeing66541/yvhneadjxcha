@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>在线客服</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      // var token = 'O616YCgOoAR2fEUEjQlbVfbYjXegFSvWmI92UWP8rs7GfZmpEbpxo0_XpuXVjO6IyO5kliNTtLgil4dAMOccWPttVbdBgU7MPD1jqrlr2QSMUqGmddqk0nNYsVF-8MFaS5YgUJZjDPSC1xhGy7p7ooNxCQK4uUDJFiELu9QDoXb1CAjkRANzfT_fhRGU1bDjTGeCXblLjSrY5AZgfnqdG-4VLA_NUppM48i6XCpUfwY4NRQZPX5RQrwbqHKQijRZV3JzeVD42b0Ep9lOvfOP35HbyJXtrZHRiLnzDpehBekgHOzjHT3TTOUMULE0weR7Le1LSm3x-e9ugOipciYXFg==';
+      var token = '{{.token}}';
+      if(token && token != ''){
+        window.localStorage.setItem('token', token);
+      }else{
+        var token = window.localStorage.getItem('token');
+      }
+      function onBridgeReady() { //屏蔽分享按钮
+        WeixinJSBridge.call('hideOptionMenu');
+      }
+      if(typeof WeixinJSBridge == "undefined"){
+        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);        
+      }else{
+        onBridgeReady()
+      }
+    </script>
+  </body>
+</html>
