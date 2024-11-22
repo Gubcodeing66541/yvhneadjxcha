@@ -114,7 +114,7 @@ func (Service) Info(c *gin.Context) {
 		web = fmt.Sprintf("%s/user/auth/join_new?code=%s", domain.Domain, service.Code)
 	}
 
-	web = fmt.Sprintf("%s/auth/local_storage/join_new?code=%s", domain.Domain, service.Code)
+	web = fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domain.Domain, service.Code)
 
 	//// 官方二维码
 	//auth, err := Logic.WeChat{}.GetAuth()
