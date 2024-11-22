@@ -1,7 +1,0 @@
-config.json
-static/upload
-*.log
-static/head
-script
-./server
-./tools

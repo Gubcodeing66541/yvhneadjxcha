@@ -1,0 +1,40 @@
+{
+  "debug": false,
+  "link_is_show_image": true,
+  "database": {
+    "mysql": {
+      "host": "127.0.0.1",
+      "port": 3306,
+      "database": "chat",
+      "username": "root",
+      "password": "lafeng110A"
+    },
+    "redis": {
+      "host": "127.0.0.1",
+      "port": 6379,
+      "password": "lafeng110A"
+    }
+  },
+  "client": {
+    "ping_second": 10,
+    "pay_time_out": 3600
+  },
+  "oss": {
+    "qiniu": {
+      "access_key": "f-",
+      "secret_key": "-",
+      "bucket": ""
+    }
+  },
+  "manager": {
+    "username": "root",
+    "password": "123456",
+    "authKey" : "laifengkey147258369874563214"
+  },
+  "head_img_url": "http://156.225.29.12/static/static/head/",
+  "http_host": "http://156.225.29.12",
+  "check": {
+    "username": "lafeng110",
+    "key": "hVrEDJsQsZWRlU6"
+  }
+}
