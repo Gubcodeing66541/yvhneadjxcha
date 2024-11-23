@@ -1,8 +1,11 @@
 package Logic
 
 import (
+	"fmt"
 	"server/App/Common"
 	Service2 "server/App/Model/Service"
+	"server/App/Sdk"
+
 	"server/Base"
 	"time"
 )
@@ -31,9 +34,13 @@ func (Auth) RegisterByServiceManager(username string, serviceName string, servic
 	Base.MysqlConn.Create(&serviceAuth)
 	code := Common.Tools{}.CreateActiveCode(serviceAuth.ServiceId)
 	head := Base.AppConfig.HttpHost + "/static/static/head.png"
+
+	domainInfo := Domain{}.GetTransfer()
+	web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, code)
+	u, _ := Sdk.CreateDomain(web)
 	Base.MysqlConn.Create(&Service2.Service{
 		ServiceManagerId: serviceManagerId, IsActivate: 0, Day: 0, ActivateTime: time.Now(), Status: "success",
-		ServiceId: serviceAuth.ServiceId, Name: serviceName, Head: head, Username: username,
+		ServiceId: serviceAuth.ServiceId, Name: serviceName, Head: head, Username: username, Domain: u,
 		Code: code, CreateTime: times, Type: "auth", Role: "user", TimeOut: times, CodeBackground: "#ffffff", CodeColor: "#000000",
 	})
 	return serviceAuth.ServiceId

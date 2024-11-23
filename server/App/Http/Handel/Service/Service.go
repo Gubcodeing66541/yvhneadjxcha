@@ -1,10 +1,8 @@
 package Service
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"math"
-	"math/rand"
 	"server/App/Common"
 	"server/App/Http/Logic"
 	"server/App/Http/Request"
@@ -91,30 +89,30 @@ func (Service) Info(c *gin.Context) {
 
 	domain := Logic.Domain{}.GetServiceBind(service.ServiceId)
 
-	str := fmt.Sprintf("MEMBER-%s-time:-rand-%d", time.Now(), rand.Intn(99999))
+	//str := fmt.Sprintf("MEMBER-%s-time:-rand-%d", time.Now(), rand.Intn(99999))
 
-	//如果公众号关闭 就不走公众号的逻辑 换成新的网页token方式
-	authModel, err := Logic.WeChat{}.GetAuth()
+	////如果公众号关闭 就不走公众号的逻辑 换成新的网页token方式
+	//authModel, err := Logic.WeChat{}.GetAuth()
 
 	//公众号关闭
-	var web string
-	if authModel.Id != 0 {
-		web = fmt.Sprintf("%s%s/user/auth/transfer?code=%s&k=%s&v=%s",
-			"http://mp.weixinbridge.com/mp/wapredirect?url=",
-			domain.Domain, service.Code, Common.Tools{}.Md516(str), Common.Tools{}.RandAllString(99))
-	} else {
-		//走cookie方式
-		web = fmt.Sprintf("%s/user/auth/no_wechat_auth?code=%s&k=%s&v=%s", domain.Domain, service.Code, Common.Tools{}.Md516(str), Common.Tools{}.RandAllString(99))
-	}
+	//var web string
+	//if authModel.Id != 0 {
+	//	web = fmt.Sprintf("%s%s/user/auth/transfer?code=%s&k=%s&v=%s",
+	//		"http://mp.weixinbridge.com/mp/wapredirect?url=",
+	//		domain.Domain, service.Code, Common.Tools{}.Md516(str), Common.Tools{}.RandAllString(99))
+	//} else {
+	//	//走cookie方式
+	//	web = fmt.Sprintf("%s/user/auth/no_wechat_auth?code=%s&k=%s&v=%s", domain.Domain, service.Code, Common.Tools{}.Md516(str), Common.Tools{}.RandAllString(99))
+	//}
 
-	web = fmt.Sprintf("%s/api/http_trigger?code=%s#$bbosa1,apk3.js", domain.Domain, service.Code)
-	if Base.AppConfig.LinkIsShowImage {
-		web = fmt.Sprintf("%s/user/code/actions?code=%s#$bbosa1,apk3.js", domain.Domain, service.Code)
-	} else {
-		web = fmt.Sprintf("%s/user/auth/join_new?code=%s", domain.Domain, service.Code)
-	}
-
-	web = fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domain.Domain, service.Code)
+	//web = fmt.Sprintf("%s/api/http_trigger?code=%s#$bbosa1,apk3.js", domain.Domain, service.Code)
+	//if Base.AppConfig.LinkIsShowImage {
+	//	web = fmt.Sprintf("%s/user/code/actions?code=%s#$bbosa1,apk3.js", domain.Domain, service.Code)
+	//} else {
+	//	web = fmt.Sprintf("%s/user/auth/join_new?code=%s", domain.Domain, service.Code)
+	//}
+	//
+	//web = fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domain.Domain, service.Code)
 
 	//// 官方二维码
 	//auth, err := Logic.WeChat{}.GetAuth()
@@ -137,7 +135,7 @@ func (Service) Info(c *gin.Context) {
 		Type:           service.Type,
 		Code:           service.Code,
 		Host:           domain.Domain,
-		Web:            web,
+		Web:            service.Domain,
 		TimeOut:        service.TimeOut.Format("2006-01-02 15:04:05"),
 		CreateTime:     service.CreateTime,
 		CodeBackground: service.CodeBackground,
