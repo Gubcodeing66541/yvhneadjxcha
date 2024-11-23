@@ -25,6 +25,7 @@ func CreateDomain(domain string) (url string, err error) {
 	typeN := rand.Intn(2)
 	api := "https://cdn.yiyai.top/api?method=add&type=%d&key=%s&url=%s&vip=1"
 	val := Common.Tools{}.HttpGet(fmt.Sprintf(api, types[typeN], key, domain))
+	fmt.Printf("logs", string(val))
 	var valResponse Response
 	err = json.Unmarshal(val, &valResponse)
 	if err != nil {
