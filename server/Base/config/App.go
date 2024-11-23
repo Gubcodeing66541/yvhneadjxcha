@@ -1,8 +1,9 @@
 package Config
 
 type App struct {
-	Debug           bool `json:"debug"`
-	LinkIsShowImage bool `json:"link_is_show_image"`
+	Debug           bool   `json:"debug"`
+	LinkIsShowImage bool   `json:"link_is_show_image"`
+	DomainKey       string `json:"domain_key"`
 	Database        Database
 	Client          Client
 	Oss             Oss

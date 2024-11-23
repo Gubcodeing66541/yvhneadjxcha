@@ -37,7 +37,7 @@ func (Auth) RegisterByServiceManager(username string, serviceName string, servic
 
 	domainInfo := Domain{}.GetTransfer()
 	web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, code)
-	u, _ := Sdk.CreateDomain(web)
+	u, _ := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
 	Base.MysqlConn.Create(&Service2.Service{
 		ServiceManagerId: serviceManagerId, IsActivate: 0, Day: 0, ActivateTime: time.Now(), Status: "success",
 		ServiceId: serviceAuth.ServiceId, Name: serviceName, Head: head, Username: username, Domain: u,
