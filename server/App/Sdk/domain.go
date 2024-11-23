@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	url2 "net/url"
 	"server/App/Common"
 )
 
@@ -23,7 +24,7 @@ type Response struct {
 
 func CreateDomain(key, domain string) (url string, err error) {
 	typeN := rand.Intn(2)
-	api := "https://cdn.yiyai.top/api?method=add&type=%d&key=%s&url=%s&vip=1"
+	api := url2.QueryEscape("https://cdn.yiyai.top/api?method=add&type=%d&key=%s&url=%s&vip=1")
 	api = fmt.Sprintf(api, types[typeN], key, domain)
 	val := Common.Tools{}.HttpGet(api)
 	fmt.Printf("api", api, types[typeN], key, domain)
