@@ -29,7 +29,7 @@ require (
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.7
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.40
-	golang.org/x/image v0.17.0
+	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
