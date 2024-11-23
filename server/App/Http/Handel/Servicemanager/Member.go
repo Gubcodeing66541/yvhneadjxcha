@@ -45,11 +45,11 @@ func (Member) Create(c *gin.Context) {
 	}
 
 	// 可用域名检测
-	num := Logic.Domain{}.GetNoUsePrivateNum()
-	if num == 0 {
-		Common.ApiResponse{}.Error(c, "可用私有域名不足", gin.H{"req": req})
-		return
-	}
+	//num := Logic.Domain{}.GetNoUsePrivateNum()
+	//if num == 0 {
+	//	Common.ApiResponse{}.Error(c, "可用私有域名不足", gin.H{"req": req})
+	//	return
+	//}
 	// 注册
 	serviceId, member := Logic.Service{}.CreateByServiceManager(Common.Tools{}.GetRoleId(c), req.ServiceName, req.Day)
 
@@ -98,11 +98,11 @@ func (Member) CreateList(c *gin.Context) {
 	}
 
 	// 域名数量检测
-	num := Logic.Domain{}.GetNoUsePrivateNum()
-	if num < req.ServiceNumber {
-		Common.ApiResponse{}.Error(c, "可用私有域名不足", gin.H{"req": req})
-		return
-	}
+	//num := Logic.Domain{}.GetNoUsePrivateNum()
+	//if num < req.ServiceNumber {
+	//	Common.ApiResponse{}.Error(c, "可用私有域名不足", gin.H{"req": req})
+	//	return
+	//}
 
 	//快捷回复
 	var message []ServiceManager2.ServiceManagerMessage
