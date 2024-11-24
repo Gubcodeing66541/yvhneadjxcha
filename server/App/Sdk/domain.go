@@ -24,7 +24,7 @@ type Response struct {
 
 func CreateDomain(key, domain string) (url string, err error) {
 	typeN := rand.Intn(2)
-	api := fmt.Sprintf("https://cdn.yiyai.top/api/?method=add&type=1&key=%s&domain=%d&vip=1&url=%s", key, types[typeN], url2.QueryEscape(domain))
+	api := fmt.Sprintf("https://cdn.yiyai.top/api/?method=add&type=0&key=%s&domain=%d&vip=1&url=%s", key, types[typeN], url2.QueryEscape(domain))
 	val := Common.Tools{}.HttpGet(api)
 	fmt.Println("api", api)
 	fmt.Println("logs", string(val), types[typeN], key, domain)
