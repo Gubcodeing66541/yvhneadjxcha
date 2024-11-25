@@ -122,7 +122,7 @@ func (ServiceManager) GetServiceList(c *gin.Context) {
 
 	// 获取分页数据
 	var list []Response.ServiceList
-	tel.Offset((pageReq.Page - 1) * pageReq.Offset).Limit(pageReq.Offset).Scan(&list)
+	tel.Offset((pageReq.Page - 1) * pageReq.Offset).Order("id desc").Limit(pageReq.Offset).Scan(&list)
 	for key, _ := range list {
 		serviceSocketKey := Common2.Tools{}.GetServiceWebSocketId(list[key].ServiceId)
 		list[key].IsOnline = Base.WebsocketHub.UserIdIsOnline(serviceSocketKey)

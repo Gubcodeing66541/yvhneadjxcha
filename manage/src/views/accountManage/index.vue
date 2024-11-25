@@ -229,6 +229,8 @@ const serviceColumns = [
     { title: '在线状态', dataIndex: 'is_online', width: 90 },
     { title: '账号状态', dataIndex: 'status', width: 90 },
     { title: '激活码', dataIndex: 'username', width: 220 },
+    { title: '域名', dataIndex: 'domain', width: 220 },
+
 ];
 const accountColumns = [
     { title: '序号', dataIndex: 'id', width: 80 },

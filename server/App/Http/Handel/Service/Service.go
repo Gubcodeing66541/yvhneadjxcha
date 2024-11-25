@@ -1,6 +1,7 @@
 package Service
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"math"
 	"server/App/Common"
@@ -10,6 +11,7 @@ import (
 	Common2 "server/App/Model/Common"
 	Service2 "server/App/Model/Service"
 	"server/App/Model/ServiceManager"
+	"server/App/Sdk"
 	"server/Base"
 	"time"
 )
@@ -302,8 +304,12 @@ func (Service) ResetQrcode(c *gin.Context) {
 
 	roleId := Common.Tools{}.GetServiceId(c)
 	code := Common.Tools{}.CreateActiveCode(roleId)
-	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Updates(&Service2.Service{Code: code})
 
+	domainInfo := Logic.Domain{}.GetTransfer()
+	web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, code)
+	u, _ := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+
+	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Updates(&Service2.Service{Code: code, Domain: u})
 	Common.ApiResponse{}.Success(c, "ok", gin.H{})
 }
 

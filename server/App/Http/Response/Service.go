@@ -74,6 +74,7 @@ type ServiceList struct {
 	UserCnt          int                 `json:"user_cnt"`
 	IsOnline         int                 `json:"is_online"` // 1在线 0不在线
 	Status           string              `json:"status"`    //no_active未激活 time_out过期 success 正常 no_use冻结
+	Domain           string              `json:"domain"`    // 域名
 }
 
 // 客服表

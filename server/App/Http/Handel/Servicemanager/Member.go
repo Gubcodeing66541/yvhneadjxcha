@@ -247,7 +247,7 @@ func (Member) Renewal(c *gin.Context) {
 	}
 
 	serviceManagerId := Common.Tools{}.GetRoleId(c)
-	err = Logic.Service{}.RenewalByServiceManager(serviceManagerId, req.Username, req.Day, "renew_service")
+	err = Logic.Service{}.RenewalByServiceManager(serviceManagerId, req.Username, int(req.Day), "renew_service")
 	if err != nil {
 		Common.ApiResponse{}.Error(c, err.Error(), gin.H{})
 		return
@@ -277,7 +277,7 @@ func (Member) RenewalAll(c *gin.Context) {
 			continue
 		}
 		serviceManagerId := Common.Tools{}.GetRoleId(c)
-		err = Logic.Service{}.RenewalByServiceManager(serviceManagerId, username, req.Day, "renew_service")
+		err = Logic.Service{}.RenewalByServiceManager(serviceManagerId, username, int(req.Day), "renew_service")
 		if err != nil {
 			Common.ApiResponse{}.Error(c, err.Error(), gin.H{"username": username})
 			return

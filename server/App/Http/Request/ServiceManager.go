@@ -58,12 +58,12 @@ type MemberCreateServiceId struct {
 
 type MemberServiceRenewal struct {
 	Username string `json:"username" uri:"username" form:"username" binding:"required"`
-	Day      int    `json:"day" uri:"day" form:"day"  binding:"required"`
+	Day      uint   `json:"day" uri:"day" form:"day"  binding:"required"`
 }
 
 type MemberServiceRenewalList struct {
 	UsernameList string `json:"username_list" uri:"username_list" form:"username_list" binding:"required"`
-	Day          int    `json:"day" uri:"day" form:"day"  binding:"required"`
+	Day          uint   `json:"day" uri:"day" form:"day"  binding:"required"`
 }
 
 type BlackPage struct {

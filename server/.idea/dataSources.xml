@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="43.155.7.124" uuid="ffefec79-e1e8-40d3-9a4c-afd4a76fcffa">
+    <data-source source="LOCAL" name="@156.225.29.12" uuid="57c76a34-6743-4b23-ab3d-d185f17182d7">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://43.155.7.124:3306</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-      <keep-alive enable="true" />
-    </data-source>
-    <data-source source="LOCAL" name="正式服" uuid="b3da4f0b-d385-45f7-91f1-2297fe22da41">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://rm-3nsalzp3kss77p25zdo.mysql.rds.aliyuncs.com:3306</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="@43.155.25.156" uuid="73d25701-fac7-409c-bfa2-a86e83f5561a">
-      <driver-ref>mysql_aurora_aws</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>software.aws.rds.jdbc.mysql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql:aws://43.155.25.156:3306</jdbc-url>
+      <jdbc-url>jdbc:mysql://156.225.29.12:3306</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="com.intellij.clouds.kubernetes.db.host.port" />
+        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+        <property name="com.intellij.clouds.kubernetes.db.container.port" />
+      </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
