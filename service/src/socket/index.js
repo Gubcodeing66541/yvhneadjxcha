@@ -13,7 +13,7 @@ let mp3 = new Audio(import.meta.env.VITE_BASE_URL + '/common/audio/mesg.mp3');
 
 // 初始化socket
 const initWebSocket = () => {
-    let socketUrl = 'ws://127.0.0.1' + `/api/websocket/conn?token=${store.state.token}`; // socket地址
+    let socketUrl = 'ws://156.225.29.12' + `/api/websocket/conn?token=${store.state.token}`; // socket地址
     websocket = new WebSocket(socketUrl);
     websocketonopen();  // socket 连接成功
     websocketclose(); //断开连接   
