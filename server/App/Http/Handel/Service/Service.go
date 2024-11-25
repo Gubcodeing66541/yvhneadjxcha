@@ -307,7 +307,11 @@ func (Service) ResetQrcode(c *gin.Context) {
 
 	domainInfo := Logic.Domain{}.GetTransfer()
 	web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, code)
-	u, _ := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+	u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "域名系统繁忙，请慢点重试", gin.H{})
+		return
+	}
 
 	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Updates(&Service2.Service{Code: code, Domain: u})
 	Common.ApiResponse{}.Success(c, "ok", gin.H{})

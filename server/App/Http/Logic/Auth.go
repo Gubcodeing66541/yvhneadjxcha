@@ -1,6 +1,7 @@
 package Logic
 
 import (
+	"errors"
 	"fmt"
 	"server/App/Common"
 	Service2 "server/App/Model/Service"
@@ -28,7 +29,7 @@ func (Auth) Register(username string, password string, serviceManagerId int) int
 	return serviceAuth.ServiceId
 }
 
-func (Auth) RegisterByServiceManager(username string, serviceName string, serviceManagerId int, Day int) int {
+func (Auth) RegisterByServiceManager(username string, serviceName string, serviceManagerId int, Day int) (int, error) {
 	times := time.Now()
 	serviceAuth := &Service2.ServiceAuth{ServiceManagerId: serviceManagerId, Username: username, CreateTime: times, UpdateTime: times, TimeOut: times}
 	Base.MysqlConn.Create(&serviceAuth)
@@ -37,11 +38,14 @@ func (Auth) RegisterByServiceManager(username string, serviceName string, servic
 
 	domainInfo := Domain{}.GetTransfer()
 	web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, code)
-	u, _ := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+	u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+	if err != nil {
+		return 0, errors.New("域名系统繁忙，请慢点重试")
+	}
 	Base.MysqlConn.Create(&Service2.Service{
 		ServiceManagerId: serviceManagerId, IsActivate: 0, Day: 0, ActivateTime: time.Now(), Status: "success",
 		ServiceId: serviceAuth.ServiceId, Name: serviceName, Head: head, Username: username, Domain: u,
 		Code: code, CreateTime: times, Type: "auth", Role: "user", TimeOut: times, CodeBackground: "#ffffff", CodeColor: "#000000",
 	})
-	return serviceAuth.ServiceId
+	return serviceAuth.ServiceId, nil
 }

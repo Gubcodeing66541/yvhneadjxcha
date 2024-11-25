@@ -51,8 +51,11 @@ func (Member) Create(c *gin.Context) {
 	//	return
 	//}
 	// 注册
-	serviceId, member := Logic.Service{}.CreateByServiceManager(Common.Tools{}.GetRoleId(c), req.ServiceName, req.Day)
-
+	serviceId, member, err := Logic.Service{}.CreateByServiceManager(Common.Tools{}.GetRoleId(c), req.ServiceName, req.Day)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, err.Error(), gin.H{"req": req})
+		return
+	}
 	// 生成快捷回复
 	var message []ServiceManager2.ServiceManagerMessage
 	Base.MysqlConn.Find(&message, "service_manager_id = ?", serviceManager.ServiceManagerId)
@@ -112,8 +115,11 @@ func (Member) CreateList(c *gin.Context) {
 	for i := 0; i < req.ServiceNumber; i++ {
 
 		// 创建账号
-		serviceId, member := Logic.Service{}.CreateByServiceManager(Common.Tools{}.GetRoleId(c), "小客服", req.Day)
-
+		serviceId, member, err := Logic.Service{}.CreateByServiceManager(Common.Tools{}.GetRoleId(c), "小客服", req.Day)
+		if err != nil {
+			Common.ApiResponse{}.Error(c, err.Error(), gin.H{"req": req})
+			return
+		}
 		// 生成快捷回复
 		for _, item := range message {
 			Base.MysqlConn.Create(Service.ServiceMessage{

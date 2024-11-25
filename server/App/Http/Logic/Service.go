@@ -221,8 +221,8 @@ func (Service) DelService(req Request.DelService) {
 }
 
 // 系统注册账号
-func (Service) CreateByServiceManager(serviceManagerId int, serviceName string, Day int) (serviceId int, member string) {
+func (Service) CreateByServiceManager(serviceManagerId int, serviceName string, Day int) (serviceId int, member string, err error) {
 	member = Common.Tools{}.CreateActiveMember()
-	serviceId = Auth{}.RegisterByServiceManager(member, serviceName, serviceManagerId, Day)
-	return serviceId, member
+	serviceId, err = Auth{}.RegisterByServiceManager(member, serviceName, serviceManagerId, Day)
+	return serviceId, member, err
 }
