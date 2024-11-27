@@ -50,7 +50,6 @@ func (ApiRoute) BindRoute(s *gin.Engine) {
 			system.POST("clear_cache", Handel.System{}.ClearCache)
 			system.POST("upload", ApiMiddleWare(), Handel.System{}.Upload)
 			system.POST("upload_image", ApiMiddleWare(), Handel.System{}.UploadImage)
-
 			system.GET("action", Handel.System{}.Action)
 		}
 	}

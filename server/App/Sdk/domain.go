@@ -33,25 +33,5 @@ func CreateDomain(key, domain string) (url string, err error) {
 	if err != nil {
 		return "", err
 	}
-
-	if valResponse.Short == "" {
-		return "", fmt.Errorf("域名添加失败")
-	}
-
-	typeN = rand.Intn(2)
-	api = fmt.Sprintf("https://cdn.yiyai.top/api/?method=add&type=0&key=%s&domain=%d&vip=1&url=%s", key, types[typeN], url2.QueryEscape(valResponse.Short))
-	val = Common.Tools{}.HttpGet(api)
-	fmt.Println("api", api)
-	fmt.Println("logs", string(val), types[typeN], key, domain)
-	valResponse = Response{}
-	err = json.Unmarshal(val, &valResponse)
-	if err != nil {
-		return "", err
-	}
-
-	if valResponse.Short == "" {
-		return "", fmt.Errorf("域名添加失败")
-	}
-
 	return valResponse.Short, nil
 }
