@@ -93,6 +93,7 @@ func initSqlDate() {
 	// 检查账号密码
 	var Member ServiceManager.ServiceManagerAuth
 	Base.MysqlConn.Find(&Member)
+	fmt.Println("member", Member)
 
 	if Member.ServiceManagerId == 0 {
 		Base.MysqlConn.Create(&ServiceManager.ServiceManagerAuth{
