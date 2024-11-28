@@ -61,9 +61,11 @@ func initSqlDate() {
 
 	if Member.ServiceManagerId == 0 {
 		fmt.Println("ERROR IS ", Base.MysqlConn.Create(&ServiceManager.ServiceManagerAuth{
-			Username: Base.AppConfig.Manager.Username,
-			Password: Base.AppConfig.Manager.Password,
-			TimeOut:  time.Now().Add(30 * 6),
+			Username:   Base.AppConfig.Manager.Username,
+			Password:   Base.AppConfig.Manager.Password,
+			TimeOut:    time.Now().Add(30 * 6),
+			CreateTime: time.Now(),
+			UpdateTime: time.Now(),
 		}).Error)
 	}
 
