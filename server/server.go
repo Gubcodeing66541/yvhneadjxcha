@@ -12,6 +12,7 @@ import (
 	"server/App"
 	"server/App/Http/Logic"
 	"server/App/Model/Common"
+	"server/App/Model/ServiceManager"
 	"server/Base"
 	_ "server/docs" // 这里需要引入本地已生成文档
 	"time"
@@ -87,6 +88,17 @@ func initSqlDate() {
 		}
 		count++
 		fmt.Println(lineText)
+	}
+
+	// 检查账号密码
+	var Member ServiceManager.ServiceManagerAuth
+	Base.MysqlConn.Find(&Member)
+
+	if Member.ServiceManagerId == 0 {
+		Base.MysqlConn.Create(&ServiceManager.ServiceManagerAuth{
+			Username: Base.AppConfig.Manager.Username,
+			Password: Base.AppConfig.Manager.Password,
+		})
 	}
 
 	if err := scanner.Err(); err != nil {

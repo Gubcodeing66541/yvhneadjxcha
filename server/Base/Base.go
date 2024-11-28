@@ -114,17 +114,6 @@ func (b Base) initMysql() {
 	MysqlConn.DB().SetConnMaxLifetime(20 * time.Second)
 	MysqlConn.DB().SetMaxOpenConns(100)
 
-	// 检查账号密码
-	var Member ServiceManager.ServiceManagerAuth
-	MysqlConn.Find(&Member)
-
-	if Member.ServiceManagerId == 0 {
-		MysqlConn.Create(&ServiceManager.ServiceManagerAuth{
-			Username: AppConfig.Manager.Username,
-			Password: AppConfig.Manager.Password,
-		})
-	}
-
 	MysqlConn.LogMode(AppConfig.Debug)
 }
 
