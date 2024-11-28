@@ -29,9 +29,10 @@ exit;
 
 #### 修改config配置文件的IP
 vi config.json
+修改head ip
 
 #### 启动服务
-chmod -R 777 server & nohub ./server &
+chmod -R 777 server & nohup ./server &
 
 #### 日志命令行安装
 go get github.com/go-swagger/go-swagger
