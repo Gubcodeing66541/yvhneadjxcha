@@ -60,10 +60,10 @@ func initSqlDate() {
 	fmt.Println("------member----", Member)
 
 	if Member.ServiceManagerId == 0 {
-		Base.MysqlConn.Create(&ServiceManager.ServiceManagerAuth{
+		fmt.Println("ERROR IS ", Base.MysqlConn.Create(&ServiceManager.ServiceManagerAuth{
 			Username: Base.AppConfig.Manager.Username,
 			Password: Base.AppConfig.Manager.Password,
-		})
+		}).Error)
 	}
 
 	var rename Common.Rename
