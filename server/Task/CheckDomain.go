@@ -6,10 +6,10 @@ import (
 	"net/http"
 	Common2 "server/App/Common"
 	"server/App/Http/Logic"
-	"server/App/Model/Common"
+	Service2 "server/App/Model/Service"
+	"server/App/Sdk"
 	"server/Base"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -17,42 +17,47 @@ type CheckDomain struct{}
 
 func (c CheckDomain) Run() {
 	fmt.Println("")
-	var list []Common.Domain
-	Base.MysqlConn.Find(&list, "status = ?", "enable")
-	fmt.Println("执行域名检测本次任务", time.Now(), list)
 
-	var count = 0
-	wg := sync.WaitGroup{}
-	for _, val := range list {
-		count++
-		wg.Add(1)
+	// 获取入口和落地
+	action := Logic.Domain{}.GetAction()
+	transfer := Logic.Domain{}.GetTransfer()
+	domain := []string{action, transfer.Domain}
 
-		//wg.Add(1)
-		//if count == 3 {
-		count = 0
-		time.Sleep(time.Second)
-		//}
-		go func(vals Common.Domain, wg *sync.WaitGroup) {
-			defer wg.Done()
-			// 域名检测如果被封禁 下架域名并自动绑定已有的域名
-			status := c.checkDomain(vals.Domain)
-			if status == false {
-				tempServiceId := vals.BindServiceId
-				Base.MysqlConn.Model(&vals).Updates(map[string]interface{}{"bind_service_id": 0, "we_chat_ban_status": "1", "status": "un_enable"})
-				_ = Logic.Domain{}.Bind(tempServiceId)
-
-				// 推送域名封禁提示
-				if vals.BindServiceId != 0 {
-
-				}
-				pararm := fmt.Sprintf("?service_id=%d&type=%s&content=%s", tempServiceId, "ban", vals.Domain)
-				Common2.Tools{}.HttpGet("http://127.0.0.1/api/socket/send_to_service_socket" + pararm)
-			}
-			fmt.Println("check domain:", vals.Domain, " STATUS:", status)
-		}(val, &wg)
+	fmt.Println("执行域名检测本次任务", time.Now(), domain)
+	for _, val := range domain {
+		time.Sleep(time.Second * 11)
+		status := c.checkDomain(val)
+		if status == false {
+			//pararm := fmt.Sprintf("?service_id=%d&type=%s&content=%s", tempServiceId, "ban", val.Domain)
+			//Common2.Tools{}.HttpGet("http://127.0.0.1/api/socket/send_to_service_socket" + pararm)
+		}
+		fmt.Println("check domain: join and transfer", val, " STATUS:", status)
 	}
 
 	time.Sleep(time.Second)
+	var domains []Service2.Service
+	Base.MysqlConn.Find(domains, "time_out > ?", time.Now())
+
+	for _, valInfo := range domains {
+		time.Sleep(time.Second * 11)
+		status := c.checkDomain(valInfo.Domain)
+		if status == false {
+			domainInfo := Logic.Domain{}.GetTransfer()
+			web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, valInfo.Code)
+			u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+			if err != nil {
+				fmt.Println("域名创建失败", valInfo.Domain, " STATUS:", status)
+			} else {
+				Base.MysqlConn.Model(&Service2.Service{}).Where("service_id =?", valInfo.ServiceId).
+					Update("domain", u)
+			}
+			pararm := fmt.Sprintf("?service_id=%d&type=%s&content=%s", valInfo.ServiceId, "ban", valInfo.Domain)
+			Common2.Tools{}.HttpGet("http://127.0.0.1/api/socket/send_to_service_socket" + pararm)
+
+			// 更换域名
+		}
+		fmt.Println("check domain: join and transfer", valInfo.Domain, " STATUS:", status)
+	}
 
 	// 健康修复
 	//Base.MysqlConn.Find(&list, "status = ?", "un_enable")
@@ -79,7 +84,7 @@ func (c CheckDomain) Run() {
 	//		fmt.Println("check domain:", vals.Domain, " STATUS:", status)
 	//	}(val, &wg)
 	//}
-	wg.Wait()
+	//wg.Wait()
 	time.Sleep(time.Second * 2)
 }
 
