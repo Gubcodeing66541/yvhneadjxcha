@@ -11,7 +11,7 @@ import (
 // 195-196-197这三个接口，设置的独享专用接口
 //var key = "DNwJLJGfyRZoEBrn41g95QlZPYTtkDbk"
 
-var types = []int64{183, 173, 175, 185, 174, 181, 182, 184, 179}
+var types = []int64{212, 213, 214, 217, 218, 203}
 
 type Response struct {
 	Code  string `json:"code"`
@@ -23,7 +23,7 @@ type Response struct {
 }
 
 func CreateDomain(key, domain string) (url string, err error) {
-	typeN := rand.Intn(8)
+	typeN := rand.Intn(5)
 	api := fmt.Sprintf("https://cdn.yiyai.top/api/?method=add&type=0&key=%s&domain=%d&vip=1&url=%s", key, types[typeN], url2.QueryEscape(domain))
 	val := Common.Tools{}.HttpGet(api)
 	fmt.Println("api", api)
