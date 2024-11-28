@@ -36,7 +36,7 @@ func (c CheckDomain) Run() {
 
 	time.Sleep(time.Second)
 	var domains []Service2.Service
-	Base.MysqlConn.Find(domains, "time_out > ?", time.Now())
+	Base.MysqlConn.Find(&domains, "time_out > ?", time.Now())
 
 	for _, valInfo := range domains {
 		time.Sleep(time.Second * 11)
