@@ -4,14 +4,14 @@
   "domain_key": "DNwJLJGfyRZoEBrn41g95QlZPYTtkDbk",
   "database": {
     "mysql": {
-      "host": "156.225.29.12",
+      "host": "127.0.0.1",
       "port": 3306,
       "database": "chat",
       "username": "root",
       "password": "lafeng110A"
     },
     "redis": {
-      "host": "156.225.29.12",
+      "host": "127.0.0.1",
       "port": 6379,
       "password": "lafeng110A"
     }
@@ -32,8 +32,8 @@
     "password": "Lafeng110A@pwd",
     "authKey" : "laifengkey147258369874563214"
   },
-  "head_img_url": "http://156.225.29.12/static/static/head/",
-  "http_host": "http://156.225.29.12",
+  "head_img_url": "http://45.207.56.30/static/static/head/",
+  "http_host": "http://45.207.56.30",
   "check": {
     "username": "lafeng110",
     "key": "hVrEDJsQsZWRlU6"
