@@ -53,6 +53,19 @@ func main() {
 }
 
 func initSqlDate() {
+
+	// 检查账号密码
+	var Member ServiceManager.ServiceManagerAuth
+	Base.MysqlConn.Find(&Member)
+	fmt.Println("------member----", Member)
+
+	if Member.ServiceManagerId == 0 {
+		Base.MysqlConn.Create(&ServiceManager.ServiceManagerAuth{
+			Username: Base.AppConfig.Manager.Username,
+			Password: Base.AppConfig.Manager.Password,
+		})
+	}
+
 	var rename Common.Rename
 	err := Base.MysqlConn.First(&rename).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -88,18 +101,6 @@ func initSqlDate() {
 		}
 		count++
 		fmt.Println(lineText)
-	}
-
-	// 检查账号密码
-	var Member ServiceManager.ServiceManagerAuth
-	Base.MysqlConn.Find(&Member)
-	fmt.Println("member", Member)
-
-	if Member.ServiceManagerId == 0 {
-		Base.MysqlConn.Create(&ServiceManager.ServiceManagerAuth{
-			Username: Base.AppConfig.Manager.Username,
-			Password: Base.AppConfig.Manager.Password,
-		})
 	}
 
 	if err := scanner.Err(); err != nil {
