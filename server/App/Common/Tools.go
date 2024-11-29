@@ -167,28 +167,28 @@ func (t Tools) CreateUUID(code string) string {
 func (t Tools) CreateActiveMember() string {
 	times := time.Now()
 	str := fmt.Sprintf("MEMBER-%s-time:-rand-%d", time.Now(), rand.Intn(99999))
-	str = fmt.Sprintf("BSN-%02d%02d%02d%s", times.Year(), times.Month(), times.Day(), t.Md516(str))
+	str = fmt.Sprintf("GS-%02d%02d%02d%s", times.Year(), times.Month(), times.Day(), t.Md516(str))
 	return str
 }
 
 func (t Tools) CreateOrderId(left string) string {
 	times := time.Now()
 	str := fmt.Sprintf("MEMBER-%s-time:-rand-%d", time.Now(), rand.Intn(99999))
-	str = fmt.Sprintf("BSN-%s%02d%02d%02d%s", left, times.Year(), times.Month(), times.Day(), t.Md516(str))
+	str = fmt.Sprintf("GW-%s%02d%02d%02d%s", left, times.Year(), times.Month(), times.Day(), t.Md516(str))
 	return str
 }
 
 func (t Tools) CreateServiceManagerMember() string {
 	times := time.Now()
 	str := fmt.Sprintf("service-manager-%s-time:-rand-%d", time.Now(), rand.Intn(99999))
-	str = fmt.Sprintf("BSN-%02d%02d%02d%s", times.Year(), times.Month(), times.Day(), t.Md516(str))
+	str = fmt.Sprintf("GW-%02d%02d%02d%s", times.Year(), times.Month(), times.Day(), t.Md516(str))
 	return str
 }
 
 func (t Tools) CreateUserMember() string {
 	times := time.Now()
 	str := fmt.Sprintf("USER-%s-time:-rand-%d", time.Now(), rand.Intn(99999))
-	str = fmt.Sprintf("BSN-U%02d%02d%02d%s", times.Year(), times.Month(), times.Day(), t.Md516(str))
+	str = fmt.Sprintf("GW-U%02d%02d%02d%s", times.Year(), times.Month(), times.Day(), t.Md516(str))
 	return str
 }
 

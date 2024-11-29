@@ -49,7 +49,7 @@
 
         // alert("join uuid"+uuid)
         // 存储uuid并带着uuid跳转
-        window.location.href = CreateLink(uuid)
+        window.location.replace(CreateLink(uuid))
     }
 
         // 中间
@@ -70,7 +70,7 @@
 
 
         // 带着uuid跳转到目的地
-        window.location.href = CreateLink(newUUid)
+        window.location.replace(CreateLink(newUUid))
     }
 
         // 落地
@@ -94,7 +94,7 @@
         // 带着uuid跳转到最终目的地
         // alert("跳轉準備"+currentUuid + "  --  newUUid"+newUUid+CreateLink(newUUid))
 
-        window.location.href = CreateLink(newUUid)
+        window.location.replace(CreateLink(newUUid))
     }
 
     // 生成一个UUID
@@ -124,7 +124,7 @@
             console.log(e)
             // alert("執行綁定OK操作")
 
-            window.location.href = CreateLink(currentUuid)
+            window.location.replace(CreateLink(currentUuid))
         };
         xhr.send(JSON.stringify({action:action})); //file 是要上传的文件对象
     }

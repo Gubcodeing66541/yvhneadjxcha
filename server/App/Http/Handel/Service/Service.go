@@ -317,6 +317,34 @@ func (Service) ResetQrcode(c *gin.Context) {
 	Common.ApiResponse{}.Success(c, "ok", gin.H{})
 }
 
+// @summary 更换二维码
+// @tags 客服系统
+// @Param token header string true "认证token"
+// @Router /service/update_qrcode [post]
+func (Service) UpdateQrcode(c *gin.Context) {
+	var req Request.ResetQrcode
+	err := c.ShouldBind(&req)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "请求錯誤", gin.H{})
+		return
+	}
+
+	roleId := Common.Tools{}.GetServiceId(c)
+	var service Service2.Service
+	Base.MysqlConn.Find(&service, "service_id=?", roleId)
+
+	domainInfo := Logic.Domain{}.GetTransfer()
+	web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, service.Code)
+	u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "域名系统繁忙，请慢点重试", gin.H{})
+		return
+	}
+
+	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Updates(&Service2.Service{Domain: u})
+	Common.ApiResponse{}.Success(c, "ok", gin.H{})
+}
+
 // @summary 快捷回复管理-获取消息列表
 // @tags 客服系统
 // @Param token header string true "认证token"

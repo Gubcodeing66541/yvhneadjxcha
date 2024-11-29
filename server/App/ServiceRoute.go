@@ -20,6 +20,7 @@ func (ServiceRoute) BindRoute(s *gin.Engine) {
 
 	{
 		service.POST("reset_qrcode", Service.Service{}.ResetQrcode)
+		service.POST("update_qrcode", Service.Service{}.UpdateQrcode)
 
 		service.POST("service_manager/message/list", Service.Service{}.ServiceManagerMessageList)
 
