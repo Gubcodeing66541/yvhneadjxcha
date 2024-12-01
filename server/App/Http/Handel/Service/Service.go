@@ -313,7 +313,8 @@ func (Service) ResetQrcode(c *gin.Context) {
 		return
 	}
 
-	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Updates(&Service2.Service{Code: code, Domain: u})
+	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).
+		Updates(map[string]interface{}{"code": code, "domain": u})
 	Common.ApiResponse{}.Success(c, "ok", gin.H{})
 }
 
@@ -341,7 +342,7 @@ func (Service) UpdateQrcode(c *gin.Context) {
 		return
 	}
 
-	err = Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Updates(&Service2.Service{Domain: u}).Error
+	err = Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Update("domain", u).Error
 	fmt.Println("update qe err is", err)
 	Common.ApiResponse{}.Success(c, "ok", gin.H{})
 }
