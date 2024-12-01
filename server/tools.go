@@ -30,7 +30,7 @@ func main() {
 
 	for true {
 		Task.CheckDomain{}.Run()
-		time.Sleep(time.Second * 30)
+		time.Sleep(time.Second)
 	}
 
 	print("done")

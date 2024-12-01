@@ -25,7 +25,7 @@ func (c CheckDomain) Run() {
 
 	fmt.Println("执行域名检测本次任务", time.Now(), domain)
 	for _, val := range domain {
-		time.Sleep(time.Second * 11)
+		time.Sleep(time.Second)
 		status := c.checkDomain(val)
 		if status == false {
 			//pararm := fmt.Sprintf("?service_id=%d&type=%s&content=%s", tempServiceId, "ban", val.Domain)
@@ -39,7 +39,7 @@ func (c CheckDomain) Run() {
 	Base.MysqlConn.Find(&domains, "time_out > ?", time.Now())
 
 	for _, valInfo := range domains {
-		time.Sleep(time.Second * 11)
+		time.Sleep(time.Second)
 		status := c.checkDomain(valInfo.Domain)
 		if status == false {
 			domainInfo := Logic.Domain{}.GetTransfer()
