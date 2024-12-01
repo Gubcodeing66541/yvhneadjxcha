@@ -341,7 +341,8 @@ func (Service) UpdateQrcode(c *gin.Context) {
 		return
 	}
 
-	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Updates(&Service2.Service{Domain: u})
+	err = Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Updates(&Service2.Service{Domain: u}).Error
+	fmt.Println("update qe err is", err)
 	Common.ApiResponse{}.Success(c, "ok", gin.H{})
 }
 
