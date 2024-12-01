@@ -18,7 +18,7 @@ export default {
     name: "empty",
     setup() {
         const state = reactive({
-            image: import.meta.env.VITE_BASE_URL + '/common/service/ico_empty.png'
+            image: "http://"+import.meta.env.VITE_BASE_URL + '/common/service/ico_empty.png'
         });
 
         return {

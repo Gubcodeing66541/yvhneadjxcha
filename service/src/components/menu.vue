@@ -83,7 +83,13 @@
                         <redo-outlined />
                         <span class="ml6">重置二维码</span>
                     </div>
-                </a-popconfirm>                
+                </a-popconfirm>         
+                <a-popconfirm title="更换后当前二维码，旧码不会失效？" @confirm="updateCode">
+                    <div class="pointer" title="更换当前二维码 旧码不会失效">
+                        <redo-outlined />
+                        <span class="ml6">更换二维码</span>
+                    </div>
+                </a-popconfirm>          
                 <div class="flex align-center">
                     <span class="mr6">二维码颜色</span>
                     <input type="color" :value="info.code_color" @input="e => onColorChange('code_color', e)" />
@@ -251,6 +257,11 @@ export default {
             store.dispatch("asyncSetInfo");
         }
 
+        const updateCode = async () => {
+            const res = await axios.post("/update_qrcode");
+            store.dispatch("asyncSetInfo");
+        }
+
         //菜单关闭
         const close = () => {
             state.tabIndex = 'news'
@@ -281,6 +292,7 @@ export default {
             close, //关闭弹窗
             onColorChange, //二维码样式调整
             resetCode, //重置二维码
+            updateCode,//更新二维码
             addClose, //控制新建显示隐藏
             copyHland, //分享统计
         };

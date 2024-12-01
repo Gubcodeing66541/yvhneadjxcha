@@ -2,7 +2,7 @@ import axios from 'axios'
 import { localGet, localRemove } from './index'
 import { Toast } from 'vant';
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL + '/user';
+axios.defaults.baseURL = "http://"+import.meta.env.VITE_BASE_URL + '/user';
 axios.defaults.timeout = 60000;
 
 //请求拦截

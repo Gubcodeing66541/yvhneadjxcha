@@ -9,11 +9,11 @@ let heartTime = null; // 心跳定时器实例
 let HeartTimeOut = 10000; // 心跳超时时间
 let socketError = 0; // 错误次数
 let isClose = false; //websocket 是否关闭连接
-let mp3 = new Audio(import.meta.env.VITE_BASE_URL + '/common/audio/mesg.mp3');
+let mp3 = new Audio("http://"+import.meta.env.VITE_BASE_URL + '/common/audio/mesg.mp3');
 
 // 初始化socket
 const initWebSocket = () => {
-    let socketUrl = 'ws://45.207.56.30' + `/api/websocket/conn?token=${store.state.token}`; // socket地址
+    let socketUrl = 'ws://'+import.meta.env.VITE_BASE_URL + `/api/websocket/conn?token=${store.state.token}`; // socket地址
     websocket = new WebSocket(socketUrl);
     websocketonopen();  // socket 连接成功
     websocketclose(); //断开连接   

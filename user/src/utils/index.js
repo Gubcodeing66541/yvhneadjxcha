@@ -1,6 +1,6 @@
-import axios from '@/utils/axios';
+import axios from 'axios'
 import { compress, compressAccurately } from 'image-conversion';
-const sendMsg = new Audio(import.meta.env.VITE_BASE_URL + '/common/audio/sendMsg.mp3');
+const sendMsg = new Audio("http://"+import.meta.env.VITE_BASE_URL + '/common/audio/sendMsg.mp3');
 /**
  * 全局方法
  * @localGet  ---获取缓存
@@ -114,16 +114,30 @@ export async function videoBeforeUpload(file) {
  * @param {文件} file 
  * @returns 
  */
-export async function uploadFile(file,name="") {
-    return new Promise(async (resolve, reject) => {
-        //获取上传签名
-        const res = await axios.post("/common/api/oss_config", { file_name: file.name || 'file.'+name }, false);        
-        var xhr = new XMLHttpRequest();
-        xhr.open('PUT', res.data.url, true);
-        xhr.onload = function (e) {
+// export async function uploadFile(file,name="") {
+//     return new Promise(async (resolve, reject) => {
+//         //获取上传签名
+//         const res = await axios.post("/common/api/oss_config", { file_name: file.name || 'file.'+name }, false);        
+//         var xhr = new XMLHttpRequest();
+//         xhr.open('PUT', res.data.url, true);
+//         xhr.onload = function (e) {
+//             resolve(res.data.file_name)
+//         };
+//         xhr.send(file); //file 是要上传的文件对象
+//     })
+// }
+export async function uploadFile(file) {
+    return new Promise((resolve, reject) => {
+        let formData = new FormData();
+        formData.append('image', file);
+        axios({
+            method: 'post',
+            url: "http://"+import.meta.env.VITE_BASE_URL + '/api/system/upload',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: formData,
+        }).then(({ data: res }) => {
             resolve(res.data.file_name)
-        };
-        xhr.send(file); //file 是要上传的文件对象
+        }).catch(err => { });
     })
 }
 /**
