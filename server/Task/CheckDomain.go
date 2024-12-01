@@ -6,6 +6,7 @@ import (
 	"net/http"
 	Common2 "server/App/Common"
 	"server/App/Http/Logic"
+	"server/App/Model/Common"
 	Service2 "server/App/Model/Service"
 	"server/App/Sdk"
 	"server/Base"
@@ -30,6 +31,8 @@ func (c CheckDomain) Run() {
 		if status == false {
 			//pararm := fmt.Sprintf("?service_id=%d&type=%s&content=%s", tempServiceId, "ban", val.Domain)
 			//Common2.Tools{}.HttpGet("http://127.0.0.1/api/socket/send_to_service_socket" + pararm)
+			Base.MysqlConn.Model(&Common.Domain{}).
+				Where("domain = ?", val).Update("status", "un_enable")
 		}
 		fmt.Println("check domain: join and transfer", val, " STATUS:", status)
 	}
