@@ -100,6 +100,9 @@ func (s System) Upload(c *gin.Context) {
 }
 
 func (s System) Action(c *gin.Context) {
-	c.String(http.StatusOK, Logic.Domain{}.GetAction())
+	code := c.Query("code")
+	domainInfo := Logic.Domain{}.GetTransfer()
+	web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, code)
+	c.String(http.StatusOK, web)
 	//Common.ApiResponse{}.Success(c, "未知操作", gin.H{"action": Logic.Domain{}.GetAction()})
 }
