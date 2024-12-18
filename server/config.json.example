@@ -4,14 +4,14 @@
   "domain_key": "DNwJLJGfyRZoEBrn41g95QlZPYTtkDbk",
   "database": {
     "mysql": {
-      "host": "127.0.0.1",
+      "host": "mysql57",
       "port": 3306,
       "database": "chat",
       "username": "root",
       "password": "lafeng110A"
     },
     "redis": {
-      "host": "127.0.0.1",
+      "host": "redis8",
       "port": 6379,
       "password": "lafeng110A"
     }
