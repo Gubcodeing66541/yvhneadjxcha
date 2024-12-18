@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="name"></div>
+</body>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const param2 = urlParams.get('param2');
+    console.log(code, param2);
+    var el = document.getElementById('name')
+    el.innerHTML = code
+
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://wfayqfhu.md.ci/api/system/action?code="+code, true);
+    xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+        // var response = JSON.parse(xhr.responseText);
+        // 处理响应数据
+        console.log("http://wfayqfhu.md.ci/api/system/action")
+        window.location.href = xhr.responseText
+    }
+    };
+    xhr.send();
+</script>
+</html>

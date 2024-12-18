@@ -3,6 +3,7 @@ package App
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	Common2 "server/App/Common"
 	"server/App/Constant"
 	"server/App/Http/Handel"
 	"server/App/Http/Handel/Api"
@@ -28,6 +29,11 @@ func (ApiRoute) BindRoute(s *gin.Engine) {
 	//s.StaticFS("/upload", http.Dir("./static/upload"))
 
 	s.GET(":filename", Common.Common{}.WeChatFile)
+
+	s.GET("test/create", func(context *gin.Context) {
+		Common2.CreateDomain()
+		context.String(http.StatusOK, "ok")
+	})
 
 	common := s.Group("common")
 	{

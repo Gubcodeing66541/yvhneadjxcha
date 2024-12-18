@@ -15,7 +15,9 @@ import (
 	"io"
 	"io/ioutil"
 	"math/rand"
+	"mime/multipart"
 	"net/http"
+	"os"
 	"server/App/Http/Constant"
 	"server/App/Model/Common"
 	"server/Base"
@@ -323,4 +325,85 @@ func (t Tools) GetRename() string {
 	var renameDb Common.Rename
 	Base.MysqlConn.Raw("select * from renames order by rand() limit 1").Scan(&renameDb)
 	return renameDb.Rename
+}
+
+func CreateDomain() {
+	// 要上传的文件路径
+	filePath := "./tezt.html"
+
+	// 创建一个新的文件体
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+
+	// 打开文件
+	file, err := os.Open(filePath)
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
+
+	// 创建文件字段
+	part, err := writer.CreateFormFile("file", "1b30ef27-20f8-41d6-a242-d6b6b989197e")
+	if err != nil {
+		fmt.Println("Error creating form file:", err)
+		return
+	}
+
+	// 将文件内容写入到表单字段
+	_, err = io.Copy(part, file)
+	if err != nil {
+		fmt.Println("Error copying file content:", err)
+		return
+	}
+
+	// 设置文件头
+	filename := time.Now().Unix()
+	writer.WriteField("filename", fmt.Sprintf("1b30ef27-20f8-41d6-a242-d6b6b989197e%d", &filename))
+	writer.WriteField("headers", "Content-Type: image/jpeg")
+
+	// 关闭写入器，这样就会写入终止的 boundary
+	err = writer.Close()
+	if err != nil {
+		fmt.Println("Error closing writer:", err)
+		return
+	}
+
+	// 创建请求
+	req, err := http.NewRequest("POST", "https://smartgate.changsha.gov.cn/tybmfwmh/cscnxgw/biz-basic/upload/img", body)
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return
+	}
+
+	// 设置请求头
+	req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.54(0x18003635) NetType/WIFI Language/zh_CN")
+	req.Header.Set("Accept-Encoding", "gzip,compress,br,deflate")
+	req.Header.Set("kid", "PA")
+	req.Header.Set("tid", "APP")
+	req.Header.Set("vid", "3.0.0")
+	req.Header.Set("oid", "WEB")
+	req.Header.Set("satoken", "b386eafc-d321-4d1c-90d9-4a7567903b03")
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	req.Header.Set("Referer", "https://servicewechat.com/wx05e67ebd827342fd/92/page-frame.html")
+
+	// 执行请求
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// 打印响应状态
+	fmt.Println("Response Status:", resp.Status)
+
+	// 打印响应内容（可选）
+	// responseBody, err := io.ReadAll(resp.Body)
+	// if err != nil {
+	//   fmt.Println("Error reading response body:", err)
+	//   return
+	// }
+	// fmt.Println("Response Body:", string(responseBody))
 }
