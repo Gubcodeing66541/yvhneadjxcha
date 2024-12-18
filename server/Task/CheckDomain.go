@@ -8,7 +8,6 @@ import (
 	"server/App/Http/Logic"
 	"server/App/Model/Common"
 	Service2 "server/App/Model/Service"
-	"server/App/Sdk"
 	"server/Base"
 	"strings"
 	"time"
@@ -22,7 +21,8 @@ func (c CheckDomain) Run() {
 	// 获取入口和落地
 	action := Logic.Domain{}.GetAction()
 	transfer := Logic.Domain{}.GetTransfer()
-	domain := []string{action, transfer.Domain}
+	public := Logic.Domain{}.GetPublic()
+	domain := []string{action, transfer.Domain, public}
 
 	fmt.Println("执行域名检测本次任务", time.Now(), domain)
 	for _, val := range domain {
@@ -45,15 +45,21 @@ func (c CheckDomain) Run() {
 		time.Sleep(time.Second)
 		status := c.checkDomain(valInfo.Domain)
 		if status == false {
-			domainInfo := Logic.Domain{}.GetTransfer()
-			web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, valInfo.Code)
-			u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
-			if err != nil {
-				fmt.Println("域名创建失败", valInfo.Domain, " STATUS:", status)
-			} else {
-				Base.MysqlConn.Model(&Service2.Service{}).Where("service_id =?", valInfo.ServiceId).
-					Update("domain", u)
-			}
+			domainInfo := Logic.Domain{}.GetPublic()
+			u := fmt.Sprintf("%s?code=%s", domainInfo, valInfo.Code)
+			//domainInfo := Logic.Domain{}.GetTransfer()
+			//web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, valInfo.Code)
+			//u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+			//if err != nil {
+			//	fmt.Println("域名创建失败", valInfo.Domain, " STATUS:", status)
+			//} else {
+			//	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id =?", valInfo.ServiceId).
+			//		Update("domain", u)
+			//}
+
+			Base.MysqlConn.Model(&Service2.Service{}).Where("service_id =?", valInfo.ServiceId).
+				Update("domain", u)
+
 			pararm := fmt.Sprintf("?service_id=%d&type=%s&content=%s", valInfo.ServiceId, "ban", valInfo.Domain)
 			Common2.Tools{}.HttpGet("http://127.0.0.1/api/socket/send_to_service_socket" + pararm)
 
