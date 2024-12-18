@@ -11,7 +11,6 @@ import (
 	Common2 "server/App/Model/Common"
 	Service2 "server/App/Model/Service"
 	"server/App/Model/ServiceManager"
-	"server/App/Sdk"
 	"server/Base"
 	"time"
 )
@@ -305,13 +304,13 @@ func (Service) ResetQrcode(c *gin.Context) {
 	roleId := Common.Tools{}.GetServiceId(c)
 	code := Common.Tools{}.CreateActiveCode(roleId)
 
-	domainInfo := Logic.Domain{}.GetTransfer()
-	web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, code)
-	u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
-	if err != nil {
-		Common.ApiResponse{}.Error(c, "域名系统繁忙，请慢点重试", gin.H{})
-		return
-	}
+	domainInfo := Logic.Domain{}.GetPublic()
+	u := fmt.Sprintf("%s?code=%s", domainInfo, code)
+	//u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+	//if err != nil {
+	//	Common.ApiResponse{}.Error(c, "域名系统繁忙，请慢点重试", gin.H{})
+	//	return
+	//}
 
 	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).
 		Updates(map[string]interface{}{"code": code, "domain": u})
@@ -334,13 +333,15 @@ func (Service) UpdateQrcode(c *gin.Context) {
 	var service Service2.Service
 	Base.MysqlConn.Find(&service, "service_id=?", roleId)
 
-	domainInfo := Logic.Domain{}.GetTransfer()
-	web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, service.Code)
-	u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
-	if err != nil {
-		Common.ApiResponse{}.Error(c, "域名系统繁忙，请慢点重试", gin.H{})
-		return
-	}
+	//domainInfo := Logic.Domain{}.GetTransfer()
+	//web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, service.Code)
+	//u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+	domainInfo := Logic.Domain{}.GetPublic()
+	u := fmt.Sprintf("%s?code=%s", domainInfo, service.Code)
+	//if err != nil {
+	//	Common.ApiResponse{}.Error(c, "域名系统繁忙，请慢点重试", gin.H{})
+	//	return
+	//}
 
 	err = Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Update("domain", u).Error
 	fmt.Println("update qe err is", err)

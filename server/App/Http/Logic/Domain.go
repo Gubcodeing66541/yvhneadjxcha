@@ -11,6 +11,15 @@ import (
 
 type Domain struct{}
 
+func (Domain) GetPublic() string {
+	var domain Common.Domain
+	Base.MysqlConn.Limit(1).Find(&domain, "type = ? and status = 'enable'", "public")
+	if domain.Domain != "" {
+		return domain.Domain
+	}
+	return ""
+}
+
 func (Domain) GetAction() string {
 	var domain Common.Domain
 	Base.MysqlConn.Limit(1).Find(&domain, "type = ? and status = 'enable'", "action")
