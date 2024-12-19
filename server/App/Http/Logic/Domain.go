@@ -22,7 +22,7 @@ func (Domain) GetPublic() string {
 
 func (Domain) GetAction() string {
 	var domain Common.Domain
-	Base.MysqlConn.Limit(1).Find(&domain, "type = ? and status = 'enable'", "action")
+	Base.MysqlConn.Limit(1).Find(&domain, "`type` = ? and status = 'enable'", "action")
 	if domain.Domain != "" {
 		return domain.Domain
 	}
@@ -37,13 +37,13 @@ func (Domain) Get(id int) Common.Domain {
 
 func (Domain) GetNoUsePrivateNum() int {
 	var leng int
-	Base.MysqlConn.Model(&Common.Domain{}).Where("type = 'private' and bind_service_id = 0 and we_chat_ban_status = 'success' and status = 'enable'").Count(&leng)
+	Base.MysqlConn.Model(&Common.Domain{}).Where("`type` = 'private' and bind_service_id = 0 and we_chat_ban_status = 'success' and status = 'enable'").Count(&leng)
 	return leng
 }
 
 func (Domain) GetTransfer() Common.Domain {
 	var domain Common.Domain
-	Base.MysqlConn.Model(&Common.Domain{}).Order("id asc").Find(&domain, "type = 'transfer' and status = 'enable' and we_chat_ban_status = 'success' ")
+	Base.MysqlConn.Model(&Common.Domain{}).Order("id asc").Find(&domain, "`type` = 'transfer' and status = 'enable' and we_chat_ban_status = 'success' ")
 	return domain
 }
 
