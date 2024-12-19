@@ -95,3 +95,16 @@ nohup ./server > server.log 2>&1 &
 #https://gatewaynew.azure-api.net/user/code/actions?code=cbbeb6ec2a5e0c041
 
 #### 安装按照模板的创建【需要注意部署规范】
+# 安装Certbot和Nginx（如果尚未安装）
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot python3-certbot-nginx nginx
+
+# 运行Certbot以自动获取证书
+sudo certbot --nginx
+
+# 如果你想手动指定域名，可以使用以下命令
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
