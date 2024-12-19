@@ -131,7 +131,7 @@ func (Domain) Create(domain string, typeEd string, status string) {
 	domainList := strings.Split(domain, "\n")
 	for _, domain = range domainList {
 
-		if domain[0:3] != "http" {
+		if string(domain[0:3]) != "http" {
 			domain = "http://" + domain
 		}
 		var domaineEntity Common.Domain
