@@ -116,3 +116,4 @@ certbot certonly --email admin@www.xxx.cn  --webroot -w ./ -d fnukywkw.md.ci
 
 echo /etc/letsencrypt/live/fnukywkw.md.ci/fullchain.pem >> Test/build/
 /etc/letsencrypt/live/fnukywkw.md.ci/privkey.pem
+ps -ef | grep nginx | grep -v grep| awk '{print $2}' | xargs kill -9

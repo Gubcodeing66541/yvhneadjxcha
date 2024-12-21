@@ -56,7 +56,7 @@ func (ServiceManager) Renew(ServiceManagerId int, Account int, Reason string, Pa
 	}
 
 	Base.MysqlConn.Model(&ServiceManager2.ServiceManager{}).Where("service_manager_id = ?", ServiceManagerId).
-		Update("Account", gorm.Expr("Account + ?", Account))
+		Update("account", gorm.Expr("account + ?", Account))
 	Base.MysqlConn.Create(&Response.ServiceManagerRenewRecorder{
 		ServiceManagerMember: account.Member, Member: member,
 		ServiceManagerId: ServiceManagerId, OldAccount: account.Account, OrderId: Common.Tools{}.CreateOrderId("PAY"),

@@ -72,6 +72,10 @@ func (Domain) Bind(serviceId int) error {
 		return errors.New("无可用分配域名")
 	}
 
+	// 修改service域名
+	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id = ?", service.Id).
+		Update("domain", domain.Domain+"?code=", service.Code)
+
 	Base.MysqlConn.Model(&domain).Where("id = ?", domain.Id).Update("bind_service_id", serviceId)
 	return nil
 }
