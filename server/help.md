@@ -108,3 +108,11 @@ sudo certbot --nginx
 
 # 如果你想手动指定域名，可以使用以下命令
 sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+
+sudo certbot --nginx -d fnukywkw.md.ci -d fnukywkw.md.ci
+
+certbot certonly --email admin@www.xxx.cn  --webroot -w ./ -d fnukywkw.md.ci
+certbot certonly --email admin@www.xxx.cn  --webroot -w ./ -d fnukywkw.md.ci
+
+echo /etc/letsencrypt/live/fnukywkw.md.ci/fullchain.pem >> Test/build/
+/etc/letsencrypt/live/fnukywkw.md.ci/privkey.pem
