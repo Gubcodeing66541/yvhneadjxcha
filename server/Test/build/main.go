@@ -35,7 +35,14 @@ func main() {
 
 		numI, _ := strconv.Atoi(num)
 		flist := []string{}
+		var number = 0
+
 		for i := 0; i < numI; i++ {
+			number++
+			if number >= 5 {
+				time.Sleep(time.Second)
+				number = 0
+			}
 			flist = append(flist, GetDomain(i))
 		}
 
