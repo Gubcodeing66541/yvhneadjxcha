@@ -57,6 +57,7 @@ func (ApiRoute) BindRoute(s *gin.Engine) {
 			system.POST("upload", ApiMiddleWare(), Handel.System{}.Upload)
 			system.POST("upload_image", ApiMiddleWare(), Handel.System{}.UploadImage)
 			system.GET("action", Handel.System{}.Action)
+			system.GET("location", Handel.System{}.Location)
 		}
 	}
 	api.GET("test/push", func(context *gin.Context) {
