@@ -109,11 +109,16 @@ sudo certbot --nginx
 # 如果你想手动指定域名，可以使用以下命令
 sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
 
-sudo certbot --nginx -d fnukywkw.md.ci -d fnukywkw.md.ci
+sudo certbot --nginx -d www.dfwr96r2.skin -d www.dfwr96r2.skin
 
 certbot certonly --email admin@www.xxx.cn  --webroot -w ./ -d fnukywkw.md.ci
-certbot certonly --email admin@www.xxx.cn  --webroot -w ./ -d fnukywkw.md.ci
+certbot certonly --email admin@dfwr96r2.skin --webroot -w ./ -d dfwr96r2.skin
 
 echo /etc/letsencrypt/live/fnukywkw.md.ci/fullchain.pem >> Test/build/
 /etc/letsencrypt/live/fnukywkw.md.ci/privkey.pem
 ps -ef | grep nginx | grep -v grep| awk '{print $2}' | xargs kill -9
+
+www.dfwr96r2.skin
+echo  /etc/letsencrypt/live/www.dfwr96r2.skin/fullchain.pem
+echo  /etc/letsencrypt/live/www.dfwr96r2.skin/privkey.pem
+
