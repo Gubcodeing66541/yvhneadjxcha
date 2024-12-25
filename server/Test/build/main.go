@@ -30,7 +30,7 @@ type responseData struct {
 
 func main() {
 	s := gin.Default()
-	s.GET("/create/:num", func(c *gin.Context) {
+	s.GET("/join/:num", func(c *gin.Context) {
 		num := c.Param("num")
 
 		numI, _ := strconv.Atoi(num)
@@ -43,7 +43,7 @@ func main() {
 				time.Sleep(time.Second)
 				number = 0
 			}
-			flist = append(flist, GetDomain(i, "tezt.html"))
+			flist = append(flist, GetDomain(i, "join.html"))
 		}
 
 		stv := ""
@@ -62,7 +62,7 @@ func main() {
 		c.String(http.StatusOK, name)
 	})
 
-	s.GET("location/:num", func(c *gin.Context) {
+	s.GET("action/:num", func(c *gin.Context) {
 		num := c.Param("num")
 		numI, _ := strconv.Atoi(num)
 		flist := []string{}
@@ -73,7 +73,7 @@ func main() {
 				time.Sleep(time.Second)
 				number = 0
 			}
-			flist = append(flist, GetDomain(i, "location.html"))
+			flist = append(flist, GetDomain(i, "action.html"))
 		}
 
 		stv := ""

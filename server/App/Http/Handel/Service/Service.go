@@ -304,12 +304,18 @@ func (Service) ResetQrcode(c *gin.Context) {
 	roleId := Common.Tools{}.GetServiceId(c)
 	code := Common.Tools{}.CreateActiveCode(roleId)
 
+	Logic.Domain{}.Bind(roleId)
+
 	domainInfo := Logic.Domain{}.GetServiceBind(roleId)
 	u := fmt.Sprintf("%s?code=%s", domainInfo.Domain, code)
 	//u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
 	//if err != nil {
 	//	Common.ApiResponse{}.Error(c, "域名系统繁忙，请慢点重试", gin.H{})
 	//	return
+	//}
+
+	//if domainInfo.Domain == "" {
+
 	//}
 
 	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).
@@ -336,6 +342,7 @@ func (Service) UpdateQrcode(c *gin.Context) {
 	//domainInfo := Logic.Domain{}.GetTransfer()
 	//web := fmt.Sprintf("%s/user/auth/local_storage/join_new?code=%s", domainInfo.Domain, service.Code)
 	//u, err := Sdk.CreateDomain(Base.AppConfig.DomainKey, web)
+	err = Logic.Domain{}.Bind(roleId)
 	domainInfo := Logic.Domain{}.GetServiceBind(roleId)
 	u := fmt.Sprintf("%s?code=%s", domainInfo.Domain, service.Code)
 	//if err != nil {
