@@ -122,3 +122,6 @@ www.dfwr96r2.skin
 echo  /etc/letsencrypt/live/www.dfwr96r2.skin/fullchain.pem
 echo  /etc/letsencrypt/live/www.dfwr96r2.skin/privkey.pem
 
+mysql -h 127.0.0.1 -u root -p
+delete from domains where type = 'private'
+

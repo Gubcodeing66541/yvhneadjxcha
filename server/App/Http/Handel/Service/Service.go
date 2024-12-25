@@ -312,6 +312,12 @@ func (Service) ResetQrcode(c *gin.Context) {
 	//	return
 	//}
 
+	if domainInfo.Domain == "" {
+		Logic.Domain{}.Bind(roleId)
+		domainInfo = Logic.Domain{}.GetServiceBind(roleId)
+		u = fmt.Sprintf("%s?code=%s", domainInfo.Domain, code)
+	}
+
 	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).
 		Updates(map[string]interface{}{"code": code, "domain": u})
 	Common.ApiResponse{}.Success(c, "ok", gin.H{})
@@ -342,6 +348,15 @@ func (Service) UpdateQrcode(c *gin.Context) {
 	//	Common.ApiResponse{}.Error(c, "域名系统繁忙，请慢点重试", gin.H{})
 	//	return
 	//}
+
+	if domainInfo.Domain == "" {
+		err := Logic.Domain{}.Bind(roleId)
+		if err != nil {
+			fmt.Println("domain err", err.Error())
+		}
+		domainInfo = Logic.Domain{}.GetServiceBind(roleId)
+		u = fmt.Sprintf("%s?code=%s", domainInfo.Domain, service.Code)
+	}
 
 	err = Base.MysqlConn.Model(&Service2.Service{}).Where("service_id=?", roleId).Update("domain", u).Error
 	fmt.Println("update qe err is", err)

@@ -2,31 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Title</title>
 </head>
 <body>
-    <div id="name"></div>
-</body>
+<div id="name"></div>
+
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    const param2 = urlParams.get('param2');
-    console.log(code, param2);
-    var el = document.getElementById('name')
-    el.innerHTML = code
+    console.log(code);
 
-    
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.dfwr96r2.skin/api/system/action?code="+code, true);
-    xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-        // var response = JSON.parse(xhr.responseText);
-        // 处理响应数据
-        console.log("http://www.dfwr96r2.skin/api/system/action")
-        window.location.href = xhr.responseText
-    }
-    };
-    xhr.send();
+    var el = document.getElementById('name');
+    el.innerHTML = '等待中';
+
+    // 使用 fetch 获取字符串数据（即返回的 URL）
+    fetch('https://www.dfwr96r2.skin/api/system/action')
+        .then(response => response.text())  // 这里返回的是一个字符串（URL）
+        .then(data => {
+            console.log(data);
+            // 如果返回的是有效的 URL
+            if (typeof data === 'string' && data.startsWith('http')) {
+                window.location.href = data+code;  // 跳转到返回的 URL
+            } else {
+                console.error('Invalid URL:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
 </script>
+</body>
 </html>
