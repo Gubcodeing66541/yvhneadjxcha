@@ -109,7 +109,7 @@ func (s System) Action(c *gin.Context) {
 
 func (s System) Location(c *gin.Context) {
 	code := c.Query("code")
-	domainInfo := Logic.Domain{}.GetTransfer()
-	web := fmt.Sprintf("%s?code=%s", domainInfo.Domain, code)
+	domainInfo := Logic.Domain{}.GetAction()
+	web := fmt.Sprintf("%s?code=%s", domainInfo, code)
 	c.String(http.StatusOK, web)
 }

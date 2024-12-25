@@ -21,7 +21,7 @@
             .then(data => {
                 localStorage.setItem("token", data.data.token);
                 console.log(data.data.token,data.data.action)
-                window.location.href = data.data.action
+                // window.location.href = data.data.action
 
             })
             .catch(error => console.error('Error:', error)); // 错误处理
@@ -32,7 +32,7 @@
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log("Redirecting to: " + xhr.responseText);
                 console.log(token,xhr.responseText)
-                window.location.href = xhr.responseText
+                // window.location.href = xhr.responseText
             } else if (xhr.readyState === 4) {
                 console.error("Failed to fetch location data, status: " + xhr.status);
             }
