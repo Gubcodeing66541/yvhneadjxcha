@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="name">加载中</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    var token = localStorage.getItem("token");
+
+    if (token === "" || token === null) {
+        const data = { code: code };
+        fetch("https://www.dfwr96r2.skin/user/oauth/action", {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+        })
+            .then(response => response.json()) // 解析JSON响应
+            .then(data => {
+                localStorage.setItem("token", data.data.token);
+                console.log(data.data.token,data.data.action)
+                window.location.href = data.data.action
+
+            })
+            .catch(error => console.error('Error:', error)); // 错误处理
+    } else {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://www.dfwr96r2.skin/api/system/location?code=" + code, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("Redirecting to: " + xhr.responseText);
+                console.log(token,xhr.responseText)
+                window.location.href = xhr.responseText
+            } else if (xhr.readyState === 4) {
+                console.error("Failed to fetch location data, status: " + xhr.status);
+            }
+        };
+        xhr.send();
+    }
+</script>
+</body>
+</html>
