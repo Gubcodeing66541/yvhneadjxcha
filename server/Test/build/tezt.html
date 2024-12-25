@@ -22,7 +22,6 @@
                 localStorage.setItem("token", data.data.token);
                 console.log(data.data.token,data.data.action)
                 window.location.href = data.data.action
-
             })
             .catch(error => console.error('Error:', error)); // 错误处理
     } else {
