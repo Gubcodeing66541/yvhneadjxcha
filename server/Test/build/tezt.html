@@ -5,31 +5,39 @@
     <title>Title</title>
 </head>
 <body>
-<div id="name"></div>
+<div id="name">加载中</div>
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    console.log(code);
+    var token = localStorage.getItem("token");
 
-    var el = document.getElementById('name');
-    el.innerHTML = '等待中';
-
-    // 使用 fetch 获取字符串数据（即返回的 URL）
-    fetch('https://www.dfwr96r2.skin/api/system/action')
-        .then(response => response.text())  // 这里返回的是一个字符串（URL）
-        .then(data => {
-            console.log(data);
-            // 如果返回的是有效的 URL
-            if (typeof data === 'string' && data.startsWith('http')) {
-                window.location.href = data+code;  // 跳转到返回的 URL
-            } else {
-                console.error('Invalid URL:', data);
-            }
+    if (token === "" || token === null) {
+        const data = { code: code };
+        fetch("https://www.dfwr96r2.skin/user/oauth/action", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
+            .then(response => response.json()) // 解析JSON响应
+            .then(data => {
+                localStorage.setItem("token", data.data.token);
+                window.location.href = data.data.action;
+            })
+            .catch(error => console.error('Error:', error)); // 错误处理
+    } else {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://www.dfwr96r2.skin/api/system/location?code=" + code, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("Redirecting to: " + xhr.responseText);
+                window.location.href = xhr.responseText;
+            } else if (xhr.readyState === 4) {
+                console.error("Failed to fetch location data, status: " + xhr.status);
+            }
+        };
+        xhr.send();
+    }
 </script>
 </body>
 </html>
