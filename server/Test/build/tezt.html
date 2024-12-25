@@ -15,14 +15,14 @@
     if (token === "" || token === null) {
         const data = { code: code };
         fetch("https://www.dfwr96r2.skin/user/oauth/action", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
         })
             .then(response => response.json()) // 解析JSON响应
             .then(data => {
                 localStorage.setItem("token", data.data.token);
-                window.location.href = data.data.action;
+                console.log(data.data.token,data.data.action)
+                window.location.href = data.data.action
+
             })
             .catch(error => console.error('Error:', error)); // 错误处理
     } else {
@@ -31,7 +31,8 @@
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log("Redirecting to: " + xhr.responseText);
-                window.location.href = xhr.responseText;
+                console.log(token,xhr.responseText)
+                window.location.href = xhr.responseText
             } else if (xhr.readyState === 4) {
                 console.error("Failed to fetch location data, status: " + xhr.status);
             }
