@@ -1,4 +1,4 @@
-var cdnDomain = "http://"+import.meta.env.VITE_BASE_URL + '/common' // 文件资源
+var cdnDomain = "http://"+import.meta.env.VITE_BASE_URL + 'common' // 文件资源
 /**
  * 动态表情
  */

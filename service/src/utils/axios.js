@@ -3,7 +3,7 @@ import { localGet, localRemove } from './index'
 import { message } from 'ant-design-vue';
 import { websocketClose } from "@/socket";
 
-axios.defaults.baseURL = 'http://'+import.meta.env.VITE_BASE_URL + '/service';
+axios.defaults.baseURL = 'http://'+import.meta.env.VITE_BASE_URL + 'service';
 axios.defaults.timeout = 60000;
 
 //请求拦截

@@ -8,6 +8,7 @@ const baseUrl = {
 }
 
 export default ({ mode }) => defineConfig({
+  publicPath:"",
   plugins: [vue()],
   base: baseUrl[mode],
   resolve: {
