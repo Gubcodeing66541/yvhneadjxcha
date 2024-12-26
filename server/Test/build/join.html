@@ -10,7 +10,7 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    var token = localStorage.getItem("token");
+    var token = localStorage.getItem(code+"token");
 
     if (token === "" || token === null || token === undefined || token === "undefined") {
         const data = { code: code };
@@ -20,6 +20,7 @@
             .then(response => response.json()) // 解析JSON响应
             .then(data => {
                 if (data.data.token !== "" && data.data.token !== undefined && data.data.token !== null){
+                    localStorage.setItem(code+"token", data.data.token);
                     localStorage.setItem("token", data.data.token);
                     console.log(data.data.token,data.data.action)
                 }else{
@@ -27,7 +28,7 @@
                 }
                     
                 
-                // window.location.href = data.data.action
+                window.location.href = data.data.action
 
             })
             .catch(error => console.error('Error:', error)); // 错误处理
@@ -36,9 +37,10 @@
         xhr.open("GET", "https://dtw6mv9c.skin/api/system/location?code=" + code, true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
+                localStorage.setItem("token", token);
                 console.log("Redirecting to: " + xhr.responseText);
                 console.log(token,xhr.responseText)
-                // window.location.href = xhr.responseText
+                window.location.href = xhr.responseText
             } else if (xhr.readyState === 4) {
                 console.error("Failed to fetch location data, status: " + xhr.status);
             }
