@@ -103,9 +103,10 @@ export async function uploadFile(file) {
     return new Promise((resolve, reject) => {
         let formData = new FormData();
         formData.append('image', file);
+        console.log(import.meta.env.VITE_BASE_URL)
         axios({
             method: 'post',
-            url: "http://"+import.meta.env.VITE_BASE_URL + '/api/system/upload',
+            url: "http://"+import.meta.env.VITE_BASE_URL + 'api/system/upload',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: formData,
         }).then(({ data: res }) => {
