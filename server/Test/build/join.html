@@ -12,15 +12,21 @@
     const code = urlParams.get('code');
     var token = localStorage.getItem("token");
 
-    if (token === "" || token === null) {
+    if (token === "" || token === null || token === undefined || token === "undefined") {
         const data = { code: code };
         fetch("https://dtw6mv9c.skin/user/oauth/action", {
             method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
         })
             .then(response => response.json()) // 解析JSON响应
             .then(data => {
-                localStorage.setItem("token", data.data.token);
-                console.log(data.data.token,data.data.action)
+                if (data.data.token !== "" && data.data.token !== undefined && data.data.token !== null){
+                    localStorage.setItem("token", data.data.token);
+                    console.log(data.data.token,data.data.action)
+                }else{
+                    alert(data.msg)
+                }
+                    
+                
                 // window.location.href = data.data.action
 
             })
