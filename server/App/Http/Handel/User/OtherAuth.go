@@ -163,6 +163,7 @@ func (otherAuth) Domain(c *gin.Context) {
 		CreateTime: time.Now(),
 	})
 
+	fmt.Println("ok-----------------------------")
 	domainInfo := Logic.Domain{}.GetAction()
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"action": domainInfo})
 }
