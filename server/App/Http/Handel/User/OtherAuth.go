@@ -2,7 +2,6 @@ package User
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"server/App/Common"
 	"server/App/Http/Logic"
 	"server/App/Http/Request"
@@ -11,6 +10,8 @@ import (
 	"server/App/Model/User"
 	"server/Base"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type otherAuth struct{}
@@ -75,6 +76,18 @@ func (otherAuth) Action(c *gin.Context) {
 	Base.MysqlConn.Model(Message2.Message{}).Where("service_id = ? and user_id = ? and is_read = 0",
 		service.ServiceId, userModel.UserId).Updates(
 		gin.H{"is_read": 1})
+
+	Base.MysqlConn.Model(&Request.ServiceRoomDetail{}).Where("service_id = ? and user_id = ?",
+		service.ServiceId, userModel.UserId).Updates(
+		gin.H{"ip": c.ClientIP()})
+
+	Base.MysqlConn.Create(&User.UserLoginLog{
+		UserId:     userModel.UserId,
+		ServiceId:  service.ServiceId,
+		Ip:         c.ClientIP(),
+		Addr:       "",
+		CreateTime: time.Now(),
+	})
 
 	action := Logic.Domain{}.GetAction()
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"token": token, "action": action})
