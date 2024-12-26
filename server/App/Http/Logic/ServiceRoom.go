@@ -2,7 +2,6 @@ package Logic
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"math"
 	"server/App/Common"
 	"server/App/Http/Request"
@@ -12,6 +11,8 @@ import (
 	User2 "server/App/Model/User"
 	"server/Base"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ServiceRoom struct {
@@ -47,7 +48,6 @@ func (ServiceRoom) Get(user User2.User, serviceId int, Ip string, Drive string) 
 		fmt.Println("------------------------------用户的获取到的异步的地址是", RoomId, "---", userAddr.Addr)
 		Base.MysqlConn.Model(&Service2.ServiceRoomDetail{}).
 			Where("service_id = ? and user_id = ?", serviceId, user.UserId).Updates(gin.H{"map": userAddr.Addr})
-
 	}(Ip)
 	return serverRoom
 }
