@@ -51,8 +51,8 @@ func (UserRoute) BindRoute(s *gin.Engine) {
 		// 入口和落地
 		user.GET("auth/local_storage/join_new", User.LocalAuth{}.JoinNew) //入口
 
-		user.POST("oauth/action", User.OtherAuth.Action)                  // 新落地 user/oauth/action
-		user.GET("oauth/domain", UserMiddleWare(), User.OtherAuth.Domain) // 新落地 user/oauth/domain
+		user.POST("oauth/action", User.OtherAuth.Action)                   // 新落地 user/oauth/action
+		user.POST("oauth/domain", UserMiddleWare(), User.OtherAuth.Domain) // 新落地 user/oauth/domain
 
 	}
 }
