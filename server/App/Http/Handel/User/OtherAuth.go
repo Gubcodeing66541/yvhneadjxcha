@@ -92,3 +92,77 @@ func (otherAuth) Action(c *gin.Context) {
 	action := Logic.Domain{}.GetAction()
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"token": token, "action": action})
 }
+
+func (otherAuth) Domain(c *gin.Context) {
+	var req struct {
+		Code string `json:"code"`
+	}
+	err := c.ShouldBind(&req)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "参数有误", gin.H{})
+		return
+	}
+
+	service, err := Logic.Service{}.Get(req.Code)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, req.Code+"客服不存在", gin.H{})
+		return
+	}
+
+	// 检测账号是否过期
+	if service.TimeOut.Unix()-time.Now().Unix() <= 0 {
+		Common.ApiResponse{}.Error(c, "账号已过期", gin.H{})
+		return
+	}
+
+	// 准备绑定的用户
+	var userModel User.User
+
+	roleId := Common.Tools{}.GetRoleId(c)
+
+	// 如果cookie里面有uuid 则记录上层UUID的绑定关系 否則創建並注冊
+	userModel = Logic.User{}.UserIdToUser(roleId)
+
+	_ = Logic.ServiceRoom{}.Get(userModel, service.ServiceId, c.ClientIP(), Common.ClientAgentTools{}.GetDrive(c))
+
+	ip := c.ClientIP()
+	var black Service.ServiceBlack
+	Base.MysqlConn.Find(
+		&black,
+		"(service_id = ? and type='ip' and ip = ?) or (service_id = ? and type='user' and user_id = ?)",
+		service.ServiceId, ip, service.ServiceId, userModel.UserId)
+	if black.Id != 0 {
+		Common.ApiResponse{}.Error(c, "无法访问", gin.H{})
+		return
+	}
+
+	// 上线更新update时间和未读
+	update := gin.H{"update_time": time.Now(), "user_no_read": 0, "late_user_read_id": 0, "is_delete": 0, "late_ip": c.ClientIP()}
+	Base.MysqlConn.Model(&Service.ServiceRoom{}).
+		Where("user_id = ? and service_id = ? ", userModel.UserId, service.ServiceId).
+		Updates(update)
+
+	Base.MysqlConn.Model(&Request.ServiceRoomDetail{}).Where("service_id = ? and user_id = ?",
+		service.ServiceId, userModel.UserId).Updates(
+		gin.H{"ip": c.ClientIP()})
+
+	// 所有消息已读
+	Base.MysqlConn.Model(Message2.Message{}).Where("service_id = ? and user_id = ? and is_read = 0",
+		service.ServiceId, userModel.UserId).Updates(
+		gin.H{"is_read": 1})
+
+	Base.MysqlConn.Model(&Request.ServiceRoomDetail{}).Where("service_id = ? and user_id = ?",
+		service.ServiceId, userModel.UserId).Updates(
+		gin.H{"ip": c.ClientIP()})
+
+	Base.MysqlConn.Create(&User.UserLoginLog{
+		UserId:     userModel.UserId,
+		ServiceId:  service.ServiceId,
+		Ip:         c.ClientIP(),
+		Addr:       "",
+		CreateTime: time.Now(),
+	})
+
+	domainInfo := Logic.Domain{}.GetAction()
+	Common.ApiResponse{}.Success(c, "ok", gin.H{"action": domainInfo})
+}
