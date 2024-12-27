@@ -122,6 +122,9 @@ www.dfwr96r2.skin
 echo  /etc/letsencrypt/live/www.dfwr96r2.skin/fullchain.pem
 echo  /etc/letsencrypt/live/www.dfwr96r2.skin/privkey.pem
 
+docker exec -it mysql57 /bin/bash
 mysql -h 127.0.0.1 -u root -p
-delete from domains where type = 'private'
+lafeng110A
+use chat;
+delete from domains where type = 'private';
 
