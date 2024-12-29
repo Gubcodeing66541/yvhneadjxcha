@@ -2,16 +2,17 @@ package main
 
 import (
 	"bytes"
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"io"
-	"math/rand"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type responseData struct {
@@ -28,7 +29,15 @@ type responseData struct {
 	TempFolder interface{} `json:"tempFolder"`
 }
 
+var headers = map[string]interface{}{
+	"User-Agent":      "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.54(0x18003638) NetType/WIFI Language/zh_CN",
+	"Accept-Encoding": "gzip,compress,br,deflate",
+	"token":           "hzfjTokeneyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoemZqIiwiaWQiOiIxODczMDMzNjkyODM1MjIxNTA1IiwibmFtZSI6IuiSi-WNjuS4nCIsImFjY291bnROYW1lIjoiMTMwNjMzMzMwNzAiLCJhcmVhQ29kZSI6IjM3MDEwMjAwMSIsImlhdCI6MTczNTQwMTAwOSwiZXhwIjoxNzM1NDg3NDA5fQ.fLEMx8etCx7ByXZeN4rfUvr8fI-mpv2k5vwxPK9HWtI",
+	"Referer":         "https://servicewechat.com/wx5e6e47eae1827134/24/page-frame.html",
+}
+
 func main() {
+
 	s := gin.Default()
 	s.GET("/join/:num", func(c *gin.Context) {
 		num := c.Param("num")
@@ -43,7 +52,7 @@ func main() {
 				time.Sleep(time.Second)
 				number = 0
 			}
-			flist = append(flist, GetDomain(i, "join.html"))
+			flist = append(flist, GetDomain("join.html", headers))
 		}
 
 		stv := ""
@@ -63,17 +72,20 @@ func main() {
 	})
 
 	s.GET("action/:num", func(c *gin.Context) {
+
 		num := c.Param("num")
 		numI, _ := strconv.Atoi(num)
 		flist := []string{}
 		var number = 0
+		// Example headers
+
 		for i := 0; i < numI; i++ {
 			number++
 			if number >= 5 {
 				time.Sleep(time.Second)
 				number = 0
 			}
-			flist = append(flist, GetDomain(i, "action.html"))
+			flist = append(flist, GetDomain("action.html", headers))
 		}
 
 		stv := ""
@@ -87,93 +99,102 @@ func main() {
 
 }
 
-func GetDomain(i int, filePath string) string {
-	// 要上传的文件路径
-	// 上传接口URL
-	url := "https://stczw.eco-city.gov.cn:10225/fileserver/FileUpload/Upload"
+func GenerateRandomString(length int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	result := make([]byte, length)
+	_, err := rand.Read(result)
+	if err != nil {
+		fmt.Println("Error generating random string:", err)
+		return ""
+	}
+	for i := 0; i < len(result); i++ {
+		result[i] = charset[result[i]%byte(len(charset))]
+	}
+	return string(result)
+}
 
-	// 创建一个新的表单文件请求
+// CreatePost function to upload a file via POST request
+func GetDomain(file string, head map[string]interface{}) string {
+	// Generate a random filename with .jpeg extension
+	randomFileName := GenerateRandomString(10) + ".jpeg"
+	fmt.Println("Generated Random Filename:", randomFileName)
+
+	// Create a buffer to hold the multipart form data
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 
-	// 添加session_token字段 (可以替换为空或需要的值)
-	_ = writer.WriteField("session_token", "")
-
-	// 打开文件
-	file, err := os.Open(filePath)
+	// Open the file to be uploaded
+	fileHandle, err := os.Open(file)
 	if err != nil {
-		fmt.Println("Error opening file:", err)
 		return ""
 	}
-	defer file.Close()
+	defer fileHandle.Close()
 
-	// 添加文件字段，文件的字段名为file，文件内容来自file变量，文件名为指定的filename
-	fileName := fmt.Sprintf("%d%d%d.html", time.Now().Unix(), rand.Intn(999), i)
-
-	part, err := writer.CreateFormFile("file", fileName)
+	// Create the form-data file part, using the random filename
+	part, err := writer.CreateFormFile("file", randomFileName)
 	if err != nil {
-		fmt.Println("Error creating form file:", err)
 		return ""
 	}
 
-	// 将文件内容复制到表单中的part
-	_, err = io.Copy(part, file)
+	// Copy the file content into the form part
+	_, err = io.Copy(part, fileHandle)
 	if err != nil {
-		fmt.Println("Error copying file:", err)
 		return ""
 	}
 
-	// 添加自定义请求头headers，Content-Type: image/jpeg
-	err = writer.WriteField("headers", "Content-Type: image/jpeg")
-	if err != nil {
-		fmt.Println("Error writing field:", err)
-		return ""
+	// Add additional fields if needed (e.g., 'fileCode', etc.)
+	for key, value := range head {
+		_ = writer.WriteField(key, fmt.Sprintf("%v", value))
 	}
 
-	// 结束并关闭writer，完成multipart/form-data的构建
+	// Close the writer to finalize the form data
 	err = writer.Close()
 	if err != nil {
-		fmt.Println("Error closing writer:", err)
 		return ""
 	}
 
-	// 创建请求
-	req, err := http.NewRequest("POST", url, body)
+	// Prepare the request
+	req, err := http.NewRequest("POST", "https://sdhh.yjt.shandong.gov.cn:9443/weld-standard/hzfj-system/system/file/upload", body)
 	if err != nil {
-		fmt.Println("Error creating request:", err)
 		return ""
 	}
 
-	// 设置请求头
-	req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.54(0x18003635) NetType/WIFI Language/zh_CN")
-	req.Header.Set("Accept-Encoding", "gzip,compress,br,deflate")
-	req.Header.Set("Content-Type", writer.FormDataContentType()) // multipart/form-data
-	req.Header.Set("Referer", "https://servicewechat.com/wx98f0c636dce332fe/95/page-frame.html")
+	// Set the headers from the input map
+	for key, value := range head {
+		req.Header.Set(key, fmt.Sprintf("%v", value))
+	}
 
-	// 使用http客户端发送请求
+	// Set the Content-Type header to the multipart writer's value
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	// Send the request using the http client
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("Error sending request:", err)
 		return ""
 	}
 	defer resp.Body.Close()
 
-	// 打印响应内容
+	// Print the response status and body for debugging
 	fmt.Println("Response Status:", resp.Status)
-	respBody, err := io.ReadAll(resp.Body)
+	responseBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("Error reading response body:", err)
 		return ""
 	}
-	fmt.Println("Response Body:", string(respBody))
 
-	var respd responseData
-	err = json.Unmarshal(respBody, &respd)
-	if err != nil {
-		fmt.Println("Error unmarshalling response body:", err)
+	fmt.Println("Response Body:", string(responseBody))
+
+	type responseData struct {
+		Data struct {
+			Url string `json:"url`
+		} `json:"data"`
 	}
-	return "https://stczw.eco-city.gov.cn:10225/fileserver" + respd.Files[0].Url
+
+	var resPon responseData
+
+	json.Unmarshal(responseBody, &resPon)
+
+	return resPon.Data.Url
 }
 
 func ResetDomain(fileName string) string {
