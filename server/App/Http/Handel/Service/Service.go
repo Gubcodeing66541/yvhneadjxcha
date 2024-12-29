@@ -2,7 +2,6 @@ package Service
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"math"
 	"server/App/Common"
 	"server/App/Http/Logic"
@@ -13,6 +12,8 @@ import (
 	"server/App/Model/ServiceManager"
 	"server/Base"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Service struct{}
@@ -136,7 +137,7 @@ func (Service) Info(c *gin.Context) {
 		Type:           service.Type,
 		Code:           service.Code,
 		Host:           domain.Domain,
-		Web:            domain.Domain + "?code=" + service.Code,
+		Web:            domain.Domain + "?code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix()),
 		TimeOut:        service.TimeOut.Format("2006-01-02 15:04:05"),
 		CreateTime:     service.CreateTime,
 		CodeBackground: service.CodeBackground,
