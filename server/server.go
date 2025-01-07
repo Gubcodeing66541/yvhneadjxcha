@@ -24,6 +24,13 @@ import (
 // @description 客服后端：`
 func main() {
 
+	os.Setenv("TZ", "Asia/Shanghai")
+	loc, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		panic(err)
+	}
+	time.Local = loc
+
 	//启动初始化
 	Base.Base{}.Init()
 
