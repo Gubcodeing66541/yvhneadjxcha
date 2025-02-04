@@ -11,11 +11,11 @@ services:
       MYSQL_ROOT_PASSWORD: lafeng110A
       MYSQL_DATABASE: chat
       MYSQL_CHARSET: utf8mb4
-      MYSQL_COLLATION: utf8mb4_general_ci
+      MYSQL_COLLATION: utf8mb4_unicode_ci
       MYSQL_INITDB_CHARACTER_SET: utf8mb4
-      MYSQL_INITDB_COLLATION: utf8mb4_general_ci
+      MYSQL_INITDB_COLLATION: utf8mb4_unicode_ci
       MYSQL_CHARACTER_SET_SERVER: utf8mb4
-      MYSQL_COLLATION_SERVER: utf8mb4_general_ci
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
       LANG: C.UTF-8
   redis8:
     container_name: redis8

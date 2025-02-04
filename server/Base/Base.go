@@ -92,7 +92,7 @@ func (b Base) initMysql() {
 		panic("mysql 初始异常")
 	}
 
-	auto := MysqlConn.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci")
+	auto := MysqlConn.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
 
 	auto.AutoMigrate(&Common.Domain{}, &Common.WeChatAuth{})
 	auto.AutoMigrate(&Message.Message{})
