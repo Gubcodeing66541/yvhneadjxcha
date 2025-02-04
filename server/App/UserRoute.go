@@ -53,7 +53,7 @@ func (UserRoute) BindRoute(s *gin.Engine) {
 
 		user.POST("oauth/action", User.OtherAuth.Action)                   // 新落地 user/oauth/action
 		user.POST("oauth/domain", UserMiddleWare(), User.OtherAuth.Domain) // 新落地 user/oauth/domain
-		user.POST("oauth/token", UserMiddleWare(), User.OtherAuth.Token)   // 新落地 uuid换token
+		user.POST("oauth/token", User.OtherAuth.Token)                     // 新落地 uuid换token
 
 		user.GET("oauth/show_join", User.OtherAuth.ShowJoin)     // 新落地join
 		user.GET("oauth/show_action", User.OtherAuth.ShowAction) // 新落地action
