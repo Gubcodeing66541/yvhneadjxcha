@@ -135,9 +135,9 @@ func (Domain) Create(domain string, typeEd string, status string) {
 	domainList := strings.Split(domain, "\n")
 	for _, domain = range domainList {
 
-		//if string(domain[0:4]) != "http" {
-		//	domain = "http://" + domain
-		//}
+		if !strings.HasPrefix(domain, "http") {
+			domain = "http://" + domain
+		}
 		var domaineEntity Common.Domain
 		domaineEntity.Domain = domain
 		domaineEntity.CreateTime = time.Now()
