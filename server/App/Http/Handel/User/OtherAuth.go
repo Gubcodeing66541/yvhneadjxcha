@@ -2,6 +2,7 @@ package User
 
 import (
 	"fmt"
+	"net/http"
 	"server/App/Common"
 	"server/App/Http/Logic"
 	"server/App/Http/Request"
@@ -95,7 +96,7 @@ func (otherAuth) Action(c *gin.Context) {
 		UserId: userModel.UserId, CookieUid: uuid,
 	})
 
-	action := fmt.Sprintf("%s?uuid=%s", Logic.Domain{}.GetAction(), uuid)
+	action := fmt.Sprintf("%s?uuid=%s&code=%s", Logic.Domain{}.GetAction(), uuid, req.Code)
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"token": token, "action": action, "uuid": uuid})
 }
 
@@ -171,7 +172,7 @@ func (otherAuth) Domain(c *gin.Context) {
 	})
 
 	fmt.Println("ok-----------------------------")
-	domainInfo := fmt.Sprintf("%s?uuid=%s", Logic.Domain{}.GetAction(), req.Uuid)
+	domainInfo := fmt.Sprintf("%s?uuid=%s&code=%s", Logic.Domain{}.GetAction(), req.Uuid, req.Code)
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"action": domainInfo})
 }
 
@@ -196,5 +197,13 @@ func (a otherAuth) Token(c *gin.Context) {
 	}
 	token := Common.Tools{}.EncodeToken(umap.UserId, "user", service.ServiceId, 0)
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"token": token})
+}
+
+func (a otherAuth) ShowJoin(c *gin.Context) {
+	c.HTML(http.StatusOK, "join.html", gin.H{})
+}
+
+func (a otherAuth) ShowAction(c *gin.Context) {
+	c.HTML(http.StatusOK, "action.html", gin.H{})
 
 }

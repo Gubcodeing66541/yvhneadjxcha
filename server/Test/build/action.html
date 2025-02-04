@@ -25,6 +25,8 @@
 
       const urlParams = new URLSearchParams(window.location.search);
       const uuid = urlParams.get('uuid');
+      const code = urlParams.get('code');
+
 
       var token = localStorage.getItem("token");
       function onBridgeReady() { //屏蔽分享按钮
