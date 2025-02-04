@@ -23,6 +23,7 @@
         document.head.appendChild(links);
       }
 
+      var  proto = window.location.protocol
       const urlParams = new URLSearchParams(window.location.search);
       const uuid = urlParams.get('uuid');
       const code = urlParams.get('code');
