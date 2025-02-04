@@ -81,6 +81,8 @@ func (otherAuth) Action(c *gin.Context) {
 		service.ServiceId, userModel.UserId).Updates(
 		gin.H{"ip": c.ClientIP()})
 
+	uuid := Common.Tools{}.CreateUserMember()
+
 	Base.MysqlConn.Create(&User.UserLoginLog{
 		UserId:     userModel.UserId,
 		ServiceId:  service.ServiceId,
@@ -89,13 +91,18 @@ func (otherAuth) Action(c *gin.Context) {
 		CreateTime: time.Now(),
 	})
 
-	action := Logic.Domain{}.GetAction()
-	Common.ApiResponse{}.Success(c, "ok", gin.H{"token": token, "action": action})
+	Base.MysqlConn.Create(&User.UserAuthMap{
+		UserId: userModel.UserId, CookieUid: uuid,
+	})
+
+	action := fmt.Sprintf("%s?uuid=%s", Logic.Domain{}.GetAction(), uuid)
+	Common.ApiResponse{}.Success(c, "ok", gin.H{"token": token, "action": action, "uuid": uuid})
 }
 
 func (otherAuth) Domain(c *gin.Context) {
 	var req struct {
 		Code string `json:"code"`
+		Uuid string `json:"uuid"`
 	}
 	err := c.ShouldBind(&req)
 	if err != nil {
@@ -164,6 +171,30 @@ func (otherAuth) Domain(c *gin.Context) {
 	})
 
 	fmt.Println("ok-----------------------------")
-	domainInfo := Logic.Domain{}.GetAction()
+	domainInfo := fmt.Sprintf("%s?uuid=%s", Logic.Domain{}.GetAction(), req.Uuid)
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"action": domainInfo})
+}
+
+func (a otherAuth) Token(c *gin.Context) {
+	var req struct {
+		Code string `json:"code"`
+		Uuid string `json:"uuid"`
+	}
+	err := c.ShouldBind(&req)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "参数有误", gin.H{})
+		return
+	}
+
+	var umap User.UserAuthMap
+	Base.MysqlConn.Model(&umap).Where("cookie_uid = ?", req.Uuid).Find(&umap)
+
+	service, err := Logic.Service{}.Get(req.Code)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, req.Code+"客服不存在", gin.H{})
+		return
+	}
+	token := Common.Tools{}.EncodeToken(umap.UserId, "user", service.ServiceId, 0)
+	Common.ApiResponse{}.Success(c, "ok", gin.H{"token": token})
+
 }
