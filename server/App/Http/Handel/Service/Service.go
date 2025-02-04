@@ -89,7 +89,9 @@ func (Service) Info(c *gin.Context) {
 	Base.MysqlConn.Model(&Service2.ServiceRoom{}).Where("service_id = ?", service.ServiceId).Count(&RoomCount)
 	Base.MysqlConn.Model(&Service2.ServiceBlack{}).Where("service_id = ?", service.ServiceId).Count(&BlackCount)
 
-	domain := Logic.Domain{}.GetServiceBind(service.ServiceId)
+	//domain := Logic.Domain{}.GetServiceBind(service.ServiceId)
+
+	domain := Logic.Domain{}.GetAction()
 
 	//str := fmt.Sprintf("MEMBER-%s-time:-rand-%d", time.Now(), rand.Intn(99999))
 
@@ -136,8 +138,8 @@ func (Service) Info(c *gin.Context) {
 		Username:       service.Username,
 		Type:           service.Type,
 		Code:           service.Code,
-		Host:           domain.Domain,
-		Web:            domain.Domain + "?response-content-type=text/html&code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix()),
+		Host:           domain,
+		Web:            domain + "?response-content-type=text/html&code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix()),
 		TimeOut:        service.TimeOut.Format("2006-01-02 15:04:05"),
 		CreateTime:     service.CreateTime,
 		CodeBackground: service.CodeBackground,
