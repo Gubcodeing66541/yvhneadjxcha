@@ -23,6 +23,7 @@ var OtherAuth = otherAuth{}
 func (otherAuth) Action(c *gin.Context) {
 	var req struct {
 		Code string `json:"code"`
+		Uuid string `json:"uuid"`
 	}
 	err := c.ShouldBind(&req)
 	if err != nil {
@@ -82,7 +83,10 @@ func (otherAuth) Action(c *gin.Context) {
 		service.ServiceId, userModel.UserId).Updates(
 		gin.H{"ip": c.ClientIP()})
 
-	uuid := Common.Tools{}.CreateUserMember()
+	var uuid = req.Uuid
+	if req.Uuid == "" {
+		uuid = Common.Tools{}.CreateUserMember()
+	}
 
 	Base.MysqlConn.Create(&User.UserLoginLog{
 		UserId:     userModel.UserId,
