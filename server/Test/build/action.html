@@ -29,7 +29,7 @@
       const code = urlParams.get('code');
 
 
-      var token = localStorage.getItem("token");
+      var token = localStorage.getItem(code+"token");
       function onBridgeReady() { //屏蔽分享按钮
         WeixinJSBridge.call('hideOptionMenu');
       }
@@ -49,7 +49,7 @@
               .then(data => {
                 if (data.code === 200){
                   token = data.data.token
-                  localStorage.setItem("token",data.data.token);
+                  localStorage.setItem(code+"token",data.data.token);
                   createJs()
                 }else{
                   alert(data.msg)
