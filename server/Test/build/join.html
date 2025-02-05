@@ -6,21 +6,26 @@
     <meta name="format-detection" content="telephone=yes" />
     <meta name="viewport" content="width=device-width,viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>在线客服</title>
-    <!-- <script type="module" crossorigin src="https://www.ssdfv.cn/users/assets/index.5aa9c97b.js"></script> -->
-<!--    <link rel="stylesheet" href="https://www.ssdfv.cn/users/assets/index.98c19ae0.css">-->
-
 </head>
 <body>
     <div id="app"></div>
 
 <script>
-    function onBridgeReady() { //屏蔽分享按钮
-      WeixinJSBridge.call('hideOptionMenu');
+    function onBridgeReady() {
+        if (typeof WeixinJSBridge !== 'undefined') {
+            WeixinJSBridge.call('hideOptionMenu');
+        }
     }
-    if(typeof WeixinJSBridge == "undefined"){
-      document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);        
-    }else{
-      onBridgeReady()
+    
+    if (typeof WeixinJSBridge === "undefined") {
+        if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+    } else {
+        onBridgeReady();
     }
 </script>
 
@@ -31,16 +36,6 @@
     var token = localStorage.getItem(code+"token");
     var uuid = localStorage.getItem("uuid");
 
-
-    function createJs(){
-        var script = document.createElement('script');
-        script.src =  proto+'//www.ssdfv.cn/users/assets/index.5aa9c97b.js';
-        document.head.appendChild(script);
-
-        var links = document.createElement('link');
-        links.href = proto+'//www.ssdfv.cn/users/assets/index.98c19ae0.css';
-        document.head.appendChild(links);
-    }
 
     if (token === "" || token === null || token === undefined || token === "undefined") {
         const data = { code: code,uuid:uuid};
@@ -60,11 +55,11 @@
                     alert(data.msg)
                 }
             })
-            .catch(error => console.error('Error:', error)); // 错误处理
+            .catch(error => {
+                console.error('Error:', error);
+                alert('网络请求失败，请稍后重试');
+            }); // 错误处理
     } else {
-
-        // createJs()
-
         const data = { code: code,uuid:uuid };
         fetch(proto+"//www.ssdfv.cn/user/oauth/domain", {
             method: 'POST',
@@ -79,7 +74,10 @@
                     alert(data.msg)
                 }
             })
-            .catch(error => alert('Error:', error)); // 错误处理
+            .catch(error => {
+                console.error('Error:', error);
+                alert('网络请求失败，请稍后重试');
+            }); // 错误处理
     }
 </script>
 </body>
