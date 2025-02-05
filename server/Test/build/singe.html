@@ -54,30 +54,30 @@
                 localStorage.setItem("token", data.data.token);
                 localStorage.setItem("uuid",uuid)
                 token = data.data.token
-                // createJs()
-                window.location.href = data.data.action
+                createJs()
+                // window.location.href = data.data.action
               }else{
                 alert(data.msg)
               }
             })
             .catch(error => console.error('Error:', error)); // 错误处理
   } else {
-    // createJs()
-    const data = { code: code,uuid:uuid };
-    fetch(proto+"//www.ssdfv.cn/user/oauth/domain", {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json','token':token},
-      body: JSON.stringify(data)
-    })
-            .then(response => response.json()) // 解析JSON响应
-            .then(data => {
-              if (data.code === 200){
-                window.location.href = data.data.action
-              }else{
-                alert(data.msg)
-              }
-            })
-            .catch(error => alert('Error:', error)); // 错误处理
+    createJs()
+    // const data = { code: code,uuid:uuid };
+    // fetch(proto+"//www.ssdfv.cn/user/oauth/domain", {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json','token':token},
+    //   body: JSON.stringify(data)
+    // })
+    //         .then(response => response.json()) // 解析JSON响应
+    //         .then(data => {
+    //           if (data.code === 200){
+    //             window.location.href = data.data.action
+    //           }else{
+    //             alert(data.msg)
+    //           }
+    //         })
+    //         .catch(error => alert('Error:', error)); // 错误处理
   }
 </script>
 </body>
