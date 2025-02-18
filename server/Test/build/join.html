@@ -38,19 +38,19 @@
 
     // 添加域名检测函数
     async function checkDomainAvailability() {
-        for (const domain of domains) {
-            try {
-                const response = await fetch(`${proto}//${domain}/ping`, {
-                    method: 'GET',
-                    timeout: 3000
-                });
-                if (response.ok) {
-                    return domain;
-                }
-            } catch (error) {
-                // console.log(`域名 ${domain} 不可用`);
-            }
-        }
+        // for (const domain of domains) {
+        //     try {
+        //         const response = await fetch(`${proto}//${domain}/ping`, {
+        //             method: 'GET',
+        //             timeout: 3000
+        //         });
+        //         if (response.ok) {
+        //             return domain;
+        //         }
+        //     } catch (error) {
+        //         // console.log(`域名 ${domain} 不可用`);
+        //     }
+        // }
         return domains[0]; // 如果都不可用，返回第一个域名
     }
 
