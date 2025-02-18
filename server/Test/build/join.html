@@ -6,112 +6,75 @@
     <meta name="format-detection" content="telephone=yes" />
     <meta name="viewport" content="width=device-width,viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>在线客服</title>
+    <!-- <script type="module" crossorigin src="https://www.ssdfv.cn/users/assets/index.5aa9c97b.js"></script> -->
+    <link rel="stylesheet" href="https://www.ssdfv.cn/users/assets/index.98c19ae0.css">
+
 </head>
 <body>
     <div id="app"></div>
 
 <script>
-    function onBridgeReady() {
-        if (typeof WeixinJSBridge !== 'undefined') {
-            WeixinJSBridge.call('hideOptionMenu');
-        }
+    function onBridgeReady() { //屏蔽分享按钮
+      WeixinJSBridge.call('hideOptionMenu');
     }
-    
-    if (typeof WeixinJSBridge === "undefined") {
-        if (document.addEventListener) {
-            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-        } else if (document.attachEvent) {
-            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-        }
-    } else {
-        onBridgeReady();
+    if(typeof WeixinJSBridge == "undefined"){
+      document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);        
+    }else{
+      onBridgeReady()
     }
 </script>
 
 <script>
-    // 添加域名数组
-    const domains = [
-        'www.ssdfv.cn',
-        'fsxlppvd.barreau.bj',
-    ];
-
-    // 添加域名检测函数
-    async function checkDomainAvailability() {
-        // for (const domain of domains) {
-        //     try {
-        //         const response = await fetch(`${proto}//${domain}/ping`, {
-        //             method: 'GET',
-        //             timeout: 3000
-        //         });
-        //         if (response.ok) {
-        //             return domain;
-        //         }
-        //     } catch (error) {
-        //         // console.log(`域名 ${domain} 不可用`);
-        //     }
-        // }
-        return domains[0]; // 如果都不可用，返回第一个域名
-    }
-
-    var proto = window.location.protocol;
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     var token = localStorage.getItem(code+"token");
-    var uuid = localStorage.getItem("uuid");
 
-    // 修改主要逻辑，使用 async/await 处理域名检测
-    async function init() {
-        const availableDomain = await checkDomainAvailability();
-
-        if (token === "" || token === null || token === undefined || token === "undefined") {
-            const data = { code: code, uuid: uuid };
-            try {
-                const response = await fetch(`${proto}//${availableDomain}/user/oauth/action`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                const data = await response.json();
-                if (data.data.token !== "" && data.data.token !== undefined && data.data.token !== null) {
-                    localStorage.setItem(code+"token", data.data.token);
-                    localStorage.setItem("token", data.data.token);
-                    localStorage.setItem("uuid", data.data.uuid);
-                    token = data.data.token;
-                    window.location.href = data.data.action;
-                } else {
-                    alert(data.msg);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('网络请求失败，请稍后重试');
-            }
-        } else {
-            const data = { code: code, uuid: uuid };
-            try {
-                const response = await fetch(`${proto}//${availableDomain}/user/oauth/domain`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'token': token
-                    },
-                    body: JSON.stringify(data)
-                });
-                const data = await response.json();
-                if (data.code === 200) {
-                    window.location.href = data.data.action;
-                } else {
-                    alert(data.msg);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('网络请求失败，请稍后重试');
-            }
-        }
+    function createJs(){
+        var script = document.createElement('script');
+        script.src = 'https://www.ssdfv.cn/users/assets/index.5aa9c97b.js';
+        document.head.appendChild(script);
     }
 
-    // 启动初始化函数
-    init();
+    if (token === "" || token === null || token === undefined || token === "undefined") {
+        const data = { code: code };
+        fetch("https://www.ssdfv.cn/user/oauth/action", {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+        })
+            .then(response => response.json()) // 解析JSON响应
+            .then(data => {
+                if (data.data.token !== "" && data.data.token !== undefined && data.data.token !== null){
+                    localStorage.setItem(code+"token", data.data.token);
+                    localStorage.setItem("token", data.data.token);
+                    console.log(data.data.token,data.data.action)
+                    token = data.data.token
+                    createJs()
+                }else{
+                    alert(data.msg)
+                }                
+                // window.location.href = data.data.action
+
+            })
+            .catch(error => console.error('Error:', error)); // 错误处理
+    } else {
+
+        createJs()
+
+        // const data = { code: code };
+        // fetch("https://www.ssdfv.cn/user/oauth/domain", {
+        //     method: 'POST', 
+        //     headers: { 'Content-Type': 'application/json','token':token}, 
+        //     body: JSON.stringify(data)
+        // })
+        //     .then(response => response.json()) // 解析JSON响应
+        //     .then(data => {
+        //         if (data.code === 200){
+        //             window.location.href = data.data.action
+        //         }else{
+        //             alert(data.msg)
+        //         }
+        //     })
+        //     .catch(error => alert('Error:', error)); // 错误处理
+    }
 </script>
 </body>
 </html>
