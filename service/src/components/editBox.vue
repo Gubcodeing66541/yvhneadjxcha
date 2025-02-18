@@ -12,11 +12,23 @@
                 <SmileOutlined class="mr14 pointer" title="表情" />
             </a-popover>
             <!-- 发送图片 -->
-            <a-upload accept=".png, .jpg, .jpeg" :show-upload-list="false" :before-upload="beforeUpload" :customRequest="uploadImgHland">
+            <a-upload 
+                accept="image/*" 
+                :show-upload-list="false" 
+                :before-upload="beforeUpload" 
+                :customRequest="uploadImgHland"
+                :capture="true"
+            >
                 <PictureOutlined class="mr14 t-tipc f18 pointer" title="发送图片" />
             </a-upload>
             <!-- 发送视频 -->
-            <a-upload accept=".mp4" :show-upload-list="false" :before-upload="videoBeforeUpload" :customRequest="uploadHland">
+            <a-upload 
+                accept="video/*" 
+                :show-upload-list="false" 
+                :before-upload="videoBeforeUpload" 
+                :customRequest="uploadHland"
+                :capture="true"
+            >
                 <VideoCameraOutlined class="mr14 t-tipc f18 pointer" title="发送视频" />
             </a-upload>
             <!-- 快捷回复 -->
