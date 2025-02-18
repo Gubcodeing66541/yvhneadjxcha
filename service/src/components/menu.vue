@@ -6,7 +6,12 @@
                 <template #content>
                     <div style="width:300px">
                         <div class="flex algin-center">
-                            <a-upload accept=".png, .jpg, .jpeg" :show-upload-list="false" :before-upload="beforeUpload" :customRequest="handleChange">
+                            <a-upload 
+                                accept=".png, .jpg, .jpeg" 
+                                :show-upload-list="false" 
+                                :before-upload="beforeUpload"
+                                :customRequest="handleChange"
+                                capture="camera,user">
                                 <a-avatar :src="info.head" shape="square" :size="40" class="mr10 pointer" />
                             </a-upload>                            
                             <div class="flex align-center flex-warp">

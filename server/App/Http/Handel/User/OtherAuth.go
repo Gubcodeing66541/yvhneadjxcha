@@ -191,6 +191,11 @@ func (a otherAuth) Token(c *gin.Context) {
 		return
 	}
 
+	if req.Code == "" || req.Uuid == "" {
+		Common.ApiResponse{}.Error(c, fmt.Sprintf("路由有误 code:%s uuid%s", req.Uuid, req.Uuid), gin.H{})
+		return
+	}
+
 	var umap User.UserAuthMap
 	Base.MysqlConn.Model(&umap).Where("cookie_uid = ?", req.Uuid).Find(&umap)
 
@@ -199,6 +204,9 @@ func (a otherAuth) Token(c *gin.Context) {
 		Common.ApiResponse{}.Error(c, req.Code+"客服不存在", gin.H{})
 		return
 	}
+
+	// 如果用户不存在则创建新用户
+
 	token := Common.Tools{}.EncodeToken(umap.UserId, "user", service.ServiceId, 0)
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"token": token})
 }
