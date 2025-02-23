@@ -120,9 +120,9 @@ func (Domain) Delete(id int) error {
 
 	var domain Common.Domain
 	Base.MysqlConn.Find(&domain, "id = ?", id)
-	if domain.BindServiceId != 0 {
-		return errors.New("该域名已绑定客服，请解绑后再删除")
-	}
+	//if domain.BindServiceId != 0 {
+	//	return errors.New("该域名已绑定客服，请解绑后再删除")
+	//}
 
 	Base.MysqlConn.Delete(&domain, "id = ?", id)
 	return nil
