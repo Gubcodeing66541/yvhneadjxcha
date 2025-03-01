@@ -92,6 +92,12 @@ func (Service) Info(c *gin.Context) {
 	//domain := Logic.Domain{}.GetServiceBind(service.ServiceId)
 
 	domain := Logic.Domain{}.GetPublic()
+	if service.BindDomainId != 0 {
+		domainTemp := Logic.Domain{}.Get(service.BindDomainId)
+		if domainTemp.Domain != "" && domainTemp.Status == "enable" {
+			domain = domainTemp.Domain
+		}
+	}
 
 	//str := fmt.Sprintf("MEMBER-%s-time:-rand-%d", time.Now(), rand.Intn(99999))
 

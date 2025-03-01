@@ -21,8 +21,21 @@ func (c CheckDomain) Run() {
 	// 获取入口和落地
 	action := Logic.Domain{}.GetAction()
 	transfer := Logic.Domain{}.GetTransfer()
-	public := Logic.Domain{}.GetPublic()
-	domain := []string{action, transfer.Domain, public}
+	publicDomain5Number := Logic.Domain{}.GetPublicBindDomain()
+	domain := []string{action, transfer.Domain}
+
+	for _, val := range publicDomain5Number {
+		time.Sleep(time.Second)
+		status := c.checkDomain(val)
+		if status == false {
+			Base.MysqlConn.Model(&Common.Domain{}).
+				Where("domain = ?", val).Update("status", "un_enable")
+
+			// 给所有在线的service发送消息
+			pararm := fmt.Sprintf("?service_id=%d&type=%s&content=%s", 0, "ban", val)
+			Common2.Tools{}.HttpGet("http://127.0.0.1/api/socket/send_to_service_socket" + pararm)
+		}
+	}
 
 	fmt.Println("执行域名检测本次任务", time.Now(), domain)
 	for _, val := range domain {

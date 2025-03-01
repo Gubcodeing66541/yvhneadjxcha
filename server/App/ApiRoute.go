@@ -1,7 +1,6 @@
 package App
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	Common2 "server/App/Common"
 	"server/App/Constant"
@@ -10,6 +9,8 @@ import (
 	"server/App/Http/Handel/Common"
 	"server/App/Http/Handel/WebSocket"
 	"server/Base"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ApiRoute struct{}

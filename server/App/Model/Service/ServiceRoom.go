@@ -11,7 +11,7 @@ type ServiceRoom struct {
 	UserId         int    `gorm:"index:user_id_idx"`
 	LateId         int
 	LateType       string
-	LateMsg        string `json:"late_msg"`
+	LateMsg        string `json:"late_msg"  gorm:"type:text"`
 	LateRole       string
 	LateIp         string `json:"late_ip"`
 	LateUserReadId int

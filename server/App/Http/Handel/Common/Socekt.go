@@ -1,11 +1,12 @@
 package Common
 
 import (
-	"github.com/gin-gonic/gin"
 	Common2 "server/App/Common"
 	"server/App/Http/Request"
 	"server/App/Model/Service"
 	"server/Base"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Socket struct{}
@@ -46,6 +47,15 @@ func (Socket) SendToServiceSocket(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	Common2.ApiResponse{}.SendMsgToService(req.ServiceId, req.Type, req.Content)
+
+	if req.ServiceId == 0 {
+		// 获取所有在线的service
+		serviceIds, _ := Common2.Socket{}.GetAll()
+		for _, val := range serviceIds {
+			Common2.ApiResponse{}.SendMsgToService(val, req.Type, req.Content)
+		}
+	} else {
+		Common2.ApiResponse{}.SendMsgToService(req.ServiceId, req.Type, req.Content)
+	}
 	Common2.ApiResponse{}.Success(c, "发送成功", gin.H{"req": req})
 }

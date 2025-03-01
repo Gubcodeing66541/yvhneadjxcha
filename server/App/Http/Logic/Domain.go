@@ -13,11 +13,38 @@ type Domain struct{}
 
 func (Domain) GetPublic() string {
 	var domain Common.Domain
-	Base.MysqlConn.Limit(1).Find(&domain, "type = ? and status = 'enable'", "private")
+	Base.MysqlConn.Limit(1).Order("id asc").Find(&domain, "type = ? and status = 'enable'", "private")
 	if domain.Domain != "" {
 		return domain.Domain
 	}
 	return ""
+}
+
+func (Domain) GetPublicDomain5Number() []string {
+	var domain []Common.Domain
+	Base.MysqlConn.Limit(5).Order("id asc").Find(&domain, "type = ? and status = 'enable'", "private")
+	if len(domain) > 0 {
+		domainList := []string{}
+		for _, val := range domain {
+			domainList = append(domainList, val.Domain)
+		}
+		return domainList
+	}
+	return []string{}
+}
+
+func (Domain) GetPublicBindDomain() []string {
+	var domain []Common.Domain
+	Base.MysqlConn.Order("id asc").Find(&domain, "type = ? and status = 'enable'", "private")
+	if len(domain) > 0 {
+		domainList := []string{}
+		for _, val := range domain {
+			domainList = append(domainList, val.Domain)
+		}
+		return domainList
+	}
+
+	return []string{}
 }
 
 func (Domain) GetAction() string {
@@ -67,14 +94,15 @@ func (Domain) Bind(serviceId int) error {
 	if domain.BindServiceId != 0 {
 		return errors.New("已绑定域名")
 	}
-	Base.MysqlConn.Find(&domain, "status = ? and  type = ?  and bind_service_id = 0", "enable", "private")
+	Base.MysqlConn.Find(&domain, "status = ? and  type = ?  and bind_service_id = 0 and bind_cnt < 5", "enable", "private")
 	if domain.Id == 0 {
 		return errors.New("无可用分配域名")
 	}
 
 	// 修改service域名
 	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id = ?", service.Id).
-		Update("domain", domain.Domain+"?code=", service.Code)
+		Updates(map[string]interface{}{
+			"domain": domain.Domain + "?code=" + service.Code, "bind_domain_id": domain.Id})
 
 	Base.MysqlConn.Model(&domain).Where("id = ?", domain.Id).Update("bind_service_id", serviceId)
 	return nil
