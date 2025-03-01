@@ -123,8 +123,8 @@ func (CheckDomain) checkDomain(domain string) bool {
 	page, _ := ioutil.ReadAll(resp.Body)
 	val := string(page)
 	fmt.Println(val)
-	if !(strings.Index(val, "未知错误") >= 0) {
-		return false
-	}
+	// if !(strings.Index(val, "未知错误") >= 0) {
+	// 	return false
+	// }
 	return !(strings.Index(val, "已被封") >= 0)
 }
