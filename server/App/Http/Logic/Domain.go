@@ -94,7 +94,7 @@ func (Domain) Bind(serviceId int) error {
 	if domain.BindServiceId != 0 {
 		return errors.New("已绑定域名")
 	}
-	Base.MysqlConn.Find(&domain, "status = ? and  type = ?  and bind_service_id = 0 and bind_cnt < 5", "enable", "private")
+	Base.MysqlConn.Find(&domain, "status = ? and  type = ?  and bind_service_id = 0 and bind_cnt < 10", "enable", "private")
 	if domain.Id == 0 {
 		return errors.New("无可用分配域名")
 	}
@@ -103,6 +103,9 @@ func (Domain) Bind(serviceId int) error {
 	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id = ?", service.Id).
 		Updates(map[string]interface{}{
 			"domain": domain.Domain + "?code=" + service.Code, "bind_domain_id": domain.Id})
+
+	// 域名数量+1
+	Base.MysqlConn.Model(&Common.Domain{}).Where("id = ?", domain.Id).Update("bind_cnt", domain.BindCnt+1)
 
 	Base.MysqlConn.Model(&domain).Where("id = ?", domain.Id).Update("bind_service_id", serviceId)
 	return nil
