@@ -145,7 +145,7 @@ func (Service) Info(c *gin.Context) {
 		Type:           service.Type,
 		Code:           service.Code,
 		Host:           domain,
-		Web:            domain + "?response-content-type=text/html&code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix()),
+		Web:            domain + "?code=" + service.Code,
 		TimeOut:        service.TimeOut.Format("2006-01-02 15:04:05"),
 		CreateTime:     service.CreateTime,
 		CodeBackground: service.CodeBackground,
