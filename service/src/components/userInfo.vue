@@ -23,7 +23,7 @@
                             <span class="f12">备注</span>
                         </a-avatar>
                         <div class="input-box">
-                            <a-input v-model:value="detail.rename" :maxlength="8" placeholder="请输入备注" :bordered="false" @blur="changeDetail(true)" />
+                            <a-input v-model:value="detail.rename" :maxlength="30" placeholder="请输入备注" :bordered="false" @blur="changeDetail(true)" />
                         </div>
                     </div>
                     <div class="item flex">
