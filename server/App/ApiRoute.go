@@ -22,6 +22,8 @@ func (ApiRoute) BindRoute(s *gin.Engine) {
 
 	s.StaticFS("users", http.Dir("./Tel/dist/user"))
 	s.StaticFS("common", http.Dir("./Tel/common"))
+	s.StaticFS("/s", http.Dir("./static"))
+
 	//
 	s.LoadHTMLGlob("Tel/dist/**/*.html")
 	s.LoadHTMLGlob("Test/build/*.html")
