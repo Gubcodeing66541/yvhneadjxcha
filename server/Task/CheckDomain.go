@@ -39,6 +39,7 @@ func (c CheckDomain) Run() {
 		time.Sleep(time.Second)
 		status = c.checkDomain(action)
 		if status == false {
+			action = Logic.Domain{}.GetAction()
 			Base.MysqlConn.Model(&Common.Domain{}).
 				Where("domain = ?", action).Update("status", "un_enable")
 		}
