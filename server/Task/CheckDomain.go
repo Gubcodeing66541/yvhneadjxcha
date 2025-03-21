@@ -1,6 +1,7 @@
 package Task
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -9,7 +10,6 @@ import (
 	"server/App/Model/Common"
 	Service2 "server/App/Model/Service"
 	"server/Base"
-	"strings"
 	"time"
 )
 
@@ -129,9 +129,24 @@ func (CheckDomain) checkDomain(domain string) bool {
 	}
 	page, _ := ioutil.ReadAll(resp.Body)
 	val := string(page)
-	fmt.Println(val)
 	// if !(strings.Index(val, "未知错误") >= 0) {
 	// 	return false
 	// }
-	return !(strings.Index(val, "已被封") >= 0)
+
+	type resa struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	}
+
+	var res resa
+	_ = json.Unmarshal([]byte(val), &res)
+
+	fmt.Println(domain, val, res)
+
+	if res.Code == 200 {
+		return true
+	}
+	return false
+
+	//return !(strings.Index(val, "已被封") >= 0)
 }
