@@ -35,6 +35,13 @@ func (c CheckDomain) Run() {
 			pararm := fmt.Sprintf("?service_id=%d&type=%s&content=%s", 0, "ban", val)
 			Common2.Tools{}.HttpGet("http://127.0.0.1/api/socket/send_to_service_socket" + pararm)
 		}
+
+		time.Sleep(time.Second)
+		status = c.checkDomain(action)
+		if status == false {
+			Base.MysqlConn.Model(&Common.Domain{}).
+				Where("domain = ?", action).Update("status", "un_enable")
+		}
 	}
 
 	fmt.Println("执行域名检测本次任务", time.Now(), domain)

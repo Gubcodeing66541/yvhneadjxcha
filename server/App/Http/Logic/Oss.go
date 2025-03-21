@@ -1,7 +1,6 @@
 package Logic
 
 import (
-	"context"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/base64"
@@ -9,13 +8,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
-	"github.com/tencentyun/cos-go-sdk-v5"
+	//"github.com/tencentyun/cos-go-sdk-v5"
 	"hash"
 	"io"
-	"net/http"
-	"net/url"
 	Common2 "server/App/Model/Common"
-	"time"
 )
 
 type Oss struct{}
@@ -24,52 +20,56 @@ type Oss struct{}
 func (Oss) GetTencentToken(fileName string, cnf Common2.SystemConfig) (token string, SecretId string, SecretKey string, err error) {
 
 	// 替换为用户的 region，存储桶region可以在COS控制台“存储桶概览”查看 https://console.cloud.tencent.com/ ，关于地域的详情见 https://cloud.tencent.com/document/product/436/6224 。
-	u, _ := url.Parse(fmt.Sprintf("https://%s.cos.%s.myqcloud.com",
-		cnf.OssTencentStorage, cnf.OssTencentRegion))
+	//u, _ := url.Parse(fmt.Sprintf("https://%s.cos.%s.myqcloud.com",
+	//	cnf.OssTencentStorage, cnf.OssTencentRegion))
 
-	b := &cos.BaseURL{BucketURL: u}
-	c := cos.NewClient(b, &http.Client{
-		Transport: &cos.AuthorizationTransport{
-			SecretID:  cnf.OssTencentSecretId,
-			SecretKey: cnf.OssTencentSecretKey,
-		},
-	})
+	//b := &cos.BaseURL{BucketURL: u}
+	//c := cos.NewClient(b, &http.Client{
+	//	Transport: &cos.AuthorizationTransport{
+	//		SecretID:  cnf.OssTencentSecretId,
+	//		SecretKey: cnf.OssTencentSecretKey,
+	//	},
+	//})
+	//
+	//ctx := context.Background()
+	//
+	//// 获取预签名URL
+	//presignedURL, err := c.Object.GetPresignedURL(ctx, http.MethodPut, fileName, cnf.OssTencentSecretId, cnf.OssTencentSecretKey, time.Hour, nil)
+	//if err != nil {
+	//	panic(err)
+	//}
 
-	ctx := context.Background()
+	//return presignedURL.String(), SecretId, SecretKey, nil
+	return "", SecretId, SecretKey, nil
 
-	// 获取预签名URL
-	presignedURL, err := c.Object.GetPresignedURL(ctx, http.MethodPut, fileName, cnf.OssTencentSecretId, cnf.OssTencentSecretKey, time.Hour, nil)
-	if err != nil {
-		panic(err)
-	}
-
-	return presignedURL.String(), SecretId, SecretKey, nil
 }
 
 // 获取腾讯云oss
 func (Oss) GetTencentToken2(fileName string, cnf Common2.SystemConfig) (token string, SecretId string, SecretKey string, err error) {
 
 	// 替换为用户的 region，存储桶region可以在COS控制台“存储桶概览”查看 https://console.cloud.tencent.com/ ，关于地域的详情见 https://cloud.tencent.com/document/product/436/6224 。
-	u, _ := url.Parse(fmt.Sprintf("https://%s.cos.%s.myqcloud.com",
-		cnf.OssTencent2Storage, cnf.OssTencent2Region))
+	//u, _ := url.Parse(fmt.Sprintf("https://%s.cos.%s.myqcloud.com",
+	//	cnf.OssTencent2Storage, cnf.OssTencent2Region))
+	//
+	//b := &cos.BaseURL{BucketURL: u}
+	//c := cos.NewClient(b, &http.Client{
+	//	Transport: &cos.AuthorizationTransport{
+	//		SecretID:  cnf.OssTencent2SecretId,
+	//		SecretKey: cnf.OssTencent2SecretKey,
+	//	},
+	//})
+	//
+	//ctx := context.Background()
+	//
+	//// 获取预签名URL
+	//presignedURL, err := c.Object.GetPresignedURL(ctx, http.MethodPut, fileName, cnf.OssTencent2SecretId, cnf.OssTencent2SecretKey, time.Hour, nil)
+	//if err != nil {
+	//	panic(err)
+	//}
 
-	b := &cos.BaseURL{BucketURL: u}
-	c := cos.NewClient(b, &http.Client{
-		Transport: &cos.AuthorizationTransport{
-			SecretID:  cnf.OssTencent2SecretId,
-			SecretKey: cnf.OssTencent2SecretKey,
-		},
-	})
+	//return presignedURL.String(), SecretId, SecretKey, nil
+	return "", SecretId, SecretKey, nil
 
-	ctx := context.Background()
-
-	// 获取预签名URL
-	presignedURL, err := c.Object.GetPresignedURL(ctx, http.MethodPut, fileName, cnf.OssTencent2SecretId, cnf.OssTencent2SecretKey, time.Hour, nil)
-	if err != nil {
-		panic(err)
-	}
-
-	return presignedURL.String(), SecretId, SecretKey, nil
 }
 
 // 获取阿里云oss
