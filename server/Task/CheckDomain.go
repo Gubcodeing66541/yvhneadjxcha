@@ -87,33 +87,6 @@ func (c CheckDomain) Run() {
 		}
 		fmt.Println("check domain: join and transfer", valInfo.Domain, " STATUS:", status)
 	}
-
-	// 健康修复
-	//Base.MysqlConn.Find(&list, "status = ?", "un_enable")
-	//fmt.Println("执行域名检测本次任务 修复列表", time.Now(), list)
-	//
-	//count = 0
-	////wg := sync.WaitGroup{}
-	//for _, val := range list {
-	//	wg.Add(1)
-	//	count++
-	//
-	//	//wg.Add(1)
-	//	if count == 30 {
-	//		count = 0
-	//		time.Sleep(time.Second * 2)
-	//	}
-	//	go func(vals Common.Domain, wg *sync.WaitGroup) {
-	//		defer wg.Done()
-	//		// 域名检测如果被封禁 下架域名并自动绑定已有的域名
-	//		status := c.checkDomain(vals.Domain)
-	//		if status == true {
-	//			Base.MysqlConn.Model(&vals).Updates(map[string]interface{}{"bind_service_id": 0, "we_chat_ban_status": "success", "status": "enable"})
-	//		}
-	//		fmt.Println("check domain:", vals.Domain, " STATUS:", status)
-	//	}(val, &wg)
-	//}
-	//wg.Wait()
 	time.Sleep(time.Second * 2)
 }
 
