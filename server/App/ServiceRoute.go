@@ -1,9 +1,10 @@
 package App
 
 import (
-	"github.com/gin-gonic/gin"
 	"server/App/Http/Handel/Common"
 	"server/App/Http/Handel/Service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ServiceRoute struct{}
@@ -67,5 +68,12 @@ func (ServiceRoute) BindRoute(s *gin.Engine) {
 		serviceMessage.POST("list", Service.ServiceMessage{}.List)
 		serviceMessage.POST("get", Service.ServiceMessage{}.GetById)
 		serviceMessage.POST("swap", Service.ServiceMessage{}.Swap)
+	}
+
+	// domain
+	domain := s.Group("domain", ServiceMiddleWare())
+	{
+		domain.POST("bind_domain", Service.Service{}.BindDomain)
+		domain.POST("bind_action", Service.Service{}.BindAction)
 	}
 }

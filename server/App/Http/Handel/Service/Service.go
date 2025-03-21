@@ -134,6 +134,11 @@ func (Service) Info(c *gin.Context) {
 	//web = Sdk.WeChat{}.Login(auth.AppId, web, service.Code)
 	//fmt.Println()
 
+	web := domain + "?code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix())
+	if service.BindDomain != "" {
+		web = service.BindDomain + "?code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix())
+	}
+
 	var bot ServiceManager.ServiceManagerBot
 	Base.MysqlConn.Find(&bot, "service_manager_id = ?", service.ServiceManagerId)
 	serviceInfo := Response.ServiceInfo{
@@ -145,7 +150,7 @@ func (Service) Info(c *gin.Context) {
 		Type:           service.Type,
 		Code:           service.Code,
 		Host:           domain,
-		Web:            domain + "?code=" + service.Code,
+		Web:            web,
 		TimeOut:        service.TimeOut.Format("2006-01-02 15:04:05"),
 		CreateTime:     service.CreateTime,
 		CodeBackground: service.CodeBackground,
@@ -405,4 +410,40 @@ func (Service) ServiceManagerMessageList(c *gin.Context) {
 	}
 	res := gin.H{"count": allCount, "page": allPage, "current_page": pageReq.Page, "list": listToTime}
 	Common.ApiResponse{}.Success(c, "获取成功", res)
+}
+
+// @summary 绑定域名
+// @tags 客服系统
+// @Param token header string true "认证token"
+// @Router /service/domain/bind_domain [post]
+func (Service) BindDomain(c *gin.Context) {
+	var req struct {
+		Domain string `json:"domain"`
+	}
+	err := c.ShouldBind(&req)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "请求錯誤", gin.H{})
+		return
+	}
+
+	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id = ?", Common.Tools{}.GetServiceId(c)).Update("bind_domain", req.Domain)
+	Common.ApiResponse{}.Success(c, "ok", gin.H{})
+}
+
+// @summary 绑定域名
+// @tags 客服系统
+// @Param token header string true "认证token"
+// @Router /service/domain/bind_action [post]
+func (Service) BindAction(c *gin.Context) {
+	var req struct {
+		Action string `json:"action"`
+	}
+	err := c.ShouldBind(&req)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "请求錯誤", gin.H{})
+		return
+	}
+
+	Base.MysqlConn.Model(&Service2.Service{}).Where("service_id = ?", Common.Tools{}.GetServiceId(c)).Update("bind_action", req.Action)
+	Common.ApiResponse{}.Success(c, "ok", gin.H{})
 }

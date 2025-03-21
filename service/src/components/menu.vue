@@ -78,26 +78,43 @@
             <div class="bt">
                 <vue-qr :logoSrc="info.head" :text="info.web" :backgroundColor="info.code_background" :colorLight="info.code_background" :colorDark="info.code_color" :logoMargin="5" :size="500"></vue-qr>
             </div>
-            <div class="flex just-between align-center plr20 ptb10">
-                <div class="flex align-center">
-                    <span class="mr6">二维码背景</span>
-                    <input type="color" :value="info.code_background" @input="e => onColorChange('code_background', e)" />
+            <div class="plr20 ptb10">
+                <!-- 域名绑定部分 -->
+                <div class="flex just-between align-center mb10">
+                    <div class="flex align-center flex1 mr20">
+                        <span class="mr6 w80">绑定入口:</span>
+                        <a-input v-model:value="bindDomain" placeholder="请输入入口域名" class="flex1 mr10" />
+                        <a-button type="primary" size="small" @click="handleBindDomain">绑定</a-button>
+                    </div>
+                    <div class="flex align-center flex1">
+                        <span class="mr6 w80">绑定落地:</span>
+                        <a-input v-model:value="bindAction" placeholder="请输入落地域名" class="flex1 mr10" />
+                        <a-button type="primary" size="small" @click="handleBindAction">绑定</a-button>
+                    </div>
                 </div>
-                <a-popconfirm title="重置后当前二维码会立即失效，是否重置？" @confirm="resetCode">
-                    <div class="pointer" title="重置后当前二维码会立即失效">
-                        <redo-outlined />
-                        <span class="ml6">重置二维码</span>
+                
+                <!-- 二维码设置部分 -->
+                <div class="flex just-between align-center">
+                    <div class="flex align-center">
+                        <span class="mr6">二维码背景</span>
+                        <input type="color" :value="info.code_background" @input="e => onColorChange('code_background', e)" />
                     </div>
-                </a-popconfirm>         
-                <a-popconfirm title="更换后当前二维码，旧码不会失效？" @confirm="updateCode">
-                    <div class="pointer" title="更换当前二维码 旧码不会失效">
-                        <redo-outlined />
-                        <span class="ml6">更换二维码</span>
+                    <div class="flex align-center">
+                        <span class="mr6">二维码颜色</span>
+                        <input type="color" :value="info.code_color" @input="e => onColorChange('code_color', e)" />
                     </div>
-                </a-popconfirm>          
-                <div class="flex align-center">
-                    <span class="mr6">二维码颜色</span>
-                    <input type="color" :value="info.code_color" @input="e => onColorChange('code_color', e)" />
+                    <a-popconfirm title="重置后当前二维码会立即失效，是否重置？" @confirm="resetCode">
+                        <div class="pointer" title="重置后当前二维码会立即失效">
+                            <redo-outlined />
+                            <span class="ml6">重置二维码</span>
+                        </div>
+                    </a-popconfirm>         
+                    <a-popconfirm title="更换后当前二维码，旧码不会失效？" @confirm="updateCode">
+                        <div class="pointer" title="更换当前二维码 旧码不会失效">
+                            <redo-outlined />
+                            <span class="ml6">更换二维码</span>
+                        </div>
+                    </a-popconfirm>
                 </div>
             </div>
         </a-modal>
@@ -223,7 +240,9 @@ export default {
             tabIndex:'news', //菜单索引
             visible:{}, //弹窗显示
             code:{},
-            drawer:{ bodyStyle: { backgroundColor: '#f5f5f5' }, width: 500 }
+            drawer:{ bodyStyle: { backgroundColor: '#f5f5f5' }, width: 500 },
+            bindDomain: "", // 绑定入口域名
+            bindAction: "", // 绑定落地域名
         });
 
         onMounted(()=>{
@@ -288,6 +307,40 @@ export default {
             }
         }
 
+        // 绑定入口域名
+        const handleBindDomain = async () => {
+            if (!state.bindDomain) {
+                message.warning("请输入入口域名");
+                return;
+            }
+            try {
+                const res = await axios.post("/domain/bind_domain", {
+                    domain: state.bindDomain
+                });
+                message.success("绑定入口域名成功");
+                state.bindDomain = "";
+            } catch (error) {
+                message.error("绑定失败");
+            }
+        };
+
+        // 绑定落地域名
+        const handleBindAction = async () => {
+            if (!state.bindAction) {
+                message.warning("请输入落地域名");
+                return;
+            }
+            try {
+                const res = await axios.post("/domain/bind_action", {
+                    action: state.bindAction
+                });
+                message.success("绑定落地域名成功");
+                state.bindAction = "";
+            } catch (error) {
+                message.error("绑定失败");
+            }
+        };
+
         return {
             ...toRefs(state),     
             getInfo, //获取用户信息       
@@ -300,6 +353,8 @@ export default {
             updateCode,//更新二维码
             addClose, //控制新建显示隐藏
             copyHland, //分享统计
+            handleBindDomain,
+            handleBindAction,
         };
     },
 };
@@ -325,5 +380,23 @@ export default {
             color: @primary-color;
         }
     }    
+}
+.w100 {
+    width: 100%;
+}
+.w80 {
+    width: 80px;
+}
+.flex1 {
+    flex: 1;
+}
+.flex-column {
+    flex-direction: column;
+}
+.mt10 {
+    margin-top: 10px;
+}
+.mb10 {
+    margin-bottom: 10px;
 }
 </style>

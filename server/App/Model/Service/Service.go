@@ -22,6 +22,8 @@ type Service struct {
 	CodeColor        string    `json:"code_color"`
 	TimeOut          time.Time `json:"time_out"`
 	Status           string    `json:"status"` // success正常 no_use 冻结
+	BindDomain       string    `json:"bind_domain" gorm:"type:text"`
+	BindAction       string    `json:"bind_action" gorm:"type:text"`
 	Domain           string    `json:"domain" gorm:"type:text"`
 	BindDomainId     int       `json:"bind_domain_id"`
 }
