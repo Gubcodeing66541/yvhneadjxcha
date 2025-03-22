@@ -158,6 +158,8 @@ func (Service) Info(c *gin.Context) {
 		RoomCount:      RoomCount,
 		BlackCount:     BlackCount,
 		BotHead:        bot.Head,
+		BindDomain:     service.BindDomain,
+		BindAction:     service.BindAction,
 	}
 
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"service": serviceInfo, "room_count": RoomCount, "black_count": BlackCount})

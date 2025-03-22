@@ -79,22 +79,8 @@
                 <vue-qr :logoSrc="info.head" :text="info.web" :backgroundColor="info.code_background" :colorLight="info.code_background" :colorDark="info.code_color" :logoMargin="5" :size="500"></vue-qr>
             </div>
             <div class="plr20 ptb10">
-                <!-- 域名绑定部分 -->
-                <div class="flex just-between align-center mb10">
-                    <div class="flex align-center flex1 mr20">
-                        <span class="mr6 w80">绑定入口:</span>
-                        <a-input v-model:value="bindDomain" placeholder="请输入入口域名" class="flex1 mr10" />
-                        <a-button type="primary" size="small" @click="handleBindDomain">绑定</a-button>
-                    </div>
-                    <div class="flex align-center flex1">
-                        <span class="mr6 w80">绑定落地:</span>
-                        <a-input v-model:value="bindAction" placeholder="请输入落地域名" class="flex1 mr10" />
-                        <a-button type="primary" size="small" @click="handleBindAction">绑定</a-button>
-                    </div>
-                </div>
-                
                 <!-- 二维码设置部分 -->
-                <div class="flex just-between align-center">
+                <div class="flex just-between align-center mb10">
                     <div class="flex align-center">
                         <span class="mr6">二维码背景</span>
                         <input type="color" :value="info.code_background" @input="e => onColorChange('code_background', e)" />
@@ -116,7 +102,25 @@
                         </div>
                     </a-popconfirm>
                 </div>
+                
+                <!-- 域名绑定部分 -->
+                <div class="flex just-between align-center">
+                    <div class="flex align-center">
+                        <a-button type="primary" size="small" class="mr10" @click="visible.bindDomainModal = true">绑定入口</a-button>
+                        <a-button type="primary" size="small" class="mr10" @click="visible.bindActionModal = true">绑定落地</a-button>
+                    </div>
+                </div>
             </div>
+        </a-modal>
+
+        <!-- 绑定入口弹窗 -->
+        <a-modal v-model:visible="visible.bindDomainModal" title="绑定入口域名" @ok="handleBindDomain" :width="500">
+            <a-input v-model:value="bindDomain" placeholder="请输入入口域名" />
+        </a-modal>
+
+        <!-- 绑定落地弹窗 -->
+        <a-modal v-model:visible="visible.bindActionModal" title="绑定落地域名" @ok="handleBindAction" :width="500">
+            <a-input v-model:value="bindAction" placeholder="请输入落地域名" />
         </a-modal>
 
         <!-- 通讯录 -->

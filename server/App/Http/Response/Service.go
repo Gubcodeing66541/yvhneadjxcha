@@ -23,6 +23,8 @@ type ServiceInfo struct {
 	RoomCount      int       `json:"room_count"`
 	BlackCount     int       `json:"black_count"`
 	BotHead        string    `json:"bot_head"`
+	BindDomain     string    `json:"bind_domain"`
+	BindAction     string    `json:"bind_action"`
 }
 
 type RespServiceList struct {
