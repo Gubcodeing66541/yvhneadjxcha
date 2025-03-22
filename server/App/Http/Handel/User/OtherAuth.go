@@ -219,3 +219,25 @@ func (a otherAuth) ShowAction(c *gin.Context) {
 	c.HTML(http.StatusOK, "action.html", gin.H{})
 
 }
+
+func (a otherAuth) CodeToAction(c *gin.Context) {
+	code := c.Query("code")
+	var service Service.Service
+	Base.MysqlConn.Model(&service).Where("code = ?", code).Find(&service)
+	if service.ServiceId == 0 {
+		Common.ApiResponse{}.Error(c, "客服不存在", gin.H{})
+		return
+	}
+
+	if service.TimeOut.Unix()-time.Now().Unix() <= 0 {
+		Common.ApiResponse{}.Error(c, "客服已过期", gin.H{})
+		return
+	}
+
+	if service.BindAction != "" {
+		Common.ApiResponse{}.Success(c, "ok", gin.H{"action": service.BindAction})
+		return
+	}
+
+	Common.ApiResponse{}.Success(c, "ok", gin.H{"action": Logic.Domain{}.GetAction()})
+}
