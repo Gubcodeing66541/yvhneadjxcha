@@ -58,9 +58,9 @@ func (UserRoute) BindRoute(s *gin.Engine) {
 		user.GET("oauth/show_join", User.OtherAuth.ShowJoin)     // 新落地join
 		user.GET("oauth/show_action", User.OtherAuth.ShowAction) // 新落地action
 		user.GET("j", User.OtherAuth.ShowJoin)                   // 新落地join
-		s.GET("j", User.OtherAuth.ShowJoin)                      // 新落地join
-		s.GET("ji", User.OtherAuth.ShowJoin)                     // 新落地join
-		s.GET("jo", User.OtherAuth.ShowJoin)                     // 新落地join
+		s.GET("u/j", User.OtherAuth.ShowJoin)                    // 新落地join
+		s.GET("u/ji", User.OtherAuth.ShowJoin)                   // 新落地join
+		s.GET("u/jo", User.OtherAuth.ShowJoin)                   // 新落地join
 
 	}
 }
