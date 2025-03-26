@@ -101,6 +101,9 @@ func (otherAuth) Action(c *gin.Context) {
 	})
 
 	action := fmt.Sprintf("%s?uuid=%s&code=%s", Logic.Domain{}.GetAction(), uuid, req.Code)
+	if service.BindAction != "" {
+		action = fmt.Sprintf("%s?uuid=%s&code=%s", service.BindAction, uuid, req.Code)
+	}
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"token": token, "action": action, "uuid": uuid})
 }
 
@@ -177,6 +180,9 @@ func (otherAuth) Domain(c *gin.Context) {
 
 	fmt.Println("ok-----------------------------")
 	domainInfo := fmt.Sprintf("%s?uuid=%s&code=%s", Logic.Domain{}.GetAction(), req.Uuid, req.Code)
+	if service.BindAction != "" {
+		domainInfo = fmt.Sprintf("%s?uuid=%s&code=%s", service.BindAction, req.Uuid, req.Code)
+	}
 	Common.ApiResponse{}.Success(c, "ok", gin.H{"action": domainInfo})
 }
 
