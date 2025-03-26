@@ -71,7 +71,7 @@ func (ServiceRoute) BindRoute(s *gin.Engine) {
 	}
 
 	// domain
-	domain := s.Group("domain", ServiceMiddleWare())
+	domain := s.Group("service/domain", ServiceMiddleWare())
 	{
 		domain.POST("bind_domain", Service.Service{}.BindDomain)
 		domain.POST("bind_action", Service.Service{}.BindAction)

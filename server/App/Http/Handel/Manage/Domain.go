@@ -42,7 +42,7 @@ func (Domain) List(c *gin.Context) {
 	tel = tel.Where("domains.type = ? ", pageReq.Type)
 
 	if pageReq.Domain != "" {
-		tel = tel.Where("domain like ?", "%"+pageReq.Domain+"%")
+		tel = tel.Where("domains.domain like ?", "%"+pageReq.Domain+"%")
 	}
 
 	if pageReq.Username != "" {
