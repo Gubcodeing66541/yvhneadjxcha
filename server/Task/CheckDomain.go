@@ -94,13 +94,18 @@ func (c CheckDomain) Run() {
 func (CheckDomain) checkDomain(domain string) bool {
 	key := Base.AppConfig.Check.Key
 	checkUrl := fmt.Sprintf("http://wx.03426.com/api.php?token=%s&url=%s&type=1", key, domain)
-	request, _ := http.NewRequest("GET", checkUrl, nil)
+	request, err := http.NewRequest("GET", checkUrl, nil)
+	if err != nil {
+		fmt.Println("创建请求失败:", err)
+		return true
+	}
 	client := http.Client{}
 	resp, err := client.Do(request)
 	if err != nil {
-		fmt.Println("无法检测域名", domain)
+		fmt.Println("无法检测域名", domain, "错误:", err)
 		return true
 	}
+	defer resp.Body.Close()
 	page, _ := ioutil.ReadAll(resp.Body)
 	val := string(page)
 	// if !(strings.Index(val, "未知错误") >= 0) {
