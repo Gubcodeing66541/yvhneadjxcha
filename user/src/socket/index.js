@@ -5,7 +5,7 @@ import store from "@/store";
 import { getTime,playMp3 } from "@/utils";
 import axios from "@/utils/axios";
 
-let socketUrl = 'wss://'+import.meta.env.VITE_BASE_URL + `/api/websocket/conn?token=${token}`; // socket地址
+let socketUrl = 'ws://'+import.meta.env.VITE_BASE_URL + `/api/websocket/conn?token=${token}`; // socket地址
 let websocket = null; // websocket 实例
 let heartTime = null; // 心跳定时器实例
 let HeartTimeOut = 10000; // 心跳超时时间

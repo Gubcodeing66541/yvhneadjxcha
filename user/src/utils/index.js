@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { compress, compressAccurately } from 'image-conversion';
-const sendMsg = new Audio("https://"+import.meta.env.VITE_BASE_URL + '/common/audio/sendMsg.mp3');
+const sendMsg = new Audio("http://"+import.meta.env.VITE_BASE_URL + '/common/audio/sendMsg.mp3');
 /**
  * 全局方法
  * @localGet  ---获取缓存
@@ -132,7 +132,7 @@ export async function uploadFile(file) {
         formData.append('image', file);
         axios({
             method: 'post',
-            url: "https://"+import.meta.env.VITE_BASE_URL + '/api/system/upload',
+            url: "http://"+import.meta.env.VITE_BASE_URL + '/api/system/upload',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: formData,
         }).then(({ data: res }) => {
