@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="http://www.ssdfv.cn/users/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="http://ajeak.cn/users/vite.svg" />
     <meta name="format-detection" content="telephone=yes" />
     <meta name="viewport" content="width=device-width,viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>在线客服</title>
@@ -39,7 +39,7 @@
 
     if (token === "" || token === null || token === undefined || token === "undefined") {
         const data = { code: code,uuid:uuid};
-        fetch(proto+"//www.ssdfv.cn/user/oauth/action", {
+        fetch(proto+"//ajeak.cn/user/oauth/action", {
             method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
         })
             .then(response => response.json()) // 解析JSON响应
@@ -61,7 +61,7 @@
             }); // 错误处理
     } else {
         const data = { code: code,uuid:uuid };
-        fetch(proto+"//www.ssdfv.cn/user/oauth/domain", {
+        fetch(proto+"//ajeak.cn/user/oauth/domain", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json','token':token},
             body: JSON.stringify(data)
