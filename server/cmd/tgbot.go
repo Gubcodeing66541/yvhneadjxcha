@@ -26,6 +26,27 @@ const (
 	subMenuSupport = "创建客服|充值|扣除|客服列表|搜索"
 )
 
+// 在文件开头添加
+type Domain struct {
+	Name   string
+	Type   string // "入口" 或 "落地" 或 "中转"
+	Status string // "正常" 或 "禁用"
+}
+
+// 模拟域名数据
+var domainList = []Domain{
+	{Name: "example1.com", Type: "入口", Status: "正常"},
+	{Name: "example2.com", Type: "入口", Status: "禁用"},
+	{Name: "example3.com", Type: "落地", Status: "正常"},
+	{Name: "example4.com", Type: "落地", Status: "正常"},
+	{Name: "example5.com", Type: "中转", Status: "正常"},
+	{Name: "example6.com", Type: "中转", Status: "禁用"},
+}
+
+// 分页相关变量
+var pageSize = 2                      // 每页显示数量
+var userPageMap = make(map[int64]int) // 保存用户当前页码
+
 func init() {
 	var err error
 	// 直接将 Token 写在代码中
@@ -86,12 +107,45 @@ func main() {
 
 			// 确认用户点击的按钮
 			callback := tgbotapi.NewCallback(update.CallbackQuery.ID, update.CallbackQuery.Data)
-			bot.AnswerCallbackQuery(callback) // 给 Telegram 发送响应，避免点击后没有反馈
+			bot.AnswerCallbackQuery(callback)
+
+			// 添加翻页处理
+			if strings.HasPrefix(callbackData, "page_") {
+				parts := strings.Split(callbackData, "_")
+				if len(parts) >= 3 {
+					domainType := parts[1]
+					action := parts[2]
+
+					// 根据动作更新页码
+					if action == "prev" {
+						userPageMap[chatID]--
+					} else if action == "next" {
+						userPageMap[chatID]++
+					}
+
+					// 重新触发列表显示
+					if domainType == "入口" {
+						update.CallbackQuery.Data = "list_entry_domain"
+					} else {
+						update.CallbackQuery.Data = "list_landing_domain"
+					}
+					continue
+				}
+			}
+
+			// 处理修改状态
+			if strings.HasPrefix(callbackData, "modify_") {
+				msg.Text = "请输入要修改的域名："
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "modifying_domain_status"
+				userInputMap[chatID] = strings.Split(callbackData, "_")[1] // 保存域名类型
+				bot.Send(msg)
+			}
 
 			// 根据点击的按钮执行操作
 			switch callbackData {
 			case "proxy":
-				msg.Text = "您已选择代理管理操作。请选择一个具体操作："
+				msg.Text = "代理管理操作，请选择："
 				keyboard := tgbotapi.NewInlineKeyboardMarkup(
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("代理列表", "proxy_list"),
@@ -108,18 +162,132 @@ func main() {
 				msg.ReplyMarkup = keyboard
 				bot.Send(msg)
 
+			case "delete_proxy":
+				msg.Text = "请输入要删除的代理账号："
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "deleting_proxy"
+				bot.Send(msg)
+
+			case "recharge_proxy":
+				msg.Text = "请输入代理ID："
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "recharge_proxy_id"
+				bot.Send(msg)
+
 			case "domain":
-				msg.Text = "您已选择域名管理操作。请选择一个具体操作："
+				msg.Text = "请选择域名类型："
 				keyboard := tgbotapi.NewInlineKeyboardMarkup(
 					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("域名列表", "domain_list"),
-						tgbotapi.NewInlineKeyboardButtonData("批量创建", "batch_create"),
+						tgbotapi.NewInlineKeyboardButtonData("入口域名", "domain_entry_manage"),
+						tgbotapi.NewInlineKeyboardButtonData("落地域名", "domain_landing_manage"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("删除域名", "delete_domain"),
+						tgbotapi.NewInlineKeyboardButtonData("中转域名", "domain_transit_manage"),
+						tgbotapi.NewInlineKeyboardButtonData("一键清理", "domain_cleanup"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("返回首页", "main_menu"),
+					),
+				)
+				msg.ReplyMarkup = keyboard
+				bot.Send(msg)
+
+			case "domain_entry_manage", "domain_landing_manage", "domain_transit_manage":
+				domainType := "入口"
+				if callbackData == "domain_landing_manage" {
+					domainType = "落地"
+				} else if callbackData == "domain_transit_manage" {
+					domainType = "中转"
+				}
+
+				msg.Text = fmt.Sprintf("请选择%s域名操作：", domainType)
+				keyboard := tgbotapi.NewInlineKeyboardMarkup(
+					tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData("域名列表", fmt.Sprintf("list_%s_domain", domainType)),
+						tgbotapi.NewInlineKeyboardButtonData("删除域名", fmt.Sprintf("delete_%s_domain", domainType)),
+					),
+					tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData("修改状态", fmt.Sprintf("modify_%s_domain", domainType)),
+					),
+					tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData("返回", "domain"),
+						tgbotapi.NewInlineKeyboardButtonData("返回首页", "main_menu"),
+					),
+				)
+				msg.ReplyMarkup = keyboard
+				bot.Send(msg)
+
+			case "list_入口_domain", "list_落地_domain", "list_中转_domain":
+				domainType := strings.Split(callbackData, "_")[1]
+
+				// 获取当前页码，默认为0
+				currentPage := userPageMap[chatID]
+
+				// 过滤指定类型的域名
+				var filteredDomains []Domain
+				for _, d := range domainList {
+					if d.Type == domainType {
+						filteredDomains = append(filteredDomains, d)
+					}
+				}
+
+				// 计算总页数
+				totalPages := (len(filteredDomains) + pageSize - 1) / pageSize
+
+				// 获取当前页的域名
+				start := currentPage * pageSize
+				end := start + pageSize
+				if end > len(filteredDomains) {
+					end = len(filteredDomains)
+				}
+
+				// 构建域名列表消息
+				var domainInfo string
+				for i := start; i < end; i++ {
+					domain := filteredDomains[i]
+					domainInfo += fmt.Sprintf("%d. %s [%s]\n", i+1, domain.Name, domain.Status)
+				}
+
+				msg.Text = fmt.Sprintf("%s域名列表（第%d/%d页）：\n%s",
+					domainType, currentPage+1, totalPages, domainInfo)
+
+				// 构建按钮
+				var buttons [][]tgbotapi.InlineKeyboardButton
+
+				// 添加翻页按钮
+				pageButtons := []tgbotapi.InlineKeyboardButton{}
+				if currentPage > 0 {
+					pageButtons = append(pageButtons,
+						tgbotapi.NewInlineKeyboardButtonData("上一页", fmt.Sprintf("page_%s_prev", domainType)))
+				}
+				if currentPage < totalPages-1 {
+					pageButtons = append(pageButtons,
+						tgbotapi.NewInlineKeyboardButtonData("下一页", fmt.Sprintf("page_%s_next", domainType)))
+				}
+				if len(pageButtons) > 0 {
+					buttons = append(buttons, pageButtons)
+				}
+
+				// 添加删除按钮
+				buttons = append(buttons, []tgbotapi.InlineKeyboardButton{
+					tgbotapi.NewInlineKeyboardButtonData("删除", fmt.Sprintf("delete_%s_domain", domainType)),
+				})
+
+				// 添加返回按钮
+				buttons = append(buttons, []tgbotapi.InlineKeyboardButton{
+					tgbotapi.NewInlineKeyboardButtonData("返回", fmt.Sprintf("domain_%s_manage", strings.ToLower(domainType))),
+				})
+
+				keyboard := tgbotapi.NewInlineKeyboardMarkup(buttons...)
+				msg.ReplyMarkup = keyboard
+				bot.Send(msg)
+
+			case "domain_cleanup":
+				msg.Text = "确定要清理所有域名吗？"
+				keyboard := tgbotapi.NewInlineKeyboardMarkup(
+					tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData("确定", "confirm_cleanup"),
+						tgbotapi.NewInlineKeyboardButtonData("取消", "domain"),
 					),
 				)
 				msg.ReplyMarkup = keyboard
@@ -133,10 +301,7 @@ func main() {
 						tgbotapi.NewInlineKeyboardButtonData("充值", "recharge"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("扣除", "deduct"),
-						tgbotapi.NewInlineKeyboardButtonData("客服列表", "support_list"),
-					),
-					tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData("列表", "support_list"),
 						tgbotapi.NewInlineKeyboardButtonData("搜索", "search"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
@@ -162,6 +327,50 @@ func main() {
 				)
 				msg.ReplyMarkup = keyboard
 				bot.Send(msg)
+
+			case "create_support":
+				msg.Text = "请输入要创建的客服账号数量："
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "creating_support"
+				bot.Send(msg)
+
+			case "recharge":
+				msg.Text = "请输入客服账号："
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "recharge_input_account"
+				bot.Send(msg)
+
+			case "support_list":
+				msg.Text = "客服列表："
+				// 这里需要实现获取客服列表的逻辑
+				bot.Send(msg)
+
+			case "search":
+				msg.Text = "请输入要搜索的客服账号："
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "searching_support"
+				bot.Send(msg)
+
+			case "batch_create":
+				msg.Text = "请选择域名类型："
+				keyboard := tgbotapi.NewInlineKeyboardMarkup(
+					tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData("入口", "domain_entry"),
+						tgbotapi.NewInlineKeyboardButtonData("落地", "domain_landing"),
+					),
+				)
+				msg.ReplyMarkup = keyboard
+				bot.Send(msg)
+
+			case "domain_entry", "domain_landing":
+				domainType := "入口"
+				if callbackData == "domain_landing" {
+					domainType = "落地"
+				}
+				userInputMap[chatID] = domainType // 保存域名类型
+				msg.Text = fmt.Sprintf("请输入%s域名列表（多个域名请换行输入）：", domainType)
+				userStepMap[chatID] = "input_domain_list"
+				bot.Send(msg)
 			}
 		}
 
@@ -173,83 +382,125 @@ func main() {
 			// 根据用户当前步骤继续操作
 			switch userStepMap[chatID] {
 			case "creating_support":
-				// 输入客服账号数量
 				accountCount := text
 				userInputMap[chatID] = accountCount
 				msg := tgbotapi.NewMessage(chatID, "请输入充值天数：")
-				userStepMap[chatID] = "enter_recharge_days"
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "creating_support_days"
 				bot.Send(msg)
 
-			case "enter_recharge_days":
-				// 输入充值天数
-				rechargeDays := text
+			case "creating_support_days":
+				days := text
 				accountCount := userInputMap[chatID]
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服账号创建成功！\n创建了 %s 个账号，充值了 %s 天", accountCount, rechargeDays))
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服账号创建了 %s 个，充值 %s 天", accountCount, days))
 				bot.Send(msg)
-				// 清除用户记录
-				userStepMap[chatID] = ""  // 清空步骤
-				userInputMap[chatID] = "" // 清空输入
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
 
-			case "recharge":
-				// 输入客服账号
+			case "recharge_input_account":
 				accountID := text
 				userInputMap[chatID] = accountID
 				msg := tgbotapi.NewMessage(chatID, "请输入充值天数：")
-				userStepMap[chatID] = "recharge_days"
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "recharge_input_days"
 				bot.Send(msg)
 
-			case "recharge_days":
-				// 输入充值天数
-				rechargeDays := text
+			case "recharge_input_days":
+				days := text
 				accountID := userInputMap[chatID]
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服账号 %s 充值了 %s 天成功", accountID, rechargeDays))
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服 %s 充值 %s 天成功", accountID, days))
 				bot.Send(msg)
-				// 清除用户记录
-				userStepMap[chatID] = ""  // 清空步骤
-				userInputMap[chatID] = "" // 清空输入
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
 
 			case "deduct":
-				// 输入客服账号
 				accountID := text
 				userInputMap[chatID] = accountID
 				msg := tgbotapi.NewMessage(chatID, "请输入扣除天数：")
-				userStepMap[chatID] = "deduct_days"
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "deduct_input_days"
 				bot.Send(msg)
 
-			case "deduct_days":
-				// 输入扣除天数
-				deductDays := text
+			case "deduct_input_days":
+				days := text
 				accountID := userInputMap[chatID]
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服账号 %s 扣除 %s 天成功", accountID, deductDays))
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服 %s 扣除 %s 天成功", accountID, days))
 				bot.Send(msg)
-				// 清除用户记录
-				userStepMap[chatID] = ""  // 清空步骤
-				userInputMap[chatID] = "" // 清空输入
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
 
-			case "batch_create":
-				// 输入域名类型
-				if text == "1" || text == "2" {
-					domainType := "入口"
-					if text == "2" {
-						domainType = "落地"
+			case "input_domain_list":
+				domains := strings.Split(text, "\n")
+				domainType := userInputMap[chatID]
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s域名共 %d 个：\n%s",
+					domainType, len(domains), strings.Join(domains, "\n")))
+				bot.Send(msg)
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
+
+			case "deleting_proxy":
+				proxyID := text
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("代理账号 %s 删除成功", proxyID))
+				bot.Send(msg)
+				userStepMap[chatID] = ""
+
+			case "recharge_proxy_id":
+				proxyID := text
+				userInputMap[chatID] = proxyID
+				msg := tgbotapi.NewMessage(chatID, "请输入充值金额：")
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "recharge_proxy_amount"
+				bot.Send(msg)
+
+			case "recharge_proxy_amount":
+				amount := text
+				proxyID := userInputMap[chatID]
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("代理 %s 充值 %s 元成功", proxyID, amount))
+				bot.Send(msg)
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
+
+			case "deleting_domain":
+				domain := text
+				userInputMap[chatID] = domain
+				msg := tgbotapi.NewMessage(chatID, "请输入卡密：")
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "enter_domain_password"
+				bot.Send(msg)
+
+			case "enter_domain_password":
+				password := text
+				domain := userInputMap[chatID]
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("域名 %s 删除成功（验证密码：%s）", domain, password))
+				bot.Send(msg)
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
+
+			case "modifying_domain_status":
+				domainName := text
+				// 查找域名并修改状态
+				found := false
+				for i, d := range domainList {
+					if d.Name == domainName {
+						found = true
+						// 切换状态
+						if domainList[i].Status == "正常" {
+							domainList[i].Status = "禁用"
+						} else {
+							domainList[i].Status = "正常"
+						}
+						msg := tgbotapi.NewMessage(chatID,
+							fmt.Sprintf("域名 %s 状态已更新为：%s", domainName, domainList[i].Status))
+						bot.Send(msg)
+						break
 					}
-					msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("您选择了 %s 域名，请输入域名列表（多个域名请换行输入）：", domainType))
-					userStepMap[chatID] = "enter_domains"
-					bot.Send(msg)
-				} else {
-					msg := tgbotapi.NewMessage(chatID, "请输入有效的选择：1 为入口，2 为落地。")
+				}
+				if !found {
+					msg := tgbotapi.NewMessage(chatID, "未找到该域名")
 					bot.Send(msg)
 				}
-
-			case "enter_domains":
-				// 输入域名列表
-				domains := text
-				domainList := strings.Split(domains, "\n")
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("共 %d 个 %s 域名：\n%s", len(domainList), text, strings.Join(domainList, "\n")))
-				bot.Send(msg)
-				// 清除用户记录
-				userStepMap[chatID] = ""  // 清空步骤
-				userInputMap[chatID] = "" // 清空输入
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
 			}
 		}
 	}
