@@ -127,4 +127,3 @@ mysql -h 127.0.0.1 -u root -p
 lafeng110A
 use chat;
 delete from domains where type = 'private';
-
