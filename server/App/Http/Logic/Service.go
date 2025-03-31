@@ -182,6 +182,7 @@ func (s Service) RenewalByServiceManager(serviceManagerId int, username string, 
 	// 续费账号
 	return s.RenewalByUsername(username, day)
 }
+
 func (Service) IsMaturities(serviceId int) error {
 	//查询客服是否存在
 	var model Service2.ServiceAuth

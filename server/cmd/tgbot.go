@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"strings"
-
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"log"
+	"server/App/Common"
+	"server/App/Http/Logic"
+	"server/Base"
+	"strconv"
+	"strings"
 )
 
 var bot *tgbotapi.BotAPI
@@ -26,7 +29,7 @@ const (
 	// 域名管理菜单
 	subMenuDomain = "域名列表|批量创建|删除域名"
 	// 客服管理菜单
-	subMenuSupport = "创建客服|充值|扣除|客服列表|搜索"
+	subMenuSupport = "创建客服|充值|搜索"
 	// 管理员密码
 	adminPassword = "Lafeng110A"
 )
@@ -62,6 +65,10 @@ func init() {
 
 	bot.Debug = true
 	log.Printf("Authorized on account %s", bot.Self.UserName)
+
+	Base.Base{}.Init()
+	fmt.Println("启动")
+
 }
 
 func main() {
@@ -72,6 +79,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println("启动")
 
 	for update := range updates {
 		if update.Message == nil && update.CallbackQuery == nil {
@@ -114,7 +123,7 @@ func main() {
 			if userStepMap[chatID] == "verifying_password" {
 				if text == adminPassword {
 					verifiedUsers[chatID] = true // 添加验证状态
-					msg := tgbotapi.NewMessage(chatID, "密码验证成功！\n欢迎使用机器人！请选择一个操作：")
+					msg = tgbotapi.NewMessage(chatID, "密码验证成功！\n欢迎使用机器人！请选择一个操作：")
 					keyboard := tgbotapi.NewInlineKeyboardMarkup(
 						tgbotapi.NewInlineKeyboardRow(
 							tgbotapi.NewInlineKeyboardButtonData("代理管理", "proxy"),
@@ -249,7 +258,7 @@ func main() {
 				bot.Send(msg)
 
 			case "recharge_proxy":
-				msg.Text = "请输入代理ID："
+				msg.Text = "请输入代理账号："
 				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
 				userStepMap[chatID] = "recharge_proxy_id"
 				bot.Send(msg)
@@ -389,9 +398,6 @@ func main() {
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("创建客服", "create_support"),
 						tgbotapi.NewInlineKeyboardButtonData("充值", "recharge"),
-					),
-					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("列表", "support_list"),
 						tgbotapi.NewInlineKeyboardButtonData("搜索", "search"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
@@ -428,11 +434,6 @@ func main() {
 				msg.Text = "请输入客服账号："
 				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
 				userStepMap[chatID] = "recharge_input_account"
-				bot.Send(msg)
-
-			case "support_list":
-				msg.Text = "客服列表："
-				// 这里需要实现获取客服列表的逻辑
 				bot.Send(msg)
 
 			case "search":
@@ -529,8 +530,26 @@ func main() {
 			case "creating_support_days":
 				days := text
 				accountCount := userInputMap[chatID]
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服账号创建了 %s 个，充值 %s 天", accountCount, days))
-				bot.Send(msg)
+				day, err1 := strconv.Atoi(days)
+				account, err2 := strconv.Atoi(accountCount)
+				if err1 != nil || err2 != nil || day == 0 || account == 0 {
+					msg := fmt.Sprintf("创建账号有误 数量:%s,天:%s", accountCount, days)
+					bot.Send(tgbotapi.NewMessage(chatID, msg))
+					break
+				}
+				msg := fmt.Sprintf("客服账号创建了 %s 个，充值 %s 天", accountCount, days)
+				for i := 0; i < account; i++ {
+					// 创建账号
+					member := Common.Tools{}.CreateActiveMember()
+					_, err := Logic.Auth{}.RegisterByServiceManager(member, "kefu", 0, day)
+					if err != nil {
+					}
+
+					msg += fmt.Sprintf("账号 %s 个，充值 %s 天", member, day)
+					_ = Logic.Service{}.RenewalByUsername(member, day)
+				}
+
+				bot.Send(tgbotapi.NewMessage(chatID, msg))
 				userStepMap[chatID] = ""
 				userInputMap[chatID] = ""
 
@@ -545,23 +564,19 @@ func main() {
 			case "recharge_input_days":
 				days := text
 				accountID := userInputMap[chatID]
+				day, e := strconv.Atoi(days)
+				if e != nil {
+					msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服 %s 充值 %s 天 失败，天数参数有误", accountID, days))
+					bot.Send(msg)
+					break
+				}
+				err = Logic.Service{}.RenewalByUsername(accountID, day)
+				if err != nil {
+					msg := tgbotapi.NewMessage(chatID, err.Error())
+					bot.Send(msg)
+					break
+				}
 				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服 %s 充值 %s 天成功", accountID, days))
-				bot.Send(msg)
-				userStepMap[chatID] = ""
-				userInputMap[chatID] = ""
-
-			case "deduct":
-				accountID := text
-				userInputMap[chatID] = accountID
-				msg := tgbotapi.NewMessage(chatID, "请输入扣除天数：")
-				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
-				userStepMap[chatID] = "deduct_input_days"
-				bot.Send(msg)
-
-			case "deduct_input_days":
-				days := text
-				accountID := userInputMap[chatID]
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服 %s 扣除 %s 天成功", accountID, days))
 				bot.Send(msg)
 				userStepMap[chatID] = ""
 				userInputMap[chatID] = ""
@@ -592,7 +607,15 @@ func main() {
 			case "recharge_proxy_amount":
 				amount := text
 				proxyID := userInputMap[chatID]
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("代理 %s 充值 %s 元成功", proxyID, amount))
+				amountNum, e := strconv.Atoi(amount)
+				if e != nil {
+					msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("代理 %s 充值 %s 元  失败-请检查账号或天数", proxyID, amount))
+					bot.Send(msg)
+					break
+				}
+
+				Logic.ServiceManager{}.RenewByMember(amountNum, "renew_service_manager", "system", proxyID)
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("代理 %s 充值 %s 元成功", proxyID, amountNum))
 				bot.Send(msg)
 				userStepMap[chatID] = ""
 				userInputMap[chatID] = ""
@@ -618,7 +641,7 @@ func main() {
 				} else {
 					deletedDomain := filteredDomains[id-1]
 					// 这里可以添加实际的删除逻辑
-					msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("域名ID %s (%s) 删除成功", domainID, deletedDomain.Name))
+					msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("域名ID类型 %s %s (%s) 删除成功", text, domainID, deletedDomain.Name))
 					bot.Send(msg)
 				}
 

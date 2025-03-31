@@ -63,3 +63,19 @@ func (ServiceManager) Renew(ServiceManagerId int, Account int, Reason string, Pa
 		Account: account.Account + Account, Renew: Account, CreateTime: time.Now().Format("2006-01-02 15:04:05"), Reason: Reason, PayType: PayType,
 	})
 }
+
+func (ServiceManager) RenewByMember(Account int, Reason string, PayType string, member string) {
+	var account ServiceManager2.ServiceManager
+	Base.MysqlConn.Find(&account, "member = ?", member)
+	if account.ServiceManagerId == 0 {
+		return
+	}
+
+	Base.MysqlConn.Model(&ServiceManager2.ServiceManager{}).Where("service_manager_id = ?", account.ServiceManagerId).
+		Update("account", gorm.Expr("account + ?", Account))
+	Base.MysqlConn.Create(&Response.ServiceManagerRenewRecorder{
+		ServiceManagerMember: account.Member, Member: member,
+		ServiceManagerId: account.ServiceManagerId, OldAccount: account.Account, OrderId: Common.Tools{}.CreateOrderId("PAY"),
+		Account: account.Account + Account, Renew: Account, CreateTime: time.Now().Format("2006-01-02 15:04:05"), Reason: Reason, PayType: PayType,
+	})
+}
