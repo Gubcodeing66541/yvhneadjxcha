@@ -465,6 +465,12 @@ func main() {
 				msg.Text = fmt.Sprintf("请输入%s域名列表（多个域名请换行输入）：", domainType)
 				userStepMap[chatID] = "input_domain_list"
 				bot.Send(msg)
+			case "confirm_cleanup":
+				Base.MysqlConn.Delete(&Common2.Domain{}, "type = ? and status != ? ", "private", "enable")
+				Base.MysqlConn.Delete(&Common2.Domain{}, "type = ? and status != ?", "transfer", "enable")
+				Base.MysqlConn.Delete(&Common2.Domain{}, "type = ? and status != ?", "action", "enable")
+				msg := tgbotapi.NewMessage(chatID, "所有域名已清理")
+				bot.Send(msg)
 
 			case "delete_入口_domain", "delete_落地_domain", "delete_中转_domain":
 				domainType := strings.Split(callbackData, "_")[1]
@@ -666,7 +672,7 @@ func main() {
 
 				// 过滤空行
 				var validDomains []string
-				for _, domain := range domains {
+				for i, domain := range domains {
 					if trimmed := strings.TrimSpace(domain); trimmed != "" {
 						if !strings.HasPrefix(trimmed, "http") {
 							trimmed = "http://" + trimmed
@@ -677,6 +683,7 @@ func main() {
 						if domainType == "入口" {
 							domainTypeName = "private"
 							trimmed = trimmed + "/user/oauth/show_join"
+							validDomains[i] = trimmed
 						}
 
 						if domainType == "中转" {
@@ -686,9 +693,14 @@ func main() {
 						if domainType == "落地" {
 							domainTypeName = "action"
 							trimmed = trimmed + "/user/oauth/show_action"
+							validDomains[i] = trimmed
 						}
-						Base.MysqlConn.Create(&Common2.Domain{
-							Domain: trimmed, Type: domainTypeName, WeChatBanStatus: "success", Status: "enable"})
+						err := Base.MysqlConn.Create(&Common2.Domain{
+							Domain: trimmed, Type: domainTypeName, WeChatBanStatus: "success", Status: "enable"}).Error
+						if err != nil {
+							msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("域名 %s 添加失败", trimmed))
+							bot.Send(msg)
+						}
 					}
 				}
 
