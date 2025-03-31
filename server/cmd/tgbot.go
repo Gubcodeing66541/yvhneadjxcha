@@ -5,6 +5,8 @@ import (
 	"log"
 	"server/App/Common"
 	"server/App/Http/Logic"
+	Common2 "server/App/Model/Common"
+	Service2 "server/App/Model/Service"
 	"server/Base"
 	"strconv"
 	"strings"
@@ -622,29 +624,11 @@ func main() {
 				userInputMap[chatID] = ""
 
 			case "deleting_domain_by_id":
-				domainID := text
-				domainType := userInputMap[chatID]
+				Base.MysqlConn.Delete(&Common2.Domain{}, "domain like ?", "%"+fmt.Sprintf("%s", text)+"%")
 
-				// 获取指定类型的域名列表
-				var filteredDomains []Domain
-				for _, d := range domainList {
-					if d.Type == domainType {
-						filteredDomains = append(filteredDomains, d)
-					}
-				}
-
-				// 转换ID为数字并检查有效性
-				id := 0
-				_, err := fmt.Sscanf(domainID, "%d", &id)
-				if err != nil || id < 1 || id > len(filteredDomains) {
-					msg := tgbotapi.NewMessage(chatID, "无效的域名ID，请重新选择操作")
-					bot.Send(msg)
-				} else {
-					deletedDomain := filteredDomains[id-1]
-					// 这里可以添加实际的删除逻辑
-					msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("域名ID类型 %s %s (%s) 删除成功", text, domainID, deletedDomain.Name))
-					bot.Send(msg)
-				}
+				// 这里可以添加实际的删除逻辑
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("域名 (%s) 删除成功", text))
+				bot.Send(msg)
 
 				// 清除用户状态
 				userStepMap[chatID] = ""
@@ -684,7 +668,27 @@ func main() {
 				var validDomains []string
 				for _, domain := range domains {
 					if trimmed := strings.TrimSpace(domain); trimmed != "" {
+						if !strings.HasPrefix(trimmed, "http") {
+							trimmed = "http://" + trimmed
+						}
+
 						validDomains = append(validDomains, trimmed)
+						domainTypeName := "private"
+						if domainType == "入口" {
+							domainTypeName = "private"
+							trimmed = trimmed + "/user/oauth/show_join"
+						}
+
+						if domainType == "中转" {
+							domainTypeName = "transfer"
+						}
+
+						if domainType == "落地" {
+							domainTypeName = "action"
+							trimmed = trimmed + "/user/oauth/show_action"
+						}
+						Base.MysqlConn.Create(&Common2.Domain{
+							Domain: trimmed, Type: domainTypeName, WeChatBanStatus: "success", Status: "enable"})
 					}
 				}
 
@@ -698,15 +702,6 @@ func main() {
 				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("已添加 %s 域名 %d 个：\n%s",
 					domainType, len(validDomains), domainListMsg))
 
-				// 这里可以添加实际的域名添加逻辑
-				for _, domain := range validDomains {
-					domainList = append(domainList, Domain{
-						Name:   domain,
-						Type:   domainType,
-						Status: "正常",
-					})
-				}
-
 				bot.Send(msg)
 
 				// 清除用户状态
@@ -715,10 +710,18 @@ func main() {
 
 			case "recovering_domain":
 				password := text
-				domainType := userInputMap[chatID]
+				//domainType := userInputMap[chatID]
+
+				var serviceInfo Service2.Service
+				Base.MysqlConn.Find(&serviceInfo, "username = ?", password)
+
+				var domainInfo Common2.Domain
+				Base.MysqlConn.Find(&domainInfo, "id = ?", serviceInfo.BindDomainId)
+
+				Base.MysqlConn.Delete(&domainInfo, "id = ?", domainInfo.Id)
 
 				// 这里可以添加实际的卡密验证和域名恢复逻辑
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("已使用卡密 %s 恢复%s域名", password, domainType))
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("已使用卡密 %s 删除绑定的%s域名", password, domainInfo.Domain))
 				bot.Send(msg)
 
 				// 清除用户状态
