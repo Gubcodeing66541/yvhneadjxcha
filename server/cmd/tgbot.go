@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"server/App/Common"
 	"server/App/Http/Logic"
 	"server/Base"
 	"strconv"
 	"strings"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 var bot *tgbotapi.BotAPI
@@ -537,7 +538,7 @@ func main() {
 					bot.Send(tgbotapi.NewMessage(chatID, msg))
 					break
 				}
-				msg := fmt.Sprintf("客服账号创建了 %s 个，充值 %s 天", accountCount, days)
+				msg := fmt.Sprintf("客服账号创建了共 %s 个，充值 %s 天 ", accountCount, days)
 				for i := 0; i < account; i++ {
 					// 创建账号
 					member := Common.Tools{}.CreateActiveMember()
@@ -545,7 +546,7 @@ func main() {
 					if err != nil {
 					}
 
-					msg += fmt.Sprintf("账号 %s 个，充值 %s 天", member, day)
+					msg += fmt.Sprintf("\n账号: %s，充值: %d 天", member, day)
 					_ = Logic.Service{}.RenewalByUsername(member, day)
 				}
 
