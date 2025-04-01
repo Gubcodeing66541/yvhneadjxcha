@@ -297,13 +297,37 @@ func main() {
 
 			case "domain_entry_manage", "domain_landing_manage", "domain_transit_manage":
 				domainType := "入口"
+				var domainCount int
+				Base.MysqlConn.Model(&Common2.Domain{}).Where("type = ? and status = ?", "private", "enable").Count(&domainCount)
 				if callbackData == "domain_landing_manage" {
 					domainType = "落地"
+					Base.MysqlConn.Model(&Common2.Domain{}).Where("type = ? and status = ?", "action", "enable").Count(&domainCount)
 				} else if callbackData == "domain_transit_manage" {
 					domainType = "中转"
+					Base.MysqlConn.Model(&Common2.Domain{}).Where("type = ? and status = ?", "transfer", "enable").Count(&domainCount)
+					msg.Text = fmt.Sprintf("请选择中转域名操作（当前有%d个可用中转域名）：", domainCount)
+					keyboard := tgbotapi.NewInlineKeyboardMarkup(
+						tgbotapi.NewInlineKeyboardRow(
+							tgbotapi.NewInlineKeyboardButtonData("域名列表", "list_中转_domain"),
+							tgbotapi.NewInlineKeyboardButtonData("批量新增", "batch_create_中转"),
+							tgbotapi.NewInlineKeyboardButtonData("删除域名", "delete_中转_domain"),
+							tgbotapi.NewInlineKeyboardButtonData("卡密反删", "recover_中转_domain"),
+						),
+						tgbotapi.NewInlineKeyboardRow(
+							tgbotapi.NewInlineKeyboardButtonData("转入口域名", "domain_to_join"),
+							tgbotapi.NewInlineKeyboardButtonData("转落地域名", "domain_to_action"),
+						),
+						tgbotapi.NewInlineKeyboardRow(
+							tgbotapi.NewInlineKeyboardButtonData("返回", "domain"),
+							tgbotapi.NewInlineKeyboardButtonData("返回首页", "main_menu"),
+						),
+					)
+					msg.ReplyMarkup = keyboard
+					bot.Send(msg)
+					continue
 				}
 
-				msg.Text = fmt.Sprintf("请选择%s域名操作：", domainType)
+				msg.Text = fmt.Sprintf("请选择%s域名操作（当前有%d个可用%s域名）：", domainType, domainCount, domainType)
 				keyboard := tgbotapi.NewInlineKeyboardMarkup(
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("域名列表", fmt.Sprintf("list_%s_domain", domainType)),
@@ -524,6 +548,23 @@ func main() {
 				msg.Text = "请输入代理昵称："
 				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
 				userStepMap[chatID] = "creating_proxy_nickname"
+				bot.Send(msg)
+
+			case "domain_to_join":
+				var count int
+
+				Base.MysqlConn.Model(&Common2.Domain{}).Where("type = ? and status = ?", "transfer", "enable").Count(&count)
+				msg.Text = fmt.Sprintf("请输入要转入入口的中转域名数量（当前有%d个中转域名）：", count)
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "converting_to_join"
+				bot.Send(msg)
+
+			case "domain_to_action":
+				var count int
+				Base.MysqlConn.Model(&Common2.Domain{}).Where("type = ? and status = ?", "transfer", "enable").Count(&count)
+				msg.Text = fmt.Sprintf("请输入要转入落地的中转域名数量（当前有%d个中转域名）：", count)
+				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
+				userStepMap[chatID] = "converting_to_action"
 				bot.Send(msg)
 			}
 		}
@@ -783,6 +824,58 @@ func main() {
 				bot.Send(msg)
 
 				// 清除用户状态
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
+
+			case "converting_to_join":
+				count, err := strconv.Atoi(text)
+				if err != nil || count <= 0 {
+					msg := tgbotapi.NewMessage(chatID, "请输入有效的数量！")
+					bot.Send(msg)
+					break
+				}
+
+				var domains []Common2.Domain
+				Base.MysqlConn.Where("type = ? and status = ?", "transfer", "enable").Limit(count).Find(&domains)
+
+				successCount := 0
+				for _, domain := range domains {
+					// 更新域名类型为入口
+					domainInfo := domain.Domain + "/user/oauth/show_join"
+					err := Base.MysqlConn.Model(&domain).Updates(map[string]interface{}{"Domain": domainInfo, "type": "private"}).Error
+					if err == nil {
+						successCount++
+					}
+				}
+
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("成功将 %d 个中转域名转换为入口域名", successCount))
+				bot.Send(msg)
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
+
+			case "converting_to_action":
+				count, err := strconv.Atoi(text)
+				if err != nil || count <= 0 {
+					msg := tgbotapi.NewMessage(chatID, "请输入有效的数量！")
+					bot.Send(msg)
+					break
+				}
+
+				var domains []Common2.Domain
+				Base.MysqlConn.Where("type = ? and status = ?", "transfer", "enable").Limit(count).Find(&domains)
+
+				successCount := 0
+				for _, domain := range domains {
+					// 更新域名类型为落地
+					domainInfo := domain.Domain + "/user/oauth/show_action"
+					err := Base.MysqlConn.Model(&domain).Updates(map[string]interface{}{"domain": domainInfo, "type": "action"}).Error
+					if err == nil {
+						successCount++
+					}
+				}
+
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("成功将 %d 个中转域名转换为落地域名", successCount))
+				bot.Send(msg)
 				userStepMap[chatID] = ""
 				userInputMap[chatID] = ""
 			}
