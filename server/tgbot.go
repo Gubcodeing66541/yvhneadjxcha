@@ -106,11 +106,7 @@ func main() {
 					keyboard := tgbotapi.NewInlineKeyboardMarkup(
 						tgbotapi.NewInlineKeyboardRow(
 							tgbotapi.NewInlineKeyboardButtonData("代理管理", "proxy"),
-						),
-						tgbotapi.NewInlineKeyboardRow(
 							tgbotapi.NewInlineKeyboardButtonData("域名管理", "domain"),
-						),
-						tgbotapi.NewInlineKeyboardRow(
 							tgbotapi.NewInlineKeyboardButtonData("客服管理", "support"),
 						),
 					)
