@@ -615,7 +615,7 @@ func main() {
 				}
 
 				Logic.ServiceManager{}.RenewByMember(amountNum, "renew_service_manager", "system", proxyID)
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("代理 %s 充值 %s 元成功", proxyID, amountNum))
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("代理 %s 充值 %d 元成功", proxyID, amountNum))
 				bot.Send(msg)
 				userStepMap[chatID] = ""
 				userInputMap[chatID] = ""
@@ -736,8 +736,8 @@ func main() {
 				nickname := text
 				// 这里可以添加实际的代理创建逻辑
 				// 生成随机的代理账号（这里用昵称代替）
-				proxyAccount := nickname
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("代理创建成功！\n代理昵称：%s\n代理账号：%s", nickname, proxyAccount))
+				username, password := Logic.ServiceManager{}.CreateByName(0, nickname)
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("代理创建成功！\n代理昵称：%s\n代理账号：%s\n代理密码：%s", nickname, username, password))
 				bot.Send(msg)
 
 				// 清除用户状态

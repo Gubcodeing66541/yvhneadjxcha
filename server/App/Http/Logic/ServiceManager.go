@@ -1,13 +1,14 @@
 package Logic
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	"server/App/Common"
 	"server/App/Http/Response"
 	ServiceManager2 "server/App/Model/ServiceManager"
 	"server/Base"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
 type ServiceManager struct{}
@@ -16,6 +17,32 @@ func (ServiceManager) Get(serviceManagerId int) ServiceManager2.ServiceManager {
 	var model ServiceManager2.ServiceManager
 	Base.MysqlConn.Find(&model, "service_manager_id = ?", serviceManagerId)
 	return model
+}
+
+func (ServiceManager) CreateByName(Account int, Name string) (username string, password string) {
+	username = Common.Tools{}.CreateServiceManagerMember()
+	password = "abc123456"
+	manager := ServiceManager2.ServiceManager{
+		Member:     username,
+		Password:   password,
+		Name:       Name,
+		Head:       Common.Tools{}.GetDefaultHead(),
+		Ip:         "-",
+		CreateTime: time.Now(),
+		UpdateTime: time.Now(),
+		Account:    Account,
+		Status:     "success",
+	}
+	Base.MysqlConn.Create(&manager)
+
+	// 生成机器人
+	Base.MysqlConn.Create(&ServiceManager2.ServiceManagerBot{
+		ServiceManagerId: manager.ServiceManagerId,
+		Status:           "stop",
+		Head:             Base.AppConfig.HttpHost + "/static/static/bot.png",
+		Name:             "机器人",
+	})
+	return username, password
 }
 
 func (ServiceManager) Create(c *gin.Context, Account int) (username string, password string) {
