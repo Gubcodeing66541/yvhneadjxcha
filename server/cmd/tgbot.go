@@ -10,6 +10,7 @@ import (
 	"server/Base"
 	"strconv"
 	"strings"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -126,6 +127,10 @@ func main() {
 			if userStepMap[chatID] == "verifying_password" {
 				if text == adminPassword {
 					verifiedUsers[chatID] = true // 添加验证状态
+					// 删除密码验证消息
+					deleteMsg := tgbotapi.NewDeleteMessage(chatID, update.Message.MessageID)
+					bot.Send(deleteMsg)
+
 					msg = tgbotapi.NewMessage(chatID, "密码验证成功！\n欢迎使用机器人！请选择一个操作：")
 					keyboard := tgbotapi.NewInlineKeyboardMarkup(
 						tgbotapi.NewInlineKeyboardRow(
@@ -695,8 +700,9 @@ func main() {
 							trimmed = trimmed + "/user/oauth/show_action"
 							validDomains[i] = trimmed
 						}
+						now := time.Now()
 						err := Base.MysqlConn.Create(&Common2.Domain{
-							Domain: trimmed, Type: domainTypeName, WeChatBanStatus: "success", Status: "enable"}).Error
+							Domain: trimmed, Type: domainTypeName, WeChatBanStatus: "success", Status: "enable", CreateTime: now, UpdateTime: now}).Error
 						if err != nil {
 							msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("域名 %s 添加失败", trimmed))
 							bot.Send(msg)
