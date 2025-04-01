@@ -7,6 +7,7 @@ import (
 	"server/App/Http/Logic"
 	Common2 "server/App/Model/Common"
 	Service2 "server/App/Model/Service"
+	ServiceManager2 "server/App/Model/ServiceManager"
 	"server/Base"
 	"strconv"
 	"strings"
@@ -247,9 +248,6 @@ func main() {
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("代理列表", "proxy_list"),
 						tgbotapi.NewInlineKeyboardButtonData("创建代理", "create_proxy"),
-					),
-					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("删除代理", "delete_proxy"),
 						tgbotapi.NewInlineKeyboardButtonData("充值代理", "recharge_proxy"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
@@ -258,6 +256,14 @@ func main() {
 				)
 				msg.ReplyMarkup = keyboard
 				bot.Send(msg)
+			case "proxy_list":
+				msg := "代理列表："
+				var serviceManager []ServiceManager2.ServiceManager
+				Base.MysqlConn.Find(&serviceManager)
+				for _, v := range serviceManager {
+					msg += fmt.Sprintf("\n代理昵称：%s\n代理账号：%s\n代理余额：%d\n\n", v.Name, v.Member, v.Account)
+				}
+				bot.Send(tgbotapi.NewMessage(chatID, msg))
 
 			case "delete_proxy":
 				msg.Text = "请输入要删除的代理账号："
@@ -280,7 +286,7 @@ func main() {
 						tgbotapi.NewInlineKeyboardButtonData("落地域名", "domain_landing_manage"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("一键清理", "domain_cleanup"),
+						tgbotapi.NewInlineKeyboardButtonData("一键清理异常域名", "domain_cleanup"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("返回首页", "main_menu"),
@@ -301,9 +307,9 @@ func main() {
 				keyboard := tgbotapi.NewInlineKeyboardMarkup(
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("域名列表", fmt.Sprintf("list_%s_domain", domainType)),
+						tgbotapi.NewInlineKeyboardButtonData("批量新增", fmt.Sprintf("batch_create_%s", domainType)),
 						tgbotapi.NewInlineKeyboardButtonData("删除域名", fmt.Sprintf("delete_%s_domain", domainType)),
 						tgbotapi.NewInlineKeyboardButtonData("卡密反删", fmt.Sprintf("recover_%s_domain", domainType)),
-						tgbotapi.NewInlineKeyboardButtonData("批量新增", fmt.Sprintf("batch_create_%s", domainType)),
 					),
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("返回", "domain"),
@@ -390,7 +396,7 @@ func main() {
 				bot.Send(msg)
 
 			case "domain_cleanup":
-				msg.Text = "确定要清理所有域名吗？"
+				msg.Text = "确定要清理所有异常域名吗？"
 				keyboard := tgbotapi.NewInlineKeyboardMarkup(
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("确定", "confirm_cleanup"),
@@ -471,16 +477,16 @@ func main() {
 				userStepMap[chatID] = "input_domain_list"
 				bot.Send(msg)
 			case "confirm_cleanup":
-				Base.MysqlConn.Delete(&Common2.Domain{}, "type = ? and status != ? ", "private", "enable")
-				Base.MysqlConn.Delete(&Common2.Domain{}, "type = ? and status != ?", "transfer", "enable")
-				Base.MysqlConn.Delete(&Common2.Domain{}, "type = ? and status != ?", "action", "enable")
-				msg := tgbotapi.NewMessage(chatID, "所有域名已清理")
+				Base.MysqlConn.Delete(&Common2.Domain{}, "type = ? and status = ? ", "private", "un_enable")
+				Base.MysqlConn.Delete(&Common2.Domain{}, "type = ? and status = ?", "transfer", "un_enable")
+				Base.MysqlConn.Delete(&Common2.Domain{}, "type = ? and status = ?", "action", "un_enable")
+				msg := tgbotapi.NewMessage(chatID, "所有异常域名已清理")
 				bot.Send(msg)
 
 			case "delete_入口_domain", "delete_落地_domain", "delete_中转_domain":
 				domainType := strings.Split(callbackData, "_")[1]
 
-				msg.Text = fmt.Sprintf("\n请输入要删除的域名(模糊匹配)")
+				msg.Text = "\n请输入要删除的域名(模糊匹配)"
 				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
 				userStepMap[chatID] = "deleting_domain_by_id"
 				userInputMap[chatID] = domainType // 保存域名类型
