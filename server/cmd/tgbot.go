@@ -324,17 +324,23 @@ func main() {
 
 				// 获取当前页码，默认为0
 				currentPage := userPageMap[chatID]
+				pageSize := 50 // 每页显示50条
 
-				// 过滤指定类型的域名
-				var filteredDomains []Domain
-				for _, d := range domainList {
-					if d.Type == domainType {
-						filteredDomains = append(filteredDomains, d)
-					}
+				// 根据域名类型设置数据库查询类型
+				var dbType string
+				switch domainType {
+				case "入口":
+					dbType = "private"
+				case "落地":
+					dbType = "action"
+				case "中转":
+					dbType = "transfer"
 				}
 
-				// 计算总页数
-				totalPages := (len(filteredDomains) + pageSize - 1) / pageSize
+				// 查询总数
+				var total int
+				Base.MysqlConn.Model(&Common2.Domain{}).Where("type = ?", dbType).Count(&total)
+				totalPages := (total + pageSize - 1) / pageSize
 
 				// 确保页码有效
 				if currentPage >= totalPages {
@@ -345,18 +351,23 @@ func main() {
 				}
 				userPageMap[chatID] = currentPage
 
-				// 获取当前页的域名
-				start := currentPage * pageSize
-				end := start + pageSize
-				if end > len(filteredDomains) {
-					end = len(filteredDomains)
-				}
+				// 查询当前页数据
+				var domains []Common2.Domain
+				Base.MysqlConn.Where("type = ?", dbType).
+					Order("id desc").
+					Offset(currentPage * pageSize).
+					Limit(pageSize).
+					Find(&domains)
 
 				// 构建域名列表消息
 				var domainInfo string
-				for i := start; i < end; i++ {
-					domain := filteredDomains[i]
-					domainInfo += fmt.Sprintf("%d. %s [%s]\n", i+1, domain.Name, domain.Status)
+				for i, domain := range domains {
+					status := "正常"
+					if domain.Status == "un_enable" {
+						status = "禁用"
+					}
+					domainInfo += fmt.Sprintf("%d. ID:%d 域名:%s 状态:%s\n",
+						i+1, domain.Id, domain.Domain, status)
 				}
 
 				msg.Text = fmt.Sprintf("%s域名列表（第%d/%d页）：\n%s",
@@ -382,7 +393,6 @@ func main() {
 				// 添加操作按钮
 				buttons = append(buttons, []tgbotapi.InlineKeyboardButton{
 					tgbotapi.NewInlineKeyboardButtonData("删除", fmt.Sprintf("delete_%s_domain", domainType)),
-					tgbotapi.NewInlineKeyboardButtonData("修改状态", fmt.Sprintf("modify_%s_domain", domainType)),
 				})
 
 				// 添加返回按钮
@@ -732,6 +742,32 @@ func main() {
 
 				// 这里可以添加实际的卡密验证和域名恢复逻辑
 				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("已使用卡密 %s 删除绑定的%s域名", password, domainInfo.Domain))
+				bot.Send(msg)
+
+				// 清除用户状态
+				userStepMap[chatID] = ""
+				userInputMap[chatID] = ""
+
+			case "searching_support":
+				username := text
+				var serviceInfo Service2.Service
+				Base.MysqlConn.Find(&serviceInfo, "username = ?", username)
+				if serviceInfo.Id == 0 {
+					msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("未找到客服账号：%s", username))
+					bot.Send(msg)
+					break
+				}
+
+				// 获取过期时间
+				expireTime := serviceInfo.TimeOut.Format("2006-01-02 15:04:05")
+				if serviceInfo.TimeOut.IsZero() {
+					expireTime = "未设置"
+				}
+
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("客服信息：\nID：%d\n账号：%s\n过期时间：%s",
+					serviceInfo.Id,
+					serviceInfo.Username,
+					expireTime))
 				bot.Send(msg)
 
 				// 清除用户状态
