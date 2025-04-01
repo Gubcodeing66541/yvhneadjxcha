@@ -683,10 +683,21 @@ func main() {
 				userInputMap[chatID] = ""
 
 			case "deleting_domain_by_id":
+				var domains []Common2.Domain
+				Base.MysqlConn.Find(&domains, "domain like ?", "%"+fmt.Sprintf("%s", text)+"%")
+				if len(domains) == 0 {
+					msg := tgbotapi.NewMessage(chatID, "未找到该域名")
+					bot.Send(msg)
+					break
+				}
+				var domainNames []string
+				for _, domain := range domains {
+					domainNames = append(domainNames, domain.Domain)
+				}
 				Base.MysqlConn.Delete(&Common2.Domain{}, "domain like ?", "%"+fmt.Sprintf("%s", text)+"%")
 
 				// 这里可以添加实际的删除逻辑
-				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("域名 (%s) 删除成功", text))
+				msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("搜素词:%s \n域名:(%s) \n删除成功", text, strings.Join(domainNames, "\n")))
 				bot.Send(msg)
 
 				// 清除用户状态
