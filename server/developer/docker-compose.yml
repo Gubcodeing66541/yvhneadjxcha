@@ -65,3 +65,15 @@ services:
     links:
       - mysql57
       - redis8
+  tgbot:
+    container_name: tgbot
+    volumes:
+      - ./../:/home/app
+    image: golang:1.13.4
+    command: bash -c "cd /home/app && sleep 8s && cp config.json.example config.json && chmod -R 777 tgbot && ./tgbot"
+    depends_on:
+      - mysql57
+      - redis8
+    links:
+      - mysql57
+      - redis8
