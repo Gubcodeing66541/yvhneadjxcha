@@ -480,21 +480,7 @@ func main() {
 			case "delete_入口_domain", "delete_落地_domain", "delete_中转_domain":
 				domainType := strings.Split(callbackData, "_")[1]
 
-				// 获取指定类型的域名列表
-				var filteredDomains []Domain
-				for _, d := range domainList {
-					if d.Type == domainType {
-						filteredDomains = append(filteredDomains, d)
-					}
-				}
-
-				// 显示域名列表和ID
-				var domainListMsg string
-				for i, d := range filteredDomains {
-					domainListMsg += fmt.Sprintf("%d. %s [%s]\n", i+1, d.Name, d.Status)
-				}
-
-				msg.Text = fmt.Sprintf("%s域名列表：\n%s\n请输入要删除的域名ID：", domainType, domainListMsg)
+				msg.Text = fmt.Sprintf("\n请输入要删除的域名(模糊匹配)：", domainType)
 				msg.ReplyMarkup = tgbotapi.ForceReply{ForceReply: true}
 				userStepMap[chatID] = "deleting_domain_by_id"
 				userInputMap[chatID] = domainType // 保存域名类型
