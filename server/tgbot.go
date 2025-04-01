@@ -589,7 +589,7 @@ func main() {
 				accountCount := userInputMap[chatID]
 				day, err1 := strconv.Atoi(days)
 				account, err2 := strconv.Atoi(accountCount)
-				if err1 != nil || err2 != nil || day == 0 || account == 0 {
+				if err1 != nil || err2 != nil || account == 0 {
 					msg := fmt.Sprintf("创建账号有误 数量:%s,天:%s", accountCount, days)
 					bot.Send(tgbotapi.NewMessage(chatID, msg))
 					break
@@ -603,7 +603,12 @@ func main() {
 					}
 
 					msg += fmt.Sprintf("\n账号: %s，充值: %d 天", member, day)
-					_ = Logic.Service{}.RenewalByUsername(member, day)
+
+					if day == 0 {
+						_ = Logic.Service{}.RenewalByTest(member)
+					} else {
+						_ = Logic.Service{}.RenewalByUsername(member, day)
+					}
 				}
 
 				bot.Send(tgbotapi.NewMessage(chatID, msg))

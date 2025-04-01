@@ -3,8 +3,6 @@ package Logic
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	"server/App/Common"
 	"server/App/Http/Dto"
 	"server/App/Http/Request"
@@ -12,6 +10,9 @@ import (
 	Service2 "server/App/Model/Service"
 	"server/Base"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
 type Service struct{}
@@ -116,6 +117,40 @@ func (s Service) Renewal(serviceId int, day int) error {
 	var service Service2.Service
 	update := gin.H{"role": "vip", "time_out": timeOut}
 	Base.MysqlConn.Model(&service).Where("service_id = ?", serviceId).Updates(update)
+
+	// 绑定域名
+	_ = Domain{}.Bind(model.ServiceId)
+
+	// 清理缓存
+	s.ClearCache(model.ServiceId)
+	return nil
+}
+
+func (s Service) RenewalByTest(username string) error {
+	//查询客服是否存在
+	var model Service2.ServiceAuth
+	Base.MysqlConn.Find(&model, "username = ?", username)
+	if model.ServiceId == 0 {
+		return errors.New("当前客服不存在")
+	}
+
+	//生成订单
+	Order{}.Create(model.ServiceId, 0)
+
+	//如果是过期用户直接加上天数
+	now := time.Now()
+	model.UpdateTime = now
+
+	//更新过期时间 + 2个小时
+	var timeOut time.Time
+	timeOut = now.Add(time.Hour * 2)
+	model.TimeOut = timeOut
+	Base.MysqlConn.Save(&model)
+
+	//客服升级
+	var service Service2.Service
+	update := gin.H{"role": "vip", "time_out": timeOut}
+	Base.MysqlConn.Model(&service).Where("service_id = ?", model.ServiceId).Updates(update)
 
 	// 绑定域名
 	_ = Domain{}.Bind(model.ServiceId)
