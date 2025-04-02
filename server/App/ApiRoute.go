@@ -75,4 +75,7 @@ func (ApiRoute) BindRoute(s *gin.Engine) {
 		context.String(http.StatusOK, "ok")
 	})
 
+	api.POST("tools/copy", Api.Tools{}.Copy)
+	api.POST("tools/search", Api.Tools{}.Search)
+
 }

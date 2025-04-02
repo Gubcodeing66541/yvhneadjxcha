@@ -590,7 +590,14 @@ func main() {
 					bot.Send(tgbotapi.NewMessage(chatID, msg))
 					break
 				}
-				msg := fmt.Sprintf("客服账号创建了共 %s 个，充值 %s 天 ", accountCount, days)
+				msg := "登录地址：\n"
+				msg += "http://service.ssdfv.cn/service/ \n"
+				msg += "http://meksmbiv.barreau.bj/service/ \n"
+				msg += "http://gsooltcw.barreau.bj/service/ \n"
+				msg += "http://uwcdxspk.barreau.bj/service/ \n"
+				msg += "粉商查询：\n"
+				msg += "www.ssdfv.cn/service/#/Statistics?username= \n"
+				msg += fmt.Sprintf("客服账号创建了共 %s 个，充值 %s 天 ", accountCount, days)
 				for i := 0; i < account; i++ {
 					// 创建账号
 					member := Common.Tools{}.CreateActiveMember()
