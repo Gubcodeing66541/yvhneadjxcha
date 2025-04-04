@@ -116,12 +116,22 @@
         <!-- 绑定入口弹窗 -->
         <a-modal v-model:visible="visible.bindDomainModal" title="绑定入口域名" @ok="handleBindDomain" :width="500">
             <div class="mb10 t-tipc">当前入口域名：{{ info.bind_domain || '未设置' }}</div>
+            <div class="mb10">
+                <p class="t-tipc">入口地址：</p>
+                <p class="t-tipc">http://{你的域名}/u/j</p>
+                <p class="t-tipc">http://{你的域名}/user/oauth/show_join</p>
+            </div>
             <a-input v-model:value="bindDomain" placeholder="请输入入口域名" />
         </a-modal>
 
         <!-- 绑定落地弹窗 -->
         <a-modal v-model:visible="visible.bindActionModal" title="绑定落地域名" @ok="handleBindAction" :width="500">
             <div class="mb10 t-tipc">当前落地域名：{{ info.bind_action || '未设置' }}</div>
+            <div class="mb10">
+                <p class="t-tipc">落地地址：</p>
+                <p class="t-tipc">http://{你的域名}/user/oauth/show_action</p>
+                <p class="t-tipc">http://{你的域名}/u/a</p>
+            </div>
             <a-input v-model:value="bindAction" placeholder="请输入落地域名" />
         </a-modal>
 
