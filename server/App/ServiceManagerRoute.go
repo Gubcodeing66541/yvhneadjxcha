@@ -1,9 +1,10 @@
 package App
 
 import (
-	"github.com/gin-gonic/gin"
 	"server/App/Http/Handel/Service"
 	"server/App/Http/Handel/Servicemanager"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ServiceManagerRoute struct{}
@@ -44,6 +45,7 @@ func (ServiceManagerRoute) BindRoute(s *gin.Engine) {
 		service.POST("member/delete", Servicemanager.Member{}.Delete)
 		service.POST("member/renewal", Servicemanager.Member{}.Renewal)
 		service.POST("member/renewal_all", Servicemanager.Member{}.RenewalAll)
+		service.POST("ip_count", Servicemanager.Manager{}.IpCount)
 
 		service.POST("users/list", Servicemanager.User{}.Users)
 		service.POST("users/message", Servicemanager.User{}.Message)

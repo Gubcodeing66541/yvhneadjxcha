@@ -77,5 +77,6 @@ func (ApiRoute) BindRoute(s *gin.Engine) {
 
 	api.POST("tools/copy", Api.Tools{}.Copy)
 	api.POST("tools/search", Api.Tools{}.Search)
+	api.POST("tools/service_count", Api.Tools{}.ServiceCount)
 
 }

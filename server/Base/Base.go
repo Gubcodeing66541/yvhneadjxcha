@@ -3,10 +3,6 @@ package Base
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/garyburd/redigo/redis"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/nsqio/go-nsq"
 	"io/ioutil"
 	"os"
 	"server/App/Constant"
@@ -20,6 +16,11 @@ import (
 	"server/Base/Nsq"
 	"server/Base/WebSocket"
 	"time"
+
+	"github.com/garyburd/redigo/redis"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/nsqio/go-nsq"
 )
 
 type Base struct{}

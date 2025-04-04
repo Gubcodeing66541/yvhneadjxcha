@@ -1,7 +1,6 @@
 package Servicemanager
 
 import (
-	"github.com/gin-gonic/gin"
 	"math"
 	"server/App/Common"
 	"server/App/Http/Request"
@@ -12,6 +11,9 @@ import (
 	"server/App/Model/ServiceManager"
 	"server/Base"
 	"strings"
+	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Manager struct {
@@ -265,5 +267,49 @@ func (Manager) Data(c *gin.Context) {
 		"service_online": serviceOnline,
 		"service_rank":   serviceRank,
 		"count_time":     contTime,
+	})
+}
+
+// @summary 统计最近7天的IP数量
+// @tags 客服系统总后台
+// @Param token header string true "认证token"
+// @Router /manager/ip_count [post]
+func (Manager) IpCount(c *gin.Context) {
+	roleId := Common.Tools{}.GetRoleId(c)
+
+	// 获取最近7天的日期
+	now := time.Now()
+	dates := make([]string, 7)
+	for i := 0; i < 7; i++ {
+		dates[i] = now.AddDate(0, 0, -i).Format("2006-01-02")
+	}
+
+	// 查询最近7天的IP统计
+	var ipCounts []Response.IpCount
+	sql := "SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as date, COUNT(DISTINCT ip) as count " +
+		"FROM user_login_logs " +
+		"WHERE service_id IN (SELECT service_id FROM services WHERE service_manager_id = ?) " +
+		"AND create_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
+		"GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') " +
+		"ORDER BY date DESC"
+
+	Base.MysqlConn.Raw(sql, roleId).Scan(&ipCounts)
+
+	// 补全没有数据的日期
+	result := make([]Response.IpCount, 7)
+	ipCountMap := make(map[string]int)
+	for _, count := range ipCounts {
+		ipCountMap[count.Date] = count.Count
+	}
+
+	for i, date := range dates {
+		result[i] = Response.IpCount{
+			Date:  date,
+			Count: ipCountMap[date],
+		}
+	}
+
+	Common.ApiResponse{}.Success(c, "获取成功", gin.H{
+		"ip_counts": result,
 	})
 }

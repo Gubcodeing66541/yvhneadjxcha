@@ -315,10 +315,7 @@ export default {
 
         // 绑定入口域名
         const handleBindDomain = async () => {
-            if (!state.bindDomain) {
-                message.warning("请输入入口域名");
-                return;
-            }
+       
             try {
                 const res = await axios.post("/domain/bind_domain", {
                     domain: state.bindDomain
@@ -332,10 +329,7 @@ export default {
 
         // 绑定落地域名
         const handleBindAction = async () => {
-            if (!state.bindAction) {
-                message.warning("请输入落地域名");
-                return;
-            }
+ 
             try {
                 const res = await axios.post("/domain/bind_action", {
                     action: state.bindAction

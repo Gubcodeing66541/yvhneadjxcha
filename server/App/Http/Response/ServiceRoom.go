@@ -85,3 +85,8 @@ type ServiceRoomList struct {
 	ServiceHead string              `json:"service_head"`
 	CreateTime  Constant.SystemTime `json:"create_time"`
 }
+
+type IpCount struct {
+	Date  string `json:"date"`
+	Count int    `json:"count"`
+}
