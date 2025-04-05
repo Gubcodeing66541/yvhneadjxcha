@@ -1,7 +1,9 @@
 package Api
 
 import (
+	"fmt"
 	"server/App/Common"
+	"server/App/Http/Logic"
 	"server/App/Model/Service"
 	"server/Base"
 	"time"
@@ -11,6 +13,7 @@ import (
 
 type Tools struct{}
 
+// 话术复制
 func (Tools) Copy(c *gin.Context) {
 	var req struct {
 		MyUsername   string   `json:"my_username"`
@@ -95,6 +98,7 @@ func (Tools) Get(c *gin.Context) {
 
 }
 
+// code search
 func (Tools) Search(c *gin.Context) {
 	var req struct {
 		Username []string `json:"username"`
@@ -116,13 +120,19 @@ func (Tools) Search(c *gin.Context) {
 		return
 	}
 
-	var bingDomain Domain.Domain{}
-	if serviceInfo.BingDomain != "" {
-		bingDomain.Domain = serviceInfo.BingDomain
-		bingDomain.Status = serviceInfo.BingDomainStatus
+	domain := Logic.Domain{}.GetPublic()
+	if serviceInfo.BindDomainId != 0 {
+		domainTemp := Logic.Domain{}.Get(serviceInfo.BindDomainId)
+		if domainTemp.Domain != "" && domainTemp.Status == "enable" {
+			domain = domainTemp.Domain
+		}
+	}
+	web := domain + "?code=" + serviceInfo.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix())
+	if serviceInfo.BindDomain != "" {
+		web = serviceInfo.BindDomain + "?code=" + serviceInfo.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix())
 	}
 
-	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"list": responseList})
+	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"domain": web})
 }
 
 func (Tools) ServiceCount(c *gin.Context) {

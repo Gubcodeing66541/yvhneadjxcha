@@ -91,14 +91,6 @@ func (Service) Info(c *gin.Context) {
 
 	//domain := Logic.Domain{}.GetServiceBind(service.ServiceId)
 
-	domain := Logic.Domain{}.GetPublic()
-	if service.BindDomainId != 0 {
-		domainTemp := Logic.Domain{}.Get(service.BindDomainId)
-		if domainTemp.Domain != "" && domainTemp.Status == "enable" {
-			domain = domainTemp.Domain
-		}
-	}
-
 	//str := fmt.Sprintf("MEMBER-%s-time:-rand-%d", time.Now(), rand.Intn(99999))
 
 	////如果公众号关闭 就不走公众号的逻辑 换成新的网页token方式
@@ -134,6 +126,13 @@ func (Service) Info(c *gin.Context) {
 	//web = Sdk.WeChat{}.Login(auth.AppId, web, service.Code)
 	//fmt.Println()
 
+	domain := Logic.Domain{}.GetPublic()
+	if service.BindDomainId != 0 {
+		domainTemp := Logic.Domain{}.Get(service.BindDomainId)
+		if domainTemp.Domain != "" && domainTemp.Status == "enable" {
+			domain = domainTemp.Domain
+		}
+	}
 	web := domain + "?code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix())
 	if service.BindDomain != "" {
 		web = service.BindDomain + "?code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix())
