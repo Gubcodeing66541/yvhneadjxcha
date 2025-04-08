@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"server/App/Common"
 	"server/App/Http/Logic"
+	Common2 "server/App/Model/Common"
 	"server/App/Model/Service"
 	"server/Base"
 	"time"
@@ -95,7 +96,6 @@ func (Tools) Get(c *gin.Context) {
 		Username string `json:"username"`
 		Timeout  int64  `json:"timeout"`
 	}
-
 }
 
 // code search
@@ -188,4 +188,63 @@ func (Tools) ServiceCount(c *gin.Context) {
 	responseData["ip_counts"] = ipCounts
 
 	Common.ApiResponse{}.Success(c, "获取成功", responseData)
+}
+
+func (Tools) GetCode(c *gin.Context) {
+	var req struct {
+		Username string `json:"username"`
+	}
+	err := c.ShouldBind(&req)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+	}
+
+	var service Service.Service
+	Base.MysqlConn.Where("username = ?", req.Username).Find(&service)
+	if service.Id == 0 {
+		Common.ApiResponse{}.Error(c, "服务不存在", gin.H{})
+		return
+	}
+
+	Logic.Domain{}.Bind(service.Id)
+
+	var domainList []Common2.Domain
+	Base.MysqlConn.Find(&domainList, "id in (?)", []int{service.BindDomainId, service.BindDomainId2, service.BindDomainId3})
+
+	for i, domain := range domainList {
+		web := domain.Domain + "?code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix())
+		domainList[i].Domain = web
+	}
+
+	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"domain": domainList})
+}
+
+func (Tools) FixDomain(c *gin.Context) {
+	var req struct {
+		Username string `json:"username"`
+	}
+	err := c.ShouldBind(&req)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+	}
+
+	var service Service.Service
+	Base.MysqlConn.Where("username = ?", req.Username).Find(&service)
+	if service.Id == 0 {
+		Common.ApiResponse{}.Error(c, "服务不存在", gin.H{})
+		return
+	}
+
+	// 绑定域名
+	Logic.Domain{}.Bind(service.Id)
+
+	var domainList []Common2.Domain
+	Base.MysqlConn.Find(&domainList, "id in (?)", []int{service.BindDomainId, service.BindDomainId2, service.BindDomainId3})
+
+	for i, domain := range domainList {
+		web := domain.Domain + "?code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix())
+		domainList[i].Domain = web
+	}
+
+	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"domain": domainList})
 }

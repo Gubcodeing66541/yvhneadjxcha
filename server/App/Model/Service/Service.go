@@ -25,5 +25,7 @@ type Service struct {
 	BindDomain       string    `json:"bind_domain" gorm:"type:text"`
 	BindAction       string    `json:"bind_action" gorm:"type:text"`
 	Domain           string    `json:"domain" gorm:"type:text"`
-	BindDomainId     int       `json:"bind_domain_id"`
+	BindDomainId     int       `json:"bind_domain_id"`  // 域名1
+	BindDomainId2    int       `json:"bind_domain_id2"` // 域名2
+	BindDomainId3    int       `json:"bind_domain_id3"` // 域名3
 }
