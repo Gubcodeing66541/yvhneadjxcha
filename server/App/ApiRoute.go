@@ -80,5 +80,5 @@ func (ApiRoute) BindRoute(s *gin.Engine) {
 	api.POST("tools/service_count", Api.Tools{}.ServiceCount)
 	api.POST("tools/getcode", Api.Tools{}.GetCode)
 	api.POST("tools/fix_domain", Api.Tools{}.FixDomain)
-
+	api.POST("tools/reset_domain", Api.Tools{}.ResetDomain)
 }

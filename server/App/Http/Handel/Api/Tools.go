@@ -24,6 +24,7 @@ func (Tools) Copy(c *gin.Context) {
 	err := c.ShouldBind(&req)
 	if err != nil {
 		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+		return
 	}
 
 	myService := Service.Service{}
@@ -90,6 +91,7 @@ func (Tools) Get(c *gin.Context) {
 	err := c.ShouldBind(&req)
 	if err != nil {
 		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+		return
 	}
 
 	type response struct {
@@ -106,6 +108,7 @@ func (Tools) Search(c *gin.Context) {
 	err := c.ShouldBind(&req)
 	if err != nil {
 		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+		return
 	}
 
 	type response struct {
@@ -142,6 +145,7 @@ func (Tools) ServiceCount(c *gin.Context) {
 	err := c.ShouldBind(&req)
 	if err != nil {
 		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+		return
 	}
 
 	var service Service.Service
@@ -197,6 +201,7 @@ func (Tools) GetCode(c *gin.Context) {
 	err := c.ShouldBind(&req)
 	if err != nil {
 		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+		return
 	}
 
 	var service Service.Service
@@ -216,7 +221,7 @@ func (Tools) GetCode(c *gin.Context) {
 		domainList[i].Domain = web
 	}
 
-	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"domain": domainList})
+	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"domain": domainList, "service": service})
 }
 
 func (Tools) FixDomain(c *gin.Context) {
@@ -226,6 +231,7 @@ func (Tools) FixDomain(c *gin.Context) {
 	err := c.ShouldBind(&req)
 	if err != nil {
 		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+		return
 	}
 
 	var service Service.Service
@@ -246,5 +252,37 @@ func (Tools) FixDomain(c *gin.Context) {
 		domainList[i].Domain = web
 	}
 
-	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"domain": domainList})
+	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"domain": domainList, "service": service})
+}
+
+func (Tools) ResetDomain(c *gin.Context) {
+	var req struct {
+		Username string `json:"username"`
+	}
+	err := c.ShouldBind(&req)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+		return
+	}
+
+	var service Service.Service
+	Base.MysqlConn.Where("username = ?", req.Username).Find(&service)
+	if service.Id == 0 {
+		Common.ApiResponse{}.Error(c, "服务不存在", gin.H{})
+		return
+	}
+
+	// 重设置code
+	service.Code = Common.Tools{}.CreateActiveCode(service.ServiceId)
+	Base.MysqlConn.Save(&service)
+
+	var domainList []Common2.Domain
+	Base.MysqlConn.Find(&domainList, "id in (?)", []int{service.BindDomainId, service.BindDomainId2, service.BindDomainId3})
+
+	for i, domain := range domainList {
+		web := domain.Domain + "?code=" + service.Code + "&t=" + fmt.Sprintf("%d", time.Now().Unix())
+		domainList[i].Domain = web
+	}
+
+	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"domain": domainList, "service": service})
 }
