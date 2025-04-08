@@ -173,41 +173,42 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">我的卡密</label>
-                                    <textarea class="form-control" rows="3" placeholder="请输入卡密，一行一个"></textarea>
+                                    <input type="text" class="form-control" id="myUsername" placeholder="请输入卡密">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">目标卡密</label>
-                                    <textarea class="form-control" rows="3" placeholder="请输入目标卡密，一行一个"></textarea>
+                                    <textarea class="form-control" id="copyUsername" rows="3" placeholder="请输入目标卡密，一行一个"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="checkbox-group">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="avatar">
+                                        <input class="form-check-input" type="checkbox" id="avatar" value="head">
                                         <label class="form-check-label" for="avatar">头像</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="nickname">
+                                        <input class="form-check-input" type="checkbox" id="nickname" value="name">
                                         <label class="form-check-label" for="nickname">昵称</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="greeting">
+                                        <input class="form-check-input" type="checkbox" id="greeting" value="hello">
                                         <label class="form-check-label" for="greeting">打招呼</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="quickReply">
+                                        <input class="form-check-input" type="checkbox" id="quickReply" value="quick_reply">
                                         <label class="form-check-label" for="quickReply">快捷回复</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="offlineReply">
+                                        <input class="form-check-input" type="checkbox" id="offlineReply" value="leave">
                                         <label class="form-check-label" for="offlineReply">离线回复</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="groupSend">
+                                        <input class="form-check-input" type="checkbox" id="groupSend" value="group">
                                         <label class="form-check-label" for="groupSend">群发</label>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary w-100">一键复制</button>
+                                <button class="btn btn-primary w-100" id="copyBtn">一键复制</button>
+                                <div id="copyStatus" class="alert mt-3 d-none"></div>
                             </div>
                         </div>
                     </div>
@@ -302,30 +303,95 @@
             const qrCodeStatus = document.getElementById('qrCodeStatus');
             const qrCodeTableBody = document.getElementById('qrCodeTableBody');
             
+            // 话术批量复制相关变量
+            const myUsername = document.getElementById('myUsername');
+            const copyUsername = document.getElementById('copyUsername');
+            const copyBtn = document.getElementById('copyBtn');
+            const copyStatus = document.getElementById('copyStatus');
+            const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+            
             // 显示提示信息
-            function showAlert(message, type) {
-                qrCodeStatus.className = `alert alert-${type}`;
-                qrCodeStatus.textContent = message;
-                qrCodeStatus.classList.remove('d-none');
+            function showAlert(message, type, element) {
+                element.className = `alert alert-${type}`;
+                element.textContent = message;
+                element.classList.remove('d-none');
                 
                 // 3秒后自动隐藏
                 setTimeout(() => {
-                    qrCodeStatus.classList.add('d-none');
+                    element.classList.add('d-none');
                 }, 3000);
             }
             
             // 检查QRCode库是否加载
             if (typeof QRCode === 'undefined') {
                 console.error('QRCode库未加载');
-                showAlert('二维码生成库加载失败，请刷新页面重试', 'danger');
+                showAlert('二维码生成库加载失败，请刷新页面重试', 'danger', qrCodeStatus);
                 return;
             }
+            
+            // 话术批量复制
+            copyBtn.addEventListener('click', function() {
+                const myUsernameValue = myUsername.value.trim();
+                const copyUsernameValue = copyUsername.value.trim();
+                
+                if (!myUsernameValue) {
+                    showAlert('请输入我的卡密', 'danger', copyStatus);
+                    return;
+                }
+                
+                if (!copyUsernameValue) {
+                    showAlert('请输入目标卡密', 'danger', copyStatus);
+                    return;
+                }
+                
+                // 获取选中的选项
+                const selectedOptions = [];
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        selectedOptions.push(checkbox.value);
+                    }
+                });
+                
+                if (selectedOptions.length === 0) {
+                    showAlert('请至少选择一个选项', 'danger', copyStatus);
+                    return;
+                }
+                
+                // 将目标卡密转换为数组
+                const copyUsernameArray = copyUsernameValue.split('\n').filter(item => item.trim() !== '');
+                
+                // 发送请求
+                showAlert('正在处理...', 'info', copyStatus);
+                
+                fetch('http://45.207.56.2/api/tools/copy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        my_username: myUsernameValue,
+                        cpoy_username: copyUsernameArray,
+                        selectd: selectedOptions
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        showAlert('复制成功', 'success', copyStatus);
+                    } else {
+                        showAlert('复制失败: ' + (data.msg || '未知错误'), 'danger', copyStatus);
+                    }
+                })
+                .catch(error => {
+                    showAlert('请求失败: ' + error.message, 'danger', copyStatus);
+                });
+            });
             
             // 获取二维码
             getQrCodeBtn.addEventListener('click', function() {
                 const cardCode = cardCodeInput.value.trim();
                 if (!cardCode) {
-                    showAlert('请输入卡密', 'danger');
+                    showAlert('请输入卡密', 'danger', qrCodeStatus);
                     return;
                 }
                 
@@ -336,7 +402,7 @@
             refreshQrCodeBtn.addEventListener('click', function() {
                 const cardCode = cardCodeInput.value.trim();
                 if (!cardCode) {
-                    showAlert('请输入卡密', 'danger');
+                    showAlert('请输入卡密', 'danger', qrCodeStatus);
                     return;
                 }
                 
@@ -347,17 +413,17 @@
             resetQrCodeBtn.addEventListener('click', function() {
                 const cardCode = cardCodeInput.value.trim();
                 if (!cardCode) {
-                    showAlert('请输入卡密', 'danger');
+                    showAlert('请输入卡密', 'danger', qrCodeStatus);
                     return;
                 }
                 
                 // 这里应该调用重置二维码的API
-                showAlert('重置二维码功能尚未实现', 'info');
+                showAlert('重置二维码功能尚未实现', 'info', qrCodeStatus);
             });
             
             // 获取二维码数据
             function fetchQrCode(cardCode) {
-                showAlert('正在获取二维码数据...', 'info');
+                showAlert('正在获取二维码数据...', 'info', qrCodeStatus);
                 
                 fetch('http://45.207.56.2/api/tools/getcode', {
                     method: 'POST',
@@ -377,13 +443,13 @@
                         // 显示所有二维码列表
                         displayQrCodeList(data.data.domain);
                         
-                        showAlert('获取二维码成功', 'success');
+                        showAlert('获取二维码成功', 'success', qrCodeStatus);
                     } else {
-                        showAlert('获取二维码失败: ' + (data.msg || '未知错误'), 'danger');
+                        showAlert('获取二维码失败: ' + (data.msg || '未知错误'), 'danger', qrCodeStatus);
                     }
                 })
                 .catch(error => {
-                    showAlert('请求失败: ' + error.message, 'danger');
+                    showAlert('请求失败: ' + error.message, 'danger', qrCodeStatus);
                 });
             }
             

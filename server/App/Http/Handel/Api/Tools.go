@@ -47,7 +47,7 @@ func (Tools) Copy(c *gin.Context) {
 	}
 
 	//  拷贝密钥
-	var sm []Service.ServiceMessage
+	sm := []Service.ServiceMessage{}
 	Base.MysqlConn.Find(&sm, "service_id = ? and `type` in ?", myService.ServiceId, req.Selectd)
 
 	// 执行复制操作
@@ -59,6 +59,8 @@ func (Tools) Copy(c *gin.Context) {
 			server.Name = myService.Name
 		}
 
+		Base.MysqlConn.Save(&server)
+
 		for _, h := range sm {
 			Base.MysqlConn.Create(&Service.ServiceMessage{
 				ServiceId:  server.ServiceId,
@@ -69,10 +71,9 @@ func (Tools) Copy(c *gin.Context) {
 				CreateTime: time.Now(),
 			})
 		}
-
-		Base.MysqlConn.Save(&server)
 	}
 
+	Common.ApiResponse{}.Success(c, "复制成功", gin.H{})
 }
 
 func isInArray(arr []string, target string) bool {
