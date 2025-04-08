@@ -20,7 +20,7 @@
                                 <img :src="item.content" height="200" @click="imagesZoom(item.content)" style="max-width: 100%;">
                             </div>
                             <!-- 视频信息 -->
-                            <div class="video-cont" v-else-if="item.type == 'video'">
+                            <div class="video-cont" v-else-if="item.type == 'video'" @touchstart="copMsg(item.content)" @touchmove="gtouchmove()" @touchend="showDeleteButton()">
                                 <video :src="item.content" :height="200" controls style="object-fit:fill;width: 100%;"></video>
                             </div>
                             <!-- 二维码 -->
@@ -312,10 +312,22 @@ export default {
         //长按事件
         const longPress = async() => {
             try {
-                await toClipboard(state.copyCont);
-                Toast("复制成功")
+                if (state.copyCont.startsWith('http')) {
+                    // 如果是视频链接，则下载视频
+                    const link = document.createElement('a');
+                    link.href = state.copyCont;
+                    link.download = 'video_' + new Date().getTime() + '.mp4';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    Toast("视频保存中...");
+                } else {
+                    // 如果是文本，则复制
+                    await toClipboard(state.copyCont);
+                    Toast("复制成功");
+                }
             } catch (e) {
-                Toast("复制失败")
+                Toast("操作失败");
             }
         }
 
