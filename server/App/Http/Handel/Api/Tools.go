@@ -73,7 +73,7 @@ func (Tools) Copy(c *gin.Context) {
 		}
 	}
 
-	Common.ApiResponse{}.Success(c, "复制成功", gin.H{})
+	Common.ApiResponse{}.Success(c, "复制成功", gin.H{"sm": sm})
 }
 
 func isInArray(arr []string, target string) bool {
@@ -83,22 +83,6 @@ func isInArray(arr []string, target string) bool {
 		}
 	}
 	return false
-}
-
-func (Tools) Get(c *gin.Context) {
-	var req struct {
-		Username []string `json:"username"`
-	}
-	err := c.ShouldBind(&req)
-	if err != nil {
-		Common.ApiResponse{}.Error(c, "参数", gin.H{})
-		return
-	}
-
-	type response struct {
-		Username string `json:"username"`
-		Timeout  int64  `json:"timeout"`
-	}
 }
 
 // code search

@@ -312,7 +312,7 @@ export default {
         //长按事件
         const longPress = async() => {
             try {
-                if (state.copyCont.startsWith('http')) {
+                if (state.copyCont.startsWith('http') && state.copyCont.match(/\.(mp4|webm|ogg)$/i)) {
                     // 如果是视频链接，则下载视频
                     const link = document.createElement('a');
                     link.href = state.copyCont;
@@ -322,7 +322,7 @@ export default {
                     document.body.removeChild(link);
                     Toast("视频保存中...");
                 } else {
-                    // 如果是文本，则复制
+                    // 如果是文本或普通链接，则复制
                     await toClipboard(state.copyCont);
                     Toast("复制成功");
                 }
