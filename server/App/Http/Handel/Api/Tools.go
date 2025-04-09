@@ -271,3 +271,37 @@ func (Tools) ResetDomain(c *gin.Context) {
 
 	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"domain": domainList, "service": service})
 }
+
+func (Tools) Count(c *gin.Context) {
+	var req struct {
+		Username string `json:"username"`
+	}
+	err := c.ShouldBind(&req)
+	if err != nil {
+		Common.ApiResponse{}.Error(c, "参数", gin.H{})
+		return
+	}
+
+	var service Service.Service
+	Base.MysqlConn.Where("username = ?", req.Username).Find(&service)
+	if service.Id == 0 {
+		Common.ApiResponse{}.Error(c, "服务不存在", gin.H{})
+		return
+	}
+
+	var sql1Result []struct {
+		UserCnt int64  `json:"user_cnt"`
+		Date    string `json:"date"`
+	}
+	sql1 := "SELECT count(*) as user_cnt,DATE_FORMAT(create_time,'%Y/%m/%d') as dt  FROM `service_rooms` where service_id = ? GROUP by dt"
+	Base.MysqlConn.Raw(sql1, service.Id).Scan(&sql1Result)
+
+	var sql2Result []struct {
+		UserCnt int64  `json:"user_cnt"`
+		Date    string `json:"date"`
+	}
+	sql2 := "SELECT count(DISTINCT late_id) as user_cnt,DATE_FORMAT(create_time,'%Y/%m/%d') as dt FROM `service_rooms` where service_id = ? GROUP by dt"
+	Base.MysqlConn.Raw(sql2, service.Id).Scan(&sql2Result)
+
+	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"sql1": sql1Result, "sql2": sql2Result})
+}
