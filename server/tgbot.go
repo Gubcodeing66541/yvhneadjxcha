@@ -592,11 +592,23 @@ func main() {
 				}
 				msg := "登录地址：\n"
 				msg += "http://service.ssdfv.cn/service/ \n"
-				msg += "http://meksmbiv.barreau.bj/service/ \n"
-				msg += "http://gsooltcw.barreau.bj/service/ \n"
-				msg += "http://uwcdxspk.barreau.bj/service/ \n"
+				msg += "http://aijbk.cn/service/service/ \n"
+				msg += "http://cdxqs.cn/service/service/ \n"
+				msg += "http://bljhk.cn/service/service/ \n"
+				msg += "http://gwrrx.cn/service/service/ \n"
+				msg += "http://bljgk.cn/service/service/ \n"
+				msg += "http://hrxzq.cn/service/service/ \n"
+				msg += "http://aihbk.cn/service/service/ \n"
+				msg += "http://blhtk.cn/service/service/ \n"
+				msg += "http://aifck.cn/service/service/ \n"
+				msg += "http://blhhk.cn/service/service/ \n"
+				msg += "http://hynxj.cn/service/service/ \n"
+				msg += "http://hynyj.cn/service/service/ \n"
+				msg += "http://hynyx.cn/service/service/ \n"
 				msg += "粉商查询：\n"
-				msg += "www.ssdfv.cn/service/#/Statistics?username= \n"
+				msg += "http://www.ssdfv.cn/service/#/Statistics?username= \n"
+				msg += "话术复制+统计+二维码提取工具：\n"
+				msg += "http://service.ssdfv.cn/s/tools/ \n"
 				msg += fmt.Sprintf("客服账号创建了共 %s 个，充值 %s 天 ", accountCount, days)
 				for i := 0; i < account; i++ {
 					// 创建账号
