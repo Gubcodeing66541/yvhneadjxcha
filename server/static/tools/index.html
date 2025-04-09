@@ -156,7 +156,7 @@
                 <button class="nav-link active" id="copy-tab" data-bs-toggle="tab" data-bs-target="#copy" type="button" role="tab" aria-controls="copy" aria-selected="true">话术批量复制</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="status-tab" data-bs-toggle="tab" data-bs-target="#status" type="button" role="tab" aria-controls="status" aria-selected="false">批量卡密状态查询</button>
+                <button class="nav-link" id="status-tab" data-bs-toggle="tab" data-bs-target="#status" type="button" role="tab" aria-controls="status" aria-selected="false">卡密统计查询</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="qr-tab" data-bs-toggle="tab" data-bs-target="#qr" type="button" role="tab" aria-controls="qr" aria-selected="false">查询提码</button>
@@ -220,25 +220,23 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="mb-3">
-                            <textarea class="form-control" rows="3" placeholder="请输入卡密，一行一个"></textarea>
+                            <input type="text" class="form-control" id="countUsername" placeholder="请输入卡密">
                         </div>
                         <div class="mb-3">
-                            <button class="btn btn-primary w-100">查询</button>
+                            <button class="btn btn-primary w-100" id="countBtn">查询</button>
                         </div>
+                        <div id="countStatus" class="alert d-none"></div>
                         <div class="result-table">
+                            <h5 class="mt-4">统计数据</h5>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>卡密</th>
-                                        <th>状态</th>
-                                        <th>二维码状态</th>
-                                        <th>粉数</th>
-                                        <th>链接</th>
-                                        <th>激活时间</th>
-                                        <th>过期时间</th>
+                                        <th>日期</th>
+                                        <th>用户数量</th>
+                                        <th>IP数量</th>
                                     </tr>
                                 </thead>
-                                <tbody id="statusTableBody">
+                                <tbody id="countTableBody">
                                 </tbody>
                             </table>
                         </div>
@@ -294,6 +292,9 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // API域名配置
+            const API_BASE_URL = '/api';
+            
             // 初始化变量
             const cardCodeInput = document.getElementById('cardCode');
             const getQrCodeBtn = document.getElementById('getQrCodeBtn');
@@ -309,6 +310,12 @@
             const copyBtn = document.getElementById('copyBtn');
             const copyStatus = document.getElementById('copyStatus');
             const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+            
+            // 卡密统计查询相关变量
+            const countUsername = document.getElementById('countUsername');
+            const countBtn = document.getElementById('countBtn');
+            const countStatus = document.getElementById('countStatus');
+            const countTableBody = document.getElementById('countTableBody');
             
             // 显示提示信息
             function showAlert(message, type, element) {
@@ -363,7 +370,7 @@
                 // 发送请求
                 showAlert('正在处理...', 'info', copyStatus);
                 
-                fetch('http://45.207.56.2/api/tools/copy', {
+                fetch(`${API_BASE_URL}/tools/copy`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -425,7 +432,7 @@
             function fetchQrCode(cardCode) {
                 showAlert('正在获取二维码数据...', 'info', qrCodeStatus);
                 
-                fetch('http://45.207.56.2/api/tools/getcode', {
+                fetch(`${API_BASE_URL}/tools/getcode`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -537,6 +544,93 @@
                     row.appendChild(createTimeCell);
                     
                     qrCodeTableBody.appendChild(row);
+                });
+            }
+            
+            // 卡密统计查询
+            countBtn.addEventListener('click', function() {
+                const username = countUsername.value.trim();
+                
+                if (!username) {
+                    showAlert('请输入卡密', 'danger', countStatus);
+                    return;
+                }
+                
+                showAlert('正在查询...', 'info', countStatus);
+                
+                fetch(`${API_BASE_URL}/tools/count`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200 && data.data) {
+                        // 显示合并后的统计数据
+                        displayCountData(data.data.sql1, data.data.sql2);
+                        
+                        showAlert('查询成功', 'success', countStatus);
+                    } else {
+                        showAlert('查询失败: ' + (data.msg || '未知错误'), 'danger', countStatus);
+                    }
+                })
+                .catch(error => {
+                    showAlert('请求失败: ' + error.message, 'danger', countStatus);
+                });
+            });
+            
+            // 显示合并后的统计数据
+            function displayCountData(userCountList, ipCountList) {
+                countTableBody.innerHTML = '';
+                
+                // 创建一个日期到数据的映射
+                const dateMap = {};
+                
+                // 处理用户数量数据
+                userCountList.forEach(item => {
+                    if (!dateMap[item.dt]) {
+                        dateMap[item.dt] = { dt: item.dt, user_cnt: item.user_cnt, ip_cnt: 0 };
+                    } else {
+                        dateMap[item.dt].user_cnt = item.user_cnt;
+                    }
+                });
+                
+                // 处理IP数量数据
+                ipCountList.forEach(item => {
+                    if (!dateMap[item.dt]) {
+                        dateMap[item.dt] = { dt: item.dt, user_cnt: 0, ip_cnt: item.ip_cnt };
+                    } else {
+                        dateMap[item.dt].ip_cnt = item.ip_cnt;
+                    }
+                });
+                
+                // 将映射转换为数组并按日期排序
+                const sortedData = Object.values(dateMap).sort((a, b) => {
+                    return new Date(b.dt) - new Date(a.dt);
+                });
+                
+                // 填充表格
+                sortedData.forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    const dateCell = document.createElement('td');
+                    dateCell.textContent = item.dt;
+                    
+                    const userCountCell = document.createElement('td');
+                    userCountCell.textContent = item.user_cnt;
+                    
+                    const ipCountCell = document.createElement('td');
+                    ipCountCell.textContent = item.ip_cnt;
+                    
+                    row.appendChild(dateCell);
+                    row.appendChild(userCountCell);
+                    row.appendChild(ipCountCell);
+                    
+                    countTableBody.appendChild(row);
                 });
             }
         });
