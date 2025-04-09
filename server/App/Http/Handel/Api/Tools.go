@@ -297,10 +297,10 @@ func (Tools) Count(c *gin.Context) {
 	Base.MysqlConn.Raw(sql1, service.Id).Scan(&sql1Result)
 
 	var sql2Result []struct {
-		UserCnt int64  `json:"user_cnt"`
-		Date    string `json:"date"`
+		IpCnt int64  `json:"ip_cnt"`
+		Date  string `json:"date"`
 	}
-	sql2 := "SELECT count(DISTINCT late_id) as user_cnt,DATE_FORMAT(create_time,'%Y/%m/%d') as dt FROM `service_rooms` where service_id = ? GROUP by dt"
+	sql2 := "SELECT count(DISTINCT late_id) as ip_cnt,DATE_FORMAT(create_time,'%Y/%m/%d') as dt FROM `service_rooms` where service_id = ? GROUP by dt"
 	Base.MysqlConn.Raw(sql2, service.Id).Scan(&sql2Result)
 
 	Common.ApiResponse{}.Success(c, "获取成功", gin.H{"sql1": sql1Result, "sql2": sql2Result})
