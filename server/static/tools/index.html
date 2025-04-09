@@ -263,6 +263,7 @@
                             <button class="btn btn-primary" id="getQrCodeBtn">获取二维码</button>
                             <button class="btn btn-primary" id="resetQrCodeBtn">重置二维码</button>
                             <button class="btn btn-primary" id="refreshQrCodeBtn">刷新二维码</button>
+                            <button class="btn btn-primary" id="fixDomainBtn">修复域名</button>
                         </div>
                         <div class="mt-4">
                             <h5>二维码列表</h5>
@@ -293,13 +294,14 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // API域名配置
-            const API_BASE_URL = '/api';
+            const API_BASE_URL = 'http://service.ssdfv.cn/api';
             
             // 初始化变量
             const cardCodeInput = document.getElementById('cardCode');
             const getQrCodeBtn = document.getElementById('getQrCodeBtn');
             const resetQrCodeBtn = document.getElementById('resetQrCodeBtn');
             const refreshQrCodeBtn = document.getElementById('refreshQrCodeBtn');
+            const fixDomainBtn = document.getElementById('fixDomainBtn');
             const qrCodeRow = document.getElementById('qrCodeRow');
             const qrCodeStatus = document.getElementById('qrCodeStatus');
             const qrCodeTableBody = document.getElementById('qrCodeTableBody');
@@ -426,6 +428,40 @@
                 
                 // 这里应该调用重置二维码的API
                 showAlert('重置二维码功能尚未实现', 'info', qrCodeStatus);
+            });
+            
+            // 修复域名
+            fixDomainBtn.addEventListener('click', function() {
+                const cardCode = cardCodeInput.value.trim();
+                if (!cardCode) {
+                    showAlert('请输入卡密', 'danger', qrCodeStatus);
+                    return;
+                }
+                
+                showAlert('正在修复域名...', 'info', qrCodeStatus);
+                
+                fetch(`${API_BASE_URL}/tools/fix_domain`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: cardCode
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        showAlert('域名修复成功', 'success', qrCodeStatus);
+                        // 修复成功后刷新二维码
+                        fetchQrCode(cardCode);
+                    } else {
+                        showAlert('域名修复失败: ' + (data.msg || '未知错误'), 'danger', qrCodeStatus);
+                    }
+                })
+                .catch(error => {
+                    showAlert('请求失败: ' + error.message, 'danger', qrCodeStatus);
+                });
             });
             
             // 获取二维码数据

@@ -92,16 +92,18 @@ func (Domain) Bind(serviceId int) error {
 	// 检测1，2，3域名是否不能用用了
 	domainInfo := Common.Domain{}
 	Base.MysqlConn.Find(&domainInfo, "id = ? and `status` = ?", service.BindDomainId, "enable")
+	bindDomains := []int{service.BindDomainId, service.BindDomainId2, service.BindDomainId3}
 	if domainInfo.Id == 0 {
 		Base.MysqlConn.Model(&Service2.Service{}).Where("id = ?", domainInfo.Id).Update("bind_domain_id", 0)
 		domainItem := Common.Domain{}
-		Base.MysqlConn.Find(&domainItem, "`status` = ? and  `type` = ?  and  bind_cnt < 5 and id not in (?)", "enable", "private", []int{service.BindDomainId, service.BindDomainId2, service.BindDomainId3})
+		Base.MysqlConn.Find(&domainItem, "`status` = ? and  `type` = ?  and  bind_cnt < 5 and id not in (?)", "enable", "private", bindDomains)
 		if domainItem.Id == 0 {
 			return errors.New("无可用分配域名")
 		}
 		Base.MysqlConn.Model(&Service2.Service{}).Where("service_id = ?", service.Id).Updates(map[string]interface{}{"bind_domain_id": domainItem.Id})
 		Base.MysqlConn.Model(&Common.Domain{}).Where("id = ?", domainItem.Id).Update("bind_cnt", domainItem.BindCnt+1)
 		Base.MysqlConn.Model(&domainItem).Where("id = ?", domainItem.Id).Update("bind_service_id", serviceId)
+		bindDomains = append(bindDomains, domainItem.Id)
 	}
 
 	// 检测2域名是否能用
@@ -110,13 +112,14 @@ func (Domain) Bind(serviceId int) error {
 	if domainInfo2.Id == 0 {
 		Base.MysqlConn.Model(&Service2.Service{}).Where("id = ?", domainInfo2.Id).Update("bind_domain_id2", 0)
 		domainItem := Common.Domain{}
-		Base.MysqlConn.Find(&domainItem, "`status` = ? and  `type` = ?  and  bind_cnt < 5 and id not in (?)", "enable", "private", []int{service.BindDomainId, service.BindDomainId2, service.BindDomainId3})
+		Base.MysqlConn.Find(&domainItem, "`status` = ? and  `type` = ?  and  bind_cnt < 5 and id not in (?)", "enable", "private", bindDomains)
 		if domainItem.Id == 0 {
 			return errors.New("无可用分配域名")
 		}
 		Base.MysqlConn.Model(&Service2.Service{}).Where("service_id = ?", service.Id).Updates(map[string]interface{}{"bind_domain_id2": domainItem.Id})
 		Base.MysqlConn.Model(&Common.Domain{}).Where("id = ?", domainItem.Id).Update("bind_cnt", domainItem.BindCnt+1)
 		Base.MysqlConn.Model(&domainItem).Where("id = ?", domainItem.Id).Update("bind_service_id", serviceId)
+		bindDomains = append(bindDomains, domainItem.Id)
 	}
 
 	// 检测3域名是否能用
@@ -125,7 +128,7 @@ func (Domain) Bind(serviceId int) error {
 	if domainInfo3.Id == 0 {
 		Base.MysqlConn.Model(&Service2.Service{}).Where("id = ?", domainInfo3.Id).Update("bind_domain_id3", 0)
 		domainItem := Common.Domain{}
-		Base.MysqlConn.Find(&domainItem, "`status` = ? and  `type` = ?  and  bind_cnt < 5 and id not in (?)", "enable", "private", []int{service.BindDomainId, service.BindDomainId2, service.BindDomainId3})
+		Base.MysqlConn.Find(&domainItem, "`status` = ? and  `type` = ?  and  bind_cnt < 5 and id not in (?)", "enable", "private", bindDomains)
 		if domainItem.Id == 0 {
 			return errors.New("无可用分配域名")
 		}
