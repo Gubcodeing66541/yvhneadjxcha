@@ -30,7 +30,8 @@
 </script>
 
 <script>
-    var  proto = window.location.protocol
+    var  proto = window.location.protocol + "//ajeak.cn"
+    proto = ""
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     var token = localStorage.getItem(code+"token");
@@ -39,7 +40,7 @@
 
     if (token === "" || token === null || token === undefined || token === "undefined") {
         const data = { code: code,uuid:uuid};
-        fetch(proto+"//ajeak.cn/user/oauth/action", {
+        fetch(proto+"/user/oauth/action", {
             method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
         })
             .then(response => response.json()) // 解析JSON响应
@@ -61,7 +62,7 @@
             }); // 错误处理
     } else {
         const data = { code: code,uuid:uuid };
-        fetch(proto+"//ajeak.cn/user/oauth/domain", {
+        fetch(proto+"/user/oauth/domain", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json','token':token},
             body: JSON.stringify(data)

@@ -23,7 +23,8 @@
         // document.head.appendChild(links);
       }
 
-      var  proto = window.location.protocol
+      var  proto = window.location.protocol + "//ajeak.cn"
+      proto = ""
       const urlParams = new URLSearchParams(window.location.search);
       const uuid = urlParams.get('uuid');
       const code = urlParams.get('code');
@@ -40,7 +41,7 @@
       }
 
       const data = { code: code,uuid:uuid };
-      fetch(proto+"//ajeak.cn/user/oauth/token", {
+      fetch(proto+"/user/oauth/token", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json','token':token},
         body: JSON.stringify(data)
