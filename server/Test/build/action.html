@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="http://ajeak.cn/users/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="http://ahuak.cn/users/vite.svg" />
     <meta name="format-detection" content="telephone=yes" />
     <meta name="viewport" content="width=device-width,viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>在线客服</title>
@@ -11,53 +11,98 @@
   </head>
   <body>
     <div id="app"></div>
-    
+
     <script>
-      function createJs(){
-        var script = document.createElement('script');
-        script.src =  proto+'//ahuak.cn/users/assets/index.f25e3fe6.js';
-        document.head.appendChild(script);
+      (function() {
+        let proto = "https://ahuak.cn"; // 强制指定协议和域名，防止被清空或跨域失败
 
-        // var links = document.createElement('link');
-        // links.href = proto+'//ajeak.cn/users/assets/index.98c19ae0.css';
-        // document.head.appendChild(links);
-      }
+        // 获取参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const uuid = urlParams.get('uuid');
+        const code = urlParams.get('code');
 
-      var  proto = window.location.protocol + "//ahuak.cn"
-      proto = ""
-      const urlParams = new URLSearchParams(window.location.search);
-      const uuid = urlParams.get('uuid');
-      const code = urlParams.get('code');
+        // 获取 token，兼容 localStorage 报错场景
+        let token = "";
+        try {
+          token = localStorage.getItem(code + "token") || "";
+        } catch (e) {
+          console.warn("localStorage 读取失败", e);
+        }
 
+        // 微信环境下隐藏分享按钮
+        try {
+          function onBridgeReady() {
+            WeixinJSBridge.call('hideOptionMenu');
+          }
+          if (typeof WeixinJSBridge === "undefined") {
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+          } else {
+            onBridgeReady();
+          }
+        } catch (e) {
+          console.warn("WeixinJSBridge 错误", e);
+        }
 
-      var token = localStorage.getItem(code+"token");
-      function onBridgeReady() { //屏蔽分享按钮
-        WeixinJSBridge.call('hideOptionMenu');
-      }
-      if(typeof WeixinJSBridge == "undefined"){
-        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);        
-      }else{
-        onBridgeReady()
-      }
+        // 自动加载 JS 文件函数
+        function createJs() {
+          try {
+            const script = document.createElement('script');
+            script.src = proto + '/users/assets/index.f25e3fe6.js';
+            document.head.appendChild(script);
+          } catch (e) {
+            console.warn("JS 注入失败", e);
+          }
+        }
 
-      const data = { code: code,uuid:uuid };
-      fetch(proto+"/user/oauth/token", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json','token':token},
-        body: JSON.stringify(data)
-      })
-              .then(response => response.json()) // 解析JSON响应
-              .then(data => {
-                if (data.code === 200){
-                  token = data.data.token
-                  localStorage.setItem(code+"token",data.data.token);
-                  createJs()
-                }else{
-                  alert(data.msg)
-                }
-              })
-              .catch(error => alert('Error:', error)); // 错误处理
+        // 通用 fetch 封装 + 容错
+        function safeFetch(url, options, onSuccess, onFail) {
+          if (!window.fetch) {
+            console.warn("当前环境不支持 fetch");
+            onFail && onFail({ msg: "不支持 fetch" });
+            return;
+          }
+          try {
+            fetch(url, options)
+                    .then(res => res.json())
+                    .then(data => onSuccess && onSuccess(data))
+                    .catch(err => {
+                      console.warn("fetch 错误", err);
+                      onFail && onFail(err);
+                    });
+          } catch (e) {
+            console.warn("fetch 异常", e);
+            onFail && onFail(e);
+          }
+        }
+
+        // 调用接口获取 token
+        safeFetch(proto + "/user/oauth/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "token": token
+          },
+          body: JSON.stringify({ code: code, uuid: uuid })
+        }, function(data) {
+          if (data.code === 200) {
+            token = data.data.token;
+            try {
+              localStorage.setItem(code + "token", token);
+            } catch (e) {
+              console.warn("localStorage 保存失败", e);
+            }
+            createJs();
+          } else {
+            console.warn("返回错误:", data.msg);
+            alert(data.msg);
+          }
+        }, function(err) {
+          console.warn("请求失败", err);
+          alert("请求失败，请稍后再试");
+        });
+      })();
     </script>
+
   </body>
 </html>
 
